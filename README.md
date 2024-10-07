@@ -46,7 +46,7 @@ $roslaunch ydlidar_ros_driver lidar_view.launch
 ```  
 ![920ba163fa977b7833bc164a6cb42b1](https://github.com/user-attachments/assets/75b7e348-bf4d-483b-a431-a6709fff12a0)
 
-### 3.2 修改设备树并实现串口通信  
+### 3.2 修改设备树  
 
 ![image](https://github.com/user-attachments/assets/0089677e-19bf-4453-9ba5-8088fed43785)  
 
@@ -87,7 +87,8 @@ $roslaunch ydlidar_ros_driver lidar_view.launch
 
 
 
+### 3.3 实现串口通信   
 
 
 
-### 3.3 实现导航与避障算法  
+### 3.4 实现导航与避障算法  
