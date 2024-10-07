@@ -50,21 +50,36 @@ $roslaunch ydlidar_ros_driver lidar_view.launch
 
 ![image](https://github.com/user-attachments/assets/0089677e-19bf-4453-9ba5-8088fed43785)  
 
+    
 泰山派在官方系统镜像下能够直接使用的串口只有UART1和UART3，其中UART1为调试串口，UART3分配给了激光雷达，所以我们必须通过修改设备树来启用其他串口从而与下位机进行通信。  
 在SDK的/kernel/arch/arm64/boot/dts/rockchip/路径下可以找到tspi-rk3566-user-v10-linux.dts，这就是我们要修改的文件。  
+  
 <img width="1208" alt="b42d0f90420b9cbe1638e56e7ce2821" src="https://github.com/user-attachments/assets/0f73c341-269c-4e7a-aa0c-6a71ce33e55b">  
+  
 将PWM8和PWM9改为disabled，并加上UART4  
+  
 <img width="449" alt="414d1c57350c0442180626664094609" src="https://github.com/user-attachments/assets/6cda6f48-b03c-4498-a44f-fe5748457889">  
+  
 <img width="1210" alt="16c197f8d00ecb7d1ab4698e051b23b" src="https://github.com/user-attachments/assets/7abc254c-683a-4780-b958-fe08ef1910f3">  
+  
 修改保存后我们就可以用```make ARCH=arm64 CROSS_COMPILE=aarch64-linux-gnu- dtbs```命令编译出新的dtb文件，注意在Makefile里加上这一行  
+  
 <img width="1206" alt="66281bb1f7bc1b0e8ba42739ac0e450" src="https://github.com/user-attachments/assets/c922b4e7-1d9a-4ec5-a853-fed541374a83">  
+  
 <img width="776" alt="cea1fcc9b6e2e64b2991f11663bd4e0" src="https://github.com/user-attachments/assets/456e480a-8c1f-409e-8c06-4d4e7e65ee3b">  
+  
 不过这里我采取的是在SDK目录下通过```./build.sh kernel```命令编译内核生成boot.image并烧录的方法  
-<img width="1280" alt="9010fb83e56a0877379fc316085981a" src="https://github.com/user-attachments/assets/362f5817-0553-4373-9bb5-184308c508d5">  
+  
+<img width="1280" alt="9010fb83e56a0877379fc316085981a" src="https://github.com/user-attachments/assets/362f5817-0553-4373-9bb5-184308c508d5">   
+  
 这样就编译成功了，注意要提前安装交叉编译器并配置环境变量  
+  
 <img width="734" alt="e76bbb10a585972d23055b951ee1564" src="https://github.com/user-attachments/assets/e49b2b27-6651-415a-9b29-1f2871008456">
+  
 这样烧录进开发板后重启系统，我们可以发现出现了新的串口设备ttyS4，这说明我们成功了  
-<img width="457" alt="d5a20b23786c10a5a9fb9c67a8df01b" src="https://github.com/user-attachments/assets/cf0b4a0d-561d-4d81-a82f-e395eb160caf">  
+  
+<img width="457" alt="d5a20b23786c10a5a9fb9c67a8df01b" src="https://github.com/user-attachments/assets/cf0b4a0d-561d-4d81-a82f-e395eb160caf">   
+  
 
 
 
