@@ -29,8 +29,7 @@ $ make
 $ sudo make install
 ```
 克隆、构建ydlidar_ros_driver并设置环境  
-```$ git clone https://github.com/YDLIDAR/ydlidar_ros_driver.git
-ydlidar_ws/src/ydlidar_ros_driver
+```$ git clone https://github.com/YDLIDAR/ydlidar_ros_driver.git ydlidar_ws/src/ydlidar_ros_driver  
 $ cd ydlidar_ws
 $ catkin_make
 $ source ./devel/setup.sh
