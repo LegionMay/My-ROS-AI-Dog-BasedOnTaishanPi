@@ -1,0 +1,1362 @@
+ARM GAS  /tmp/ccq3kZXF.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 1
+  11              		.eabi_attribute 18, 4
+  12              		.file	"robocontrol.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.Move_Forward,"ax",%progbits
+  17              		.align	1
+  18              		.global	Move_Forward
+  19              		.arch armv7e-m
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv5-d16
+  25              	Move_Forward:
+  26              	.LFB148:
+  27              		.file 1 "Core/Src/robocontrol.c"
+   1:Core/Src/robocontrol.c **** #include "robocontrol.h"
+   2:Core/Src/robocontrol.c **** #include "servo_control.h"
+   3:Core/Src/robocontrol.c **** #include "FreeRTOS.h"
+   4:Core/Src/robocontrol.c **** #include "task.h"
+   5:Core/Src/robocontrol.c **** #include <math.h>
+   6:Core/Src/robocontrol.c **** 
+   7:Core/Src/robocontrol.c **** 
+   8:Core/Src/robocontrol.c **** #define M_PI 3.14159265358979323846
+   9:Core/Src/robocontrol.c **** 
+  10:Core/Src/robocontrol.c **** // 全局状态变量
+  11:Core/Src/robocontrol.c **** volatile RobotAction current_action = ACTION_STOP;
+  12:Core/Src/robocontrol.c **** 
+  13:Core/Src/robocontrol.c **** // 控制机器人动作的函数
+  14:Core/Src/robocontrol.c **** void Move_Forward() { current_action = ACTION_FORWARD; }
+  28              		.loc 1 14 21 view -0
+  29              		.cfi_startproc
+  30              		@ args = 0, pretend = 0, frame = 0
+  31              		@ frame_needed = 0, uses_anonymous_args = 0
+  32              		@ link register save eliminated.
+  33              		.loc 1 14 23 view .LVU1
+  34              		.loc 1 14 38 is_stmt 0 view .LVU2
+  35 0000 014B     		ldr	r3, .L2
+  36 0002 0122     		movs	r2, #1
+  37 0004 1A70     		strb	r2, [r3]
+  38              		.loc 1 14 56 view .LVU3
+  39 0006 7047     		bx	lr
+  40              	.L3:
+  41              		.align	2
+  42              	.L2:
+  43 0008 00000000 		.word	.LANCHOR0
+  44              		.cfi_endproc
+ARM GAS  /tmp/ccq3kZXF.s 			page 2
+
+
+  45              	.LFE148:
+  47              		.section	.text.Move_Backward,"ax",%progbits
+  48              		.align	1
+  49              		.global	Move_Backward
+  50              		.syntax unified
+  51              		.thumb
+  52              		.thumb_func
+  53              		.fpu fpv5-d16
+  55              	Move_Backward:
+  56              	.LFB149:
+  15:Core/Src/robocontrol.c **** void Move_Backward() { current_action = ACTION_BACKWARD; }
+  57              		.loc 1 15 22 is_stmt 1 view -0
+  58              		.cfi_startproc
+  59              		@ args = 0, pretend = 0, frame = 0
+  60              		@ frame_needed = 0, uses_anonymous_args = 0
+  61              		@ link register save eliminated.
+  62              		.loc 1 15 24 view .LVU5
+  63              		.loc 1 15 39 is_stmt 0 view .LVU6
+  64 0000 014B     		ldr	r3, .L5
+  65 0002 0222     		movs	r2, #2
+  66 0004 1A70     		strb	r2, [r3]
+  67              		.loc 1 15 58 view .LVU7
+  68 0006 7047     		bx	lr
+  69              	.L6:
+  70              		.align	2
+  71              	.L5:
+  72 0008 00000000 		.word	.LANCHOR0
+  73              		.cfi_endproc
+  74              	.LFE149:
+  76              		.section	.text.Turn_Left,"ax",%progbits
+  77              		.align	1
+  78              		.global	Turn_Left
+  79              		.syntax unified
+  80              		.thumb
+  81              		.thumb_func
+  82              		.fpu fpv5-d16
+  84              	Turn_Left:
+  85              	.LFB150:
+  16:Core/Src/robocontrol.c **** void Turn_Left() { current_action = ACTION_TURN_LEFT; }
+  86              		.loc 1 16 18 is_stmt 1 view -0
+  87              		.cfi_startproc
+  88              		@ args = 0, pretend = 0, frame = 0
+  89              		@ frame_needed = 0, uses_anonymous_args = 0
+  90              		@ link register save eliminated.
+  91              		.loc 1 16 20 view .LVU9
+  92              		.loc 1 16 35 is_stmt 0 view .LVU10
+  93 0000 014B     		ldr	r3, .L8
+  94 0002 0322     		movs	r2, #3
+  95 0004 1A70     		strb	r2, [r3]
+  96              		.loc 1 16 55 view .LVU11
+  97 0006 7047     		bx	lr
+  98              	.L9:
+  99              		.align	2
+ 100              	.L8:
+ 101 0008 00000000 		.word	.LANCHOR0
+ 102              		.cfi_endproc
+ 103              	.LFE150:
+ARM GAS  /tmp/ccq3kZXF.s 			page 3
+
+
+ 105              		.section	.text.Turn_Right,"ax",%progbits
+ 106              		.align	1
+ 107              		.global	Turn_Right
+ 108              		.syntax unified
+ 109              		.thumb
+ 110              		.thumb_func
+ 111              		.fpu fpv5-d16
+ 113              	Turn_Right:
+ 114              	.LFB151:
+  17:Core/Src/robocontrol.c **** void Turn_Right() { current_action = ACTION_TURN_RIGHT; }
+ 115              		.loc 1 17 19 is_stmt 1 view -0
+ 116              		.cfi_startproc
+ 117              		@ args = 0, pretend = 0, frame = 0
+ 118              		@ frame_needed = 0, uses_anonymous_args = 0
+ 119              		@ link register save eliminated.
+ 120              		.loc 1 17 21 view .LVU13
+ 121              		.loc 1 17 36 is_stmt 0 view .LVU14
+ 122 0000 014B     		ldr	r3, .L11
+ 123 0002 0422     		movs	r2, #4
+ 124 0004 1A70     		strb	r2, [r3]
+ 125              		.loc 1 17 57 view .LVU15
+ 126 0006 7047     		bx	lr
+ 127              	.L12:
+ 128              		.align	2
+ 129              	.L11:
+ 130 0008 00000000 		.word	.LANCHOR0
+ 131              		.cfi_endproc
+ 132              	.LFE151:
+ 134              		.section	.text.Stop,"ax",%progbits
+ 135              		.align	1
+ 136              		.global	Stop
+ 137              		.syntax unified
+ 138              		.thumb
+ 139              		.thumb_func
+ 140              		.fpu fpv5-d16
+ 142              	Stop:
+ 143              	.LFB152:
+  18:Core/Src/robocontrol.c **** void Stop() { current_action = ACTION_STOP; }
+ 144              		.loc 1 18 13 is_stmt 1 view -0
+ 145              		.cfi_startproc
+ 146              		@ args = 0, pretend = 0, frame = 0
+ 147              		@ frame_needed = 0, uses_anonymous_args = 0
+ 148              		@ link register save eliminated.
+ 149              		.loc 1 18 15 view .LVU17
+ 150              		.loc 1 18 30 is_stmt 0 view .LVU18
+ 151 0000 014B     		ldr	r3, .L14
+ 152 0002 0022     		movs	r2, #0
+ 153 0004 1A70     		strb	r2, [r3]
+ 154              		.loc 1 18 45 view .LVU19
+ 155 0006 7047     		bx	lr
+ 156              	.L15:
+ 157              		.align	2
+ 158              	.L14:
+ 159 0008 00000000 		.word	.LANCHOR0
+ 160              		.cfi_endproc
+ 161              	.LFE152:
+ 163              		.section	.text.InverseKinematics,"ax",%progbits
+ARM GAS  /tmp/ccq3kZXF.s 			page 4
+
+
+ 164              		.align	1
+ 165              		.global	InverseKinematics
+ 166              		.syntax unified
+ 167              		.thumb
+ 168              		.thumb_func
+ 169              		.fpu fpv5-d16
+ 171              	InverseKinematics:
+ 172              	.LVL0:
+ 173              	.LFB153:
+  19:Core/Src/robocontrol.c **** 
+  20:Core/Src/robocontrol.c **** /*** 逆运动学：通过给定的足尖位置，计算关节角度 ***/
+  21:Core/Src/robocontrol.c **** void InverseKinematics(float x, float y, float* theta1, float* theta2) {
+ 174              		.loc 1 21 72 is_stmt 1 view -0
+ 175              		.cfi_startproc
+ 176              		@ args = 0, pretend = 0, frame = 0
+ 177              		@ frame_needed = 0, uses_anonymous_args = 0
+ 178              		.loc 1 21 72 is_stmt 0 view .LVU21
+ 179 0000 38B5     		push	{r3, r4, r5, lr}
+ 180              	.LCFI0:
+ 181              		.cfi_def_cfa_offset 16
+ 182              		.cfi_offset 3, -16
+ 183              		.cfi_offset 4, -12
+ 184              		.cfi_offset 5, -8
+ 185              		.cfi_offset 14, -4
+ 186 0002 2DED048B 		vpush.64	{d8, d9}
+ 187              	.LCFI1:
+ 188              		.cfi_def_cfa_offset 32
+ 189              		.cfi_offset 80, -32
+ 190              		.cfi_offset 81, -28
+ 191              		.cfi_offset 82, -24
+ 192              		.cfi_offset 83, -20
+ 193 0006 B0EE409A 		vmov.f32	s18, s0
+ 194 000a F0EE608A 		vmov.f32	s17, s1
+ 195 000e 0546     		mov	r5, r0
+ 196 0010 0C46     		mov	r4, r1
+  22:Core/Src/robocontrol.c ****     float L1 = LEG_UPPER_LENGTH;
+ 197              		.loc 1 22 5 is_stmt 1 view .LVU22
+ 198              	.LVL1:
+  23:Core/Src/robocontrol.c ****     float L2 = LEG_LOWER_LENGTH;
+ 199              		.loc 1 23 5 view .LVU23
+  24:Core/Src/robocontrol.c **** 
+  25:Core/Src/robocontrol.c ****     float D = (x * x + y * y - L1 * L1 - L2 * L2) / (2 * L1 * L2);
+ 200              		.loc 1 25 5 view .LVU24
+ 201              		.loc 1 25 18 is_stmt 0 view .LVU25
+ 202 0012 60EE007A 		vmul.f32	s15, s0, s0
+ 203              		.loc 1 25 26 view .LVU26
+ 204 0016 20EEA00A 		vmul.f32	s0, s1, s1
+ 205              	.LVL2:
+ 206              		.loc 1 25 22 view .LVU27
+ 207 001a 77EE807A 		vadd.f32	s15, s15, s0
+ 208              		.loc 1 25 30 view .LVU28
+ 209 001e 9FED1B0A 		vldr.32	s0, .L18
+ 210 0022 77EEC07A 		vsub.f32	s15, s15, s0
+ 211              		.loc 1 25 40 view .LVU29
+ 212 0026 9FED1A0A 		vldr.32	s0, .L18+4
+ 213 002a 77EEC07A 		vsub.f32	s15, s15, s0
+ 214              	.LVL3:
+ARM GAS  /tmp/ccq3kZXF.s 			page 5
+
+
+  26:Core/Src/robocontrol.c ****     float phi2 = acosf(D);  // 小腿角度
+ 215              		.loc 1 26 5 is_stmt 1 view .LVU30
+ 216              		.loc 1 26 18 is_stmt 0 view .LVU31
+ 217 002e 9FED190A 		vldr.32	s0, .L18+8
+ 218 0032 87EE800A 		vdiv.f32	s0, s15, s0
+ 219              	.LVL4:
+ 220              		.loc 1 26 18 view .LVU32
+ 221 0036 FFF7FEFF 		bl	acosf
+ 222              	.LVL5:
+ 223              		.loc 1 26 18 view .LVU33
+ 224 003a B0EE408A 		vmov.f32	s16, s0
+ 225              	.LVL6:
+  27:Core/Src/robocontrol.c ****     float phi1 = atan2f(y, x) - atan2f(L2 * sinf(phi2), L1 + L2 * cosf(phi2));  // 大腿角度
+ 226              		.loc 1 27 5 is_stmt 1 view .LVU34
+ 227              		.loc 1 27 18 is_stmt 0 view .LVU35
+ 228 003e F0EE490A 		vmov.f32	s1, s18
+ 229 0042 B0EE680A 		vmov.f32	s0, s17
+ 230              	.LVL7:
+ 231              		.loc 1 27 18 view .LVU36
+ 232 0046 FFF7FEFF 		bl	atan2f
+ 233              	.LVL8:
+ 234 004a F0EE408A 		vmov.f32	s17, s0
+ 235              	.LVL9:
+ 236              		.loc 1 27 45 view .LVU37
+ 237 004e B0EE480A 		vmov.f32	s0, s16
+ 238 0052 FFF7FEFF 		bl	sinf
+ 239              	.LVL10:
+ 240 0056 B0EE409A 		vmov.f32	s18, s0
+ 241              	.LVL11:
+ 242              		.loc 1 27 67 view .LVU38
+ 243 005a B0EE480A 		vmov.f32	s0, s16
+ 244 005e FFF7FEFF 		bl	cosf
+ 245              	.LVL12:
+ 246              		.loc 1 27 65 view .LVU39
+ 247 0062 9FED0D7A 		vldr.32	s14, .L18+12
+ 248 0066 20EE070A 		vmul.f32	s0, s0, s14
+ 249              		.loc 1 27 33 view .LVU40
+ 250 006a DFED0C0A 		vldr.32	s1, .L18+16
+ 251 006e 70EE200A 		vadd.f32	s1, s0, s1
+ 252 0072 29EE070A 		vmul.f32	s0, s18, s14
+ 253 0076 FFF7FEFF 		bl	atan2f
+ 254              	.LVL13:
+ 255              		.loc 1 27 11 view .LVU41
+ 256 007a 78EEC08A 		vsub.f32	s17, s17, s0
+ 257              	.LVL14:
+  28:Core/Src/robocontrol.c **** 
+  29:Core/Src/robocontrol.c ****     *theta1 = phi1;  // 大腿角度
+ 258              		.loc 1 29 5 is_stmt 1 view .LVU42
+ 259              		.loc 1 29 13 is_stmt 0 view .LVU43
+ 260 007e C5ED008A 		vstr.32	s17, [r5]
+  30:Core/Src/robocontrol.c ****     *theta2 = phi2;  // 小腿角度
+ 261              		.loc 1 30 5 is_stmt 1 view .LVU44
+ 262              		.loc 1 30 13 is_stmt 0 view .LVU45
+ 263 0082 84ED008A 		vstr.32	s16, [r4]
+  31:Core/Src/robocontrol.c **** }
+ 264              		.loc 1 31 1 view .LVU46
+ 265 0086 BDEC048B 		vldm	sp!, {d8-d9}
+ARM GAS  /tmp/ccq3kZXF.s 			page 6
+
+
+ 266              	.LCFI2:
+ 267              		.cfi_restore 82
+ 268              		.cfi_restore 83
+ 269              		.cfi_restore 80
+ 270              		.cfi_restore 81
+ 271              		.cfi_def_cfa_offset 16
+ 272              	.LVL15:
+ 273              		.loc 1 31 1 view .LVU47
+ 274 008a 38BD     		pop	{r3, r4, r5, pc}
+ 275              	.LVL16:
+ 276              	.L19:
+ 277              		.loc 1 31 1 view .LVU48
+ 278              		.align	2
+ 279              	.L18:
+ 280 008c 7B86CC45 		.word	1171031675
+ 281 0090 80B49345 		.word	1167307904
+ 282 0094 00CF2D46 		.word	1177407232
+ 283 0098 00808942 		.word	1116307456
+ 284 009c CDCCA142 		.word	1117899981
+ 285              		.cfi_endproc
+ 286              	.LFE153:
+ 288              		.section	.text.CalculateGait,"ax",%progbits
+ 289              		.align	1
+ 290              		.global	CalculateGait
+ 291              		.syntax unified
+ 292              		.thumb
+ 293              		.thumb_func
+ 294              		.fpu fpv5-d16
+ 296              	CalculateGait:
+ 297              	.LVL17:
+ 298              	.LFB154:
+  32:Core/Src/robocontrol.c **** 
+  33:Core/Src/robocontrol.c **** /*** 计算步态：根据时间计算每一步的足尖位置 ***/
+  34:Core/Src/robocontrol.c **** void CalculateGait(float time, float* x, float* y) {
+ 299              		.loc 1 34 52 is_stmt 1 view -0
+ 300              		.cfi_startproc
+ 301              		@ args = 0, pretend = 0, frame = 0
+ 302              		@ frame_needed = 0, uses_anonymous_args = 0
+ 303              		.loc 1 34 52 is_stmt 0 view .LVU50
+ 304 0000 10B5     		push	{r4, lr}
+ 305              	.LCFI3:
+ 306              		.cfi_def_cfa_offset 8
+ 307              		.cfi_offset 4, -8
+ 308              		.cfi_offset 14, -4
+ 309 0002 0C46     		mov	r4, r1
+  35:Core/Src/robocontrol.c ****     float stepLength = 50.0;  // 步长，单位：毫米
+ 310              		.loc 1 35 5 is_stmt 1 view .LVU51
+ 311              	.LVL18:
+  36:Core/Src/robocontrol.c ****     float stepHeight = 30.0;  // 抬脚高度，单位：毫米
+ 312              		.loc 1 36 5 view .LVU52
+  37:Core/Src/robocontrol.c **** 
+  38:Core/Src/robocontrol.c ****     if (time < 0.5) {
+ 313              		.loc 1 38 5 view .LVU53
+ 314              		.loc 1 38 8 is_stmt 0 view .LVU54
+ 315 0004 F6EE007A 		vmov.f32	s15, #5.0e-1
+ 316 0008 B4EEE70A 		vcmpe.f32	s0, s15
+ 317 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+ARM GAS  /tmp/ccq3kZXF.s 			page 7
+
+
+ 318 0010 18D5     		bpl	.L25
+  39:Core/Src/robocontrol.c ****         // 抬脚并向前移动
+  40:Core/Src/robocontrol.c ****         *x = stepLength * (2 * time);
+ 319              		.loc 1 40 9 is_stmt 1 view .LVU55
+ 320              		.loc 1 40 30 is_stmt 0 view .LVU56
+ 321 0012 70EE007A 		vadd.f32	s15, s0, s0
+ 322              		.loc 1 40 25 view .LVU57
+ 323 0016 9FED1A7A 		vldr.32	s14, .L27+16
+ 324 001a 67EE877A 		vmul.f32	s15, s15, s14
+ 325              		.loc 1 40 12 view .LVU58
+ 326 001e C0ED007A 		vstr.32	s15, [r0]
+  41:Core/Src/robocontrol.c ****         *y = stepHeight * sinf(M_PI * time);
+ 327              		.loc 1 41 9 is_stmt 1 view .LVU59
+ 328              		.loc 1 41 37 is_stmt 0 view .LVU60
+ 329 0022 B7EEC00A 		vcvt.f64.f32	d0, s0
+ 330              	.LVL19:
+ 331              		.loc 1 41 37 view .LVU61
+ 332 0026 9FED127B 		vldr.64	d7, .L27
+ 333 002a 20EE070B 		vmul.f64	d0, d0, d7
+ 334              		.loc 1 41 27 view .LVU62
+ 335 002e B7EEC00B 		vcvt.f32.f64	s0, d0
+ 336 0032 FFF7FEFF 		bl	sinf
+ 337              	.LVL20:
+ 338              		.loc 1 41 25 view .LVU63
+ 339 0036 F3EE0E7A 		vmov.f32	s15, #3.0e+1
+ 340 003a 20EE270A 		vmul.f32	s0, s0, s15
+ 341              		.loc 1 41 12 view .LVU64
+ 342 003e 84ED000A 		vstr.32	s0, [r4]
+ 343              	.L20:
+  42:Core/Src/robocontrol.c ****     } else {
+  43:Core/Src/robocontrol.c ****         // 放下脚并向后滑动
+  44:Core/Src/robocontrol.c ****         *x = stepLength * (2 * (1.0 - time));
+  45:Core/Src/robocontrol.c ****         *y = 0;
+  46:Core/Src/robocontrol.c ****     }
+  47:Core/Src/robocontrol.c **** }
+ 344              		.loc 1 47 1 view .LVU65
+ 345 0042 10BD     		pop	{r4, pc}
+ 346              	.LVL21:
+ 347              	.L25:
+  44:Core/Src/robocontrol.c ****         *y = 0;
+ 348              		.loc 1 44 9 is_stmt 1 view .LVU66
+  44:Core/Src/robocontrol.c ****         *y = 0;
+ 349              		.loc 1 44 37 is_stmt 0 view .LVU67
+ 350 0044 B7EEC00A 		vcvt.f64.f32	d0, s0
+ 351              	.LVL22:
+  44:Core/Src/robocontrol.c ****         *y = 0;
+ 352              		.loc 1 44 37 view .LVU68
+ 353 0048 B7EE007B 		vmov.f64	d7, #1.0e+0
+ 354 004c 37EE400B 		vsub.f64	d0, d7, d0
+  44:Core/Src/robocontrol.c ****         *y = 0;
+ 355              		.loc 1 44 30 view .LVU69
+ 356 0050 30EE000B 		vadd.f64	d0, d0, d0
+  44:Core/Src/robocontrol.c ****         *y = 0;
+ 357              		.loc 1 44 25 view .LVU70
+ 358 0054 9FED087B 		vldr.64	d7, .L27+8
+ 359 0058 20EE070B 		vmul.f64	d0, d0, d7
+ 360 005c B7EEC00B 		vcvt.f32.f64	s0, d0
+ARM GAS  /tmp/ccq3kZXF.s 			page 8
+
+
+  44:Core/Src/robocontrol.c ****         *y = 0;
+ 361              		.loc 1 44 12 view .LVU71
+ 362 0060 80ED000A 		vstr.32	s0, [r0]
+  45:Core/Src/robocontrol.c ****     }
+ 363              		.loc 1 45 9 is_stmt 1 view .LVU72
+  45:Core/Src/robocontrol.c ****     }
+ 364              		.loc 1 45 12 is_stmt 0 view .LVU73
+ 365 0064 0023     		movs	r3, #0
+ 366 0066 0B60     		str	r3, [r1]	@ float
+ 367              		.loc 1 47 1 view .LVU74
+ 368 0068 EBE7     		b	.L20
+ 369              	.L28:
+ 370 006a 00BFAFF3 		.align	3
+ 370      0080
+ 371              	.L27:
+ 372 0070 182D4454 		.word	1413754136
+ 373 0074 FB210940 		.word	1074340347
+ 374 0078 00000000 		.word	0
+ 375 007c 00004940 		.word	1078525952
+ 376 0080 00004842 		.word	1112014848
+ 377              		.cfi_endproc
+ 378              	.LFE154:
+ 380              		.section	.text.GetServoIDForLeg,"ax",%progbits
+ 381              		.align	1
+ 382              		.global	GetServoIDForLeg
+ 383              		.syntax unified
+ 384              		.thumb
+ 385              		.thumb_func
+ 386              		.fpu fpv5-d16
+ 388              	GetServoIDForLeg:
+ 389              	.LVL23:
+ 390              	.LFB155:
+  48:Core/Src/robocontrol.c **** 
+  49:Core/Src/robocontrol.c **** /*** 舵机标号获取函数 ***/
+  50:Core/Src/robocontrol.c **** ServoID GetServoIDForLeg(int leg, bool isUpperLeg) {
+ 391              		.loc 1 50 52 is_stmt 1 view -0
+ 392              		.cfi_startproc
+ 393              		@ args = 0, pretend = 0, frame = 0
+ 394              		@ frame_needed = 0, uses_anonymous_args = 0
+ 395              		@ link register save eliminated.
+  51:Core/Src/robocontrol.c ****     if (isUpperLeg) {
+ 396              		.loc 1 51 5 view .LVU76
+ 397              		.loc 1 51 8 is_stmt 0 view .LVU77
+ 398 0000 19B1     		cbz	r1, .L30
+  52:Core/Src/robocontrol.c ****         return (ServoID)((leg * 2) + 1);  // 大腿舵机（双数）
+ 399              		.loc 1 52 9 is_stmt 1 view .LVU78
+ 400              		.loc 1 52 16 is_stmt 0 view .LVU79
+ 401 0002 4000     		lsls	r0, r0, #1
+ 402              	.LVL24:
+ 403              		.loc 1 52 16 view .LVU80
+ 404 0004 0130     		adds	r0, r0, #1
+ 405 0006 C0B2     		uxtb	r0, r0
+ 406 0008 7047     		bx	lr
+ 407              	.LVL25:
+ 408              	.L30:
+  53:Core/Src/robocontrol.c ****     } else {
+  54:Core/Src/robocontrol.c ****         return (ServoID)((leg * 2));  // 小腿舵机（单数）
+ARM GAS  /tmp/ccq3kZXF.s 			page 9
+
+
+ 409              		.loc 1 54 9 is_stmt 1 view .LVU81
+ 410              		.loc 1 54 31 is_stmt 0 view .LVU82
+ 411 000a C0B2     		uxtb	r0, r0
+ 412              	.LVL26:
+ 413              		.loc 1 54 16 view .LVU83
+ 414 000c 4000     		lsls	r0, r0, #1
+ 415 000e C0B2     		uxtb	r0, r0
+  55:Core/Src/robocontrol.c ****     }
+  56:Core/Src/robocontrol.c **** }
+ 416              		.loc 1 56 1 view .LVU84
+ 417 0010 7047     		bx	lr
+ 418              		.cfi_endproc
+ 419              	.LFE155:
+ 421              		.section	.text.Gait_Forward,"ax",%progbits
+ 422              		.align	1
+ 423              		.global	Gait_Forward
+ 424              		.syntax unified
+ 425              		.thumb
+ 426              		.thumb_func
+ 427              		.fpu fpv5-d16
+ 429              	Gait_Forward:
+ 430              	.LFB156:
+  57:Core/Src/robocontrol.c **** 
+  58:Core/Src/robocontrol.c **** /*** 前进步态控制 ***/
+  59:Core/Src/robocontrol.c **** void Gait_Forward(void) {
+ 431              		.loc 1 59 25 is_stmt 1 view -0
+ 432              		.cfi_startproc
+ 433              		@ args = 0, pretend = 0, frame = 16
+ 434              		@ frame_needed = 0, uses_anonymous_args = 0
+ 435 0000 70B5     		push	{r4, r5, r6, lr}
+ 436              	.LCFI4:
+ 437              		.cfi_def_cfa_offset 16
+ 438              		.cfi_offset 4, -16
+ 439              		.cfi_offset 5, -12
+ 440              		.cfi_offset 6, -8
+ 441              		.cfi_offset 14, -4
+ 442 0002 84B0     		sub	sp, sp, #16
+ 443              	.LCFI5:
+ 444              		.cfi_def_cfa_offset 32
+  60:Core/Src/robocontrol.c ****     for (int leg = 0; leg < NUM_SERVOS / 2; leg++) {  // 每个舵机一条腿（NUM_SERVOS / 2 表
+ 445              		.loc 1 60 5 view .LVU86
+ 446              	.LBB2:
+ 447              		.loc 1 60 10 view .LVU87
+ 448              	.LVL27:
+ 449              		.loc 1 60 14 is_stmt 0 view .LVU88
+ 450 0004 0024     		movs	r4, #0
+ 451              		.loc 1 60 5 view .LVU89
+ 452 0006 22E0     		b	.L33
+ 453              	.LVL28:
+ 454              	.L36:
+ 455              	.LBB3:
+  61:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;  // 对角腿同步：Leg 0 和 Leg 3 相�
+ 456              		.loc 1 61 51 view .LVU90
+ 457 0008 B6EE000A 		vmov.f32	s0, #5.0e-1
+ 458              	.L34:
+ 459              	.LVL29:
+  62:Core/Src/robocontrol.c ****         float x, y;
+ARM GAS  /tmp/ccq3kZXF.s 			page 10
+
+
+ 460              		.loc 1 62 9 is_stmt 1 discriminator 4 view .LVU91
+  63:Core/Src/robocontrol.c ****         CalculateGait(time, &x, &y);  // 计算足尖位置
+ 461              		.loc 1 63 9 discriminator 4 view .LVU92
+ 462 000c 01A9     		add	r1, sp, #4
+ 463 000e 6846     		mov	r0, sp
+ 464 0010 FFF7FEFF 		bl	CalculateGait
+ 465              	.LVL30:
+  64:Core/Src/robocontrol.c **** 
+  65:Core/Src/robocontrol.c ****         float theta1, theta2;
+ 466              		.loc 1 65 9 discriminator 4 view .LVU93
+  66:Core/Src/robocontrol.c ****         InverseKinematics(x, y, &theta1, &theta2);  // 计算关节角度
+ 467              		.loc 1 66 9 discriminator 4 view .LVU94
+ 468 0014 03A9     		add	r1, sp, #12
+ 469 0016 02A8     		add	r0, sp, #8
+ 470 0018 DDED010A 		vldr.32	s1, [sp, #4]
+ 471 001c 9DED000A 		vldr.32	s0, [sp]
+ 472 0020 FFF7FEFF 		bl	InverseKinematics
+ 473              	.LVL31:
+  67:Core/Src/robocontrol.c **** 
+  68:Core/Src/robocontrol.c ****         // 局部变量定义，控制大腿和小腿舵机
+  69:Core/Src/robocontrol.c ****         ServoID upperLegServo = GetServoIDForLeg(leg, true);  // 获取大腿舵机
+ 474              		.loc 1 69 9 discriminator 4 view .LVU95
+ 475              		.loc 1 69 33 is_stmt 0 discriminator 4 view .LVU96
+ 476 0024 0121     		movs	r1, #1
+ 477 0026 2046     		mov	r0, r4
+ 478 0028 FFF7FEFF 		bl	GetServoIDForLeg
+ 479              	.LVL32:
+ 480 002c 0646     		mov	r6, r0
+ 481              	.LVL33:
+  70:Core/Src/robocontrol.c ****         ServoID lowerLegServo = GetServoIDForLeg(leg, false);  // 获取小腿舵机
+ 482              		.loc 1 70 9 is_stmt 1 discriminator 4 view .LVU97
+ 483              		.loc 1 70 33 is_stmt 0 discriminator 4 view .LVU98
+ 484 002e 0021     		movs	r1, #0
+ 485 0030 2046     		mov	r0, r4
+ 486 0032 FFF7FEFF 		bl	GetServoIDForLeg
+ 487              	.LVL34:
+ 488 0036 0546     		mov	r5, r0
+ 489              	.LVL35:
+  71:Core/Src/robocontrol.c **** 
+  72:Core/Src/robocontrol.c ****         Set_Servo_Angle(upperLegServo, theta1);  // 控制大腿舵机
+ 490              		.loc 1 72 9 is_stmt 1 discriminator 4 view .LVU99
+ 491 0038 9DED020A 		vldr.32	s0, [sp, #8]
+ 492 003c 3046     		mov	r0, r6
+ 493 003e FFF7FEFF 		bl	Set_Servo_Angle
+ 494              	.LVL36:
+  73:Core/Src/robocontrol.c ****         Set_Servo_Angle(lowerLegServo, theta2);  // 控制小腿舵机
+ 495              		.loc 1 73 9 discriminator 4 view .LVU100
+ 496 0042 9DED030A 		vldr.32	s0, [sp, #12]
+ 497 0046 2846     		mov	r0, r5
+ 498 0048 FFF7FEFF 		bl	Set_Servo_Angle
+ 499              	.LVL37:
+ 500              	.LBE3:
+  60:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;  // 对角腿同步：Leg 0 和 Leg 3 相�
+ 501              		.loc 1 60 45 discriminator 4 view .LVU101
+  60:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;  // 对角腿同步：Leg 0 和 Leg 3 相�
+ 502              		.loc 1 60 48 is_stmt 0 discriminator 4 view .LVU102
+ 503 004c 0134     		adds	r4, r4, #1
+ARM GAS  /tmp/ccq3kZXF.s 			page 11
+
+
+ 504              	.LVL38:
+ 505              	.L33:
+  60:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;  // 对角腿同步：Leg 0 和 Leg 3 相�
+ 506              		.loc 1 60 23 is_stmt 1 discriminator 2 view .LVU103
+  60:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;  // 对角腿同步：Leg 0 和 Leg 3 相�
+ 507              		.loc 1 60 5 is_stmt 0 discriminator 2 view .LVU104
+ 508 004e 032C     		cmp	r4, #3
+ 509 0050 06DC     		bgt	.L38
+ 510              	.LBB4:
+  61:Core/Src/robocontrol.c ****         float x, y;
+ 511              		.loc 1 61 9 is_stmt 1 view .LVU105
+  61:Core/Src/robocontrol.c ****         float x, y;
+ 512              		.loc 1 61 51 is_stmt 0 view .LVU106
+ 513 0052 032C     		cmp	r4, #3
+ 514 0054 18BF     		it	ne
+ 515 0056 002C     		cmpne	r4, #0
+ 516 0058 D6D1     		bne	.L36
+ 517 005a 9FED020A 		vldr.32	s0, .L39
+ 518 005e D5E7     		b	.L34
+ 519              	.L38:
+ 520              	.LBE4:
+ 521              	.LBE2:
+  74:Core/Src/robocontrol.c ****     }
+  75:Core/Src/robocontrol.c **** }
+ 522              		.loc 1 75 1 view .LVU107
+ 523 0060 04B0     		add	sp, sp, #16
+ 524              	.LCFI6:
+ 525              		.cfi_def_cfa_offset 16
+ 526              		@ sp needed
+ 527 0062 70BD     		pop	{r4, r5, r6, pc}
+ 528              	.LVL39:
+ 529              	.L40:
+ 530              		.loc 1 75 1 view .LVU108
+ 531              		.align	2
+ 532              	.L39:
+ 533 0064 00000000 		.word	0
+ 534              		.cfi_endproc
+ 535              	.LFE156:
+ 537              		.section	.text.Gait_Backward,"ax",%progbits
+ 538              		.align	1
+ 539              		.global	Gait_Backward
+ 540              		.syntax unified
+ 541              		.thumb
+ 542              		.thumb_func
+ 543              		.fpu fpv5-d16
+ 545              	Gait_Backward:
+ 546              	.LFB157:
+  76:Core/Src/robocontrol.c **** 
+  77:Core/Src/robocontrol.c **** /*** 后退步态控制 ***/
+  78:Core/Src/robocontrol.c **** void Gait_Backward(void) {
+ 547              		.loc 1 78 26 is_stmt 1 view -0
+ 548              		.cfi_startproc
+ 549              		@ args = 0, pretend = 0, frame = 16
+ 550              		@ frame_needed = 0, uses_anonymous_args = 0
+ 551 0000 70B5     		push	{r4, r5, r6, lr}
+ 552              	.LCFI7:
+ 553              		.cfi_def_cfa_offset 16
+ARM GAS  /tmp/ccq3kZXF.s 			page 12
+
+
+ 554              		.cfi_offset 4, -16
+ 555              		.cfi_offset 5, -12
+ 556              		.cfi_offset 6, -8
+ 557              		.cfi_offset 14, -4
+ 558 0002 84B0     		sub	sp, sp, #16
+ 559              	.LCFI8:
+ 560              		.cfi_def_cfa_offset 32
+  79:Core/Src/robocontrol.c ****     for (int leg = 0; leg < NUM_SERVOS / 2; leg++) {
+ 561              		.loc 1 79 5 view .LVU110
+ 562              	.LBB5:
+ 563              		.loc 1 79 10 view .LVU111
+ 564              	.LVL40:
+ 565              		.loc 1 79 14 is_stmt 0 view .LVU112
+ 566 0004 0024     		movs	r4, #0
+ 567              		.loc 1 79 5 view .LVU113
+ 568 0006 26E0     		b	.L42
+ 569              	.LVL41:
+ 570              	.L45:
+ 571              	.LBB6:
+  80:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;  // 对角腿同步
+ 572              		.loc 1 80 51 view .LVU114
+ 573 0008 F6EE007A 		vmov.f32	s15, #5.0e-1
+ 574              	.L43:
+ 575              	.LVL42:
+  81:Core/Src/robocontrol.c ****         float x, y;
+ 576              		.loc 1 81 9 is_stmt 1 discriminator 4 view .LVU115
+  82:Core/Src/robocontrol.c ****         CalculateGait(1.0 - time, &x, &y);  // 反向运动
+ 577              		.loc 1 82 9 discriminator 4 view .LVU116
+ 578 000c 01A9     		add	r1, sp, #4
+ 579 000e 6846     		mov	r0, sp
+ 580 0010 B7EE000A 		vmov.f32	s0, #1.0e+0
+ 581 0014 30EE670A 		vsub.f32	s0, s0, s15
+ 582 0018 FFF7FEFF 		bl	CalculateGait
+ 583              	.LVL43:
+  83:Core/Src/robocontrol.c **** 
+  84:Core/Src/robocontrol.c ****         float theta1, theta2;
+ 584              		.loc 1 84 9 discriminator 4 view .LVU117
+  85:Core/Src/robocontrol.c ****         InverseKinematics(x, y, &theta1, &theta2);  // 计算关节角度
+ 585              		.loc 1 85 9 discriminator 4 view .LVU118
+ 586 001c 03A9     		add	r1, sp, #12
+ 587 001e 02A8     		add	r0, sp, #8
+ 588 0020 DDED010A 		vldr.32	s1, [sp, #4]
+ 589 0024 9DED000A 		vldr.32	s0, [sp]
+ 590 0028 FFF7FEFF 		bl	InverseKinematics
+ 591              	.LVL44:
+  86:Core/Src/robocontrol.c **** 
+  87:Core/Src/robocontrol.c ****         // 局部变量定义，控制大腿和小腿舵机
+  88:Core/Src/robocontrol.c ****         ServoID upperLegServo = GetServoIDForLeg(leg, true);
+ 592              		.loc 1 88 9 discriminator 4 view .LVU119
+ 593              		.loc 1 88 33 is_stmt 0 discriminator 4 view .LVU120
+ 594 002c 0121     		movs	r1, #1
+ 595 002e 2046     		mov	r0, r4
+ 596 0030 FFF7FEFF 		bl	GetServoIDForLeg
+ 597              	.LVL45:
+ 598 0034 0646     		mov	r6, r0
+ 599              	.LVL46:
+  89:Core/Src/robocontrol.c ****         ServoID lowerLegServo = GetServoIDForLeg(leg, false);
+ARM GAS  /tmp/ccq3kZXF.s 			page 13
+
+
+ 600              		.loc 1 89 9 is_stmt 1 discriminator 4 view .LVU121
+ 601              		.loc 1 89 33 is_stmt 0 discriminator 4 view .LVU122
+ 602 0036 0021     		movs	r1, #0
+ 603 0038 2046     		mov	r0, r4
+ 604 003a FFF7FEFF 		bl	GetServoIDForLeg
+ 605              	.LVL47:
+ 606 003e 0546     		mov	r5, r0
+ 607              	.LVL48:
+  90:Core/Src/robocontrol.c **** 
+  91:Core/Src/robocontrol.c ****         Set_Servo_Angle(upperLegServo, theta1);  // 控制大腿舵机
+ 608              		.loc 1 91 9 is_stmt 1 discriminator 4 view .LVU123
+ 609 0040 9DED020A 		vldr.32	s0, [sp, #8]
+ 610 0044 3046     		mov	r0, r6
+ 611 0046 FFF7FEFF 		bl	Set_Servo_Angle
+ 612              	.LVL49:
+  92:Core/Src/robocontrol.c ****         Set_Servo_Angle(lowerLegServo, theta2);  // 控制小腿舵机
+ 613              		.loc 1 92 9 discriminator 4 view .LVU124
+ 614 004a 9DED030A 		vldr.32	s0, [sp, #12]
+ 615 004e 2846     		mov	r0, r5
+ 616 0050 FFF7FEFF 		bl	Set_Servo_Angle
+ 617              	.LVL50:
+ 618              	.LBE6:
+  79:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;  // 对角腿同步
+ 619              		.loc 1 79 45 discriminator 4 view .LVU125
+  79:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;  // 对角腿同步
+ 620              		.loc 1 79 48 is_stmt 0 discriminator 4 view .LVU126
+ 621 0054 0134     		adds	r4, r4, #1
+ 622              	.LVL51:
+ 623              	.L42:
+  79:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;  // 对角腿同步
+ 624              		.loc 1 79 23 is_stmt 1 discriminator 2 view .LVU127
+  79:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;  // 对角腿同步
+ 625              		.loc 1 79 5 is_stmt 0 discriminator 2 view .LVU128
+ 626 0056 032C     		cmp	r4, #3
+ 627 0058 06DC     		bgt	.L47
+ 628              	.LBB7:
+  80:Core/Src/robocontrol.c ****         float x, y;
+ 629              		.loc 1 80 9 is_stmt 1 view .LVU129
+  80:Core/Src/robocontrol.c ****         float x, y;
+ 630              		.loc 1 80 51 is_stmt 0 view .LVU130
+ 631 005a 032C     		cmp	r4, #3
+ 632 005c 18BF     		it	ne
+ 633 005e 002C     		cmpne	r4, #0
+ 634 0060 D2D1     		bne	.L45
+ 635 0062 DFED027A 		vldr.32	s15, .L48
+ 636 0066 D1E7     		b	.L43
+ 637              	.L47:
+ 638              	.LBE7:
+ 639              	.LBE5:
+  93:Core/Src/robocontrol.c ****     }
+  94:Core/Src/robocontrol.c **** }
+ 640              		.loc 1 94 1 view .LVU131
+ 641 0068 04B0     		add	sp, sp, #16
+ 642              	.LCFI9:
+ 643              		.cfi_def_cfa_offset 16
+ 644              		@ sp needed
+ 645 006a 70BD     		pop	{r4, r5, r6, pc}
+ARM GAS  /tmp/ccq3kZXF.s 			page 14
+
+
+ 646              	.LVL52:
+ 647              	.L49:
+ 648              		.loc 1 94 1 view .LVU132
+ 649              		.align	2
+ 650              	.L48:
+ 651 006c 00000000 		.word	0
+ 652              		.cfi_endproc
+ 653              	.LFE157:
+ 655              		.section	.text.Gait_Turn_Left,"ax",%progbits
+ 656              		.align	1
+ 657              		.global	Gait_Turn_Left
+ 658              		.syntax unified
+ 659              		.thumb
+ 660              		.thumb_func
+ 661              		.fpu fpv5-d16
+ 663              	Gait_Turn_Left:
+ 664              	.LFB158:
+  95:Core/Src/robocontrol.c **** 
+  96:Core/Src/robocontrol.c **** /*** 左转步态控制 ***/
+  97:Core/Src/robocontrol.c **** void Gait_Turn_Left(void) {
+ 665              		.loc 1 97 27 is_stmt 1 view -0
+ 666              		.cfi_startproc
+ 667              		@ args = 0, pretend = 0, frame = 16
+ 668              		@ frame_needed = 0, uses_anonymous_args = 0
+ 669 0000 70B5     		push	{r4, r5, r6, lr}
+ 670              	.LCFI10:
+ 671              		.cfi_def_cfa_offset 16
+ 672              		.cfi_offset 4, -16
+ 673              		.cfi_offset 5, -12
+ 674              		.cfi_offset 6, -8
+ 675              		.cfi_offset 14, -4
+ 676 0002 84B0     		sub	sp, sp, #16
+ 677              	.LCFI11:
+ 678              		.cfi_def_cfa_offset 32
+  98:Core/Src/robocontrol.c ****     for (int leg = 0; leg < NUM_SERVOS / 2; leg++) {
+ 679              		.loc 1 98 5 view .LVU134
+ 680              	.LBB8:
+ 681              		.loc 1 98 10 view .LVU135
+ 682              	.LVL53:
+ 683              		.loc 1 98 14 is_stmt 0 view .LVU136
+ 684 0004 0024     		movs	r4, #0
+ 685              		.loc 1 98 5 view .LVU137
+ 686 0006 23E0     		b	.L51
+ 687              	.LVL54:
+ 688              	.L56:
+ 689              	.LBB9:
+  99:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 690              		.loc 1 99 51 view .LVU138
+ 691 0008 B6EE000A 		vmov.f32	s0, #5.0e-1
+ 692 000c 2BE0     		b	.L52
+ 693              	.LVL55:
+ 694              	.L53:
+ 100:Core/Src/robocontrol.c ****         float x, y;
+ 101:Core/Src/robocontrol.c **** 
+ 102:Core/Src/robocontrol.c ****         // 左侧腿向后，右侧腿向前
+ 103:Core/Src/robocontrol.c ****         if (leg == 0 || leg == 3) {
+ 104:Core/Src/robocontrol.c ****             CalculateGait(1.0 - time, &x, &y);  // 左侧腿后移
+ARM GAS  /tmp/ccq3kZXF.s 			page 15
+
+
+ 105:Core/Src/robocontrol.c ****         } else {
+ 106:Core/Src/robocontrol.c ****             CalculateGait(time, &x, &y);  // 右侧腿前移
+ 695              		.loc 1 106 13 is_stmt 1 view .LVU139
+ 696 000e 01A9     		add	r1, sp, #4
+ 697 0010 6846     		mov	r0, sp
+ 698 0012 FFF7FEFF 		bl	CalculateGait
+ 699              	.LVL56:
+ 700              	.L54:
+ 107:Core/Src/robocontrol.c ****         }
+ 108:Core/Src/robocontrol.c **** 
+ 109:Core/Src/robocontrol.c ****         float theta1, theta2;
+ 701              		.loc 1 109 9 discriminator 2 view .LVU140
+ 110:Core/Src/robocontrol.c ****         InverseKinematics(x, y, &theta1, &theta2);
+ 702              		.loc 1 110 9 discriminator 2 view .LVU141
+ 703 0016 03A9     		add	r1, sp, #12
+ 704 0018 02A8     		add	r0, sp, #8
+ 705 001a DDED010A 		vldr.32	s1, [sp, #4]
+ 706 001e 9DED000A 		vldr.32	s0, [sp]
+ 707 0022 FFF7FEFF 		bl	InverseKinematics
+ 708              	.LVL57:
+ 111:Core/Src/robocontrol.c **** 
+ 112:Core/Src/robocontrol.c ****         // 局部变量定义，控制大腿和小腿舵机
+ 113:Core/Src/robocontrol.c ****         ServoID upperLegServo = GetServoIDForLeg(leg, true);
+ 709              		.loc 1 113 9 discriminator 2 view .LVU142
+ 710              		.loc 1 113 33 is_stmt 0 discriminator 2 view .LVU143
+ 711 0026 0121     		movs	r1, #1
+ 712 0028 2046     		mov	r0, r4
+ 713 002a FFF7FEFF 		bl	GetServoIDForLeg
+ 714              	.LVL58:
+ 715 002e 0646     		mov	r6, r0
+ 716              	.LVL59:
+ 114:Core/Src/robocontrol.c ****         ServoID lowerLegServo = GetServoIDForLeg(leg, false);
+ 717              		.loc 1 114 9 is_stmt 1 discriminator 2 view .LVU144
+ 718              		.loc 1 114 33 is_stmt 0 discriminator 2 view .LVU145
+ 719 0030 0021     		movs	r1, #0
+ 720 0032 2046     		mov	r0, r4
+ 721 0034 FFF7FEFF 		bl	GetServoIDForLeg
+ 722              	.LVL60:
+ 723 0038 0546     		mov	r5, r0
+ 724              	.LVL61:
+ 115:Core/Src/robocontrol.c **** 
+ 116:Core/Src/robocontrol.c ****         Set_Servo_Angle(upperLegServo, theta1);
+ 725              		.loc 1 116 9 is_stmt 1 discriminator 2 view .LVU146
+ 726 003a 9DED020A 		vldr.32	s0, [sp, #8]
+ 727 003e 3046     		mov	r0, r6
+ 728 0040 FFF7FEFF 		bl	Set_Servo_Angle
+ 729              	.LVL62:
+ 117:Core/Src/robocontrol.c ****         Set_Servo_Angle(lowerLegServo, theta2);
+ 730              		.loc 1 117 9 discriminator 2 view .LVU147
+ 731 0044 9DED030A 		vldr.32	s0, [sp, #12]
+ 732 0048 2846     		mov	r0, r5
+ 733 004a FFF7FEFF 		bl	Set_Servo_Angle
+ 734              	.LVL63:
+ 735              	.LBE9:
+  98:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 736              		.loc 1 98 45 discriminator 2 view .LVU148
+  98:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ARM GAS  /tmp/ccq3kZXF.s 			page 16
+
+
+ 737              		.loc 1 98 48 is_stmt 0 discriminator 2 view .LVU149
+ 738 004e 0134     		adds	r4, r4, #1
+ 739              	.LVL64:
+ 740              	.L51:
+  98:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 741              		.loc 1 98 23 is_stmt 1 discriminator 1 view .LVU150
+  98:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 742              		.loc 1 98 5 is_stmt 0 discriminator 1 view .LVU151
+ 743 0050 032C     		cmp	r4, #3
+ 744 0052 13DC     		bgt	.L58
+ 745              	.LBB10:
+  99:Core/Src/robocontrol.c ****         float x, y;
+ 746              		.loc 1 99 9 is_stmt 1 view .LVU152
+  99:Core/Src/robocontrol.c ****         float x, y;
+ 747              		.loc 1 99 51 is_stmt 0 view .LVU153
+ 748 0054 032C     		cmp	r4, #3
+ 749 0056 18BF     		it	ne
+ 750 0058 002C     		cmpne	r4, #0
+ 751 005a 0CBF     		ite	eq
+ 752 005c 0123     		moveq	r3, #1
+ 753 005e 0023     		movne	r3, #0
+ 754 0060 D2D1     		bne	.L56
+ 755 0062 9FED070A 		vldr.32	s0, .L59
+ 756              	.L52:
+ 757              	.LVL65:
+ 100:Core/Src/robocontrol.c **** 
+ 758              		.loc 1 100 9 is_stmt 1 discriminator 4 view .LVU154
+ 103:Core/Src/robocontrol.c ****             CalculateGait(1.0 - time, &x, &y);  // 左侧腿后移
+ 759              		.loc 1 103 9 discriminator 4 view .LVU155
+ 103:Core/Src/robocontrol.c ****             CalculateGait(1.0 - time, &x, &y);  // 左侧腿后移
+ 760              		.loc 1 103 12 is_stmt 0 discriminator 4 view .LVU156
+ 761 0066 002B     		cmp	r3, #0
+ 762 0068 D1D0     		beq	.L53
+ 104:Core/Src/robocontrol.c ****         } else {
+ 763              		.loc 1 104 13 is_stmt 1 view .LVU157
+ 764 006a 01A9     		add	r1, sp, #4
+ 765 006c 6846     		mov	r0, sp
+ 766 006e F7EE007A 		vmov.f32	s15, #1.0e+0
+ 767 0072 37EEC00A 		vsub.f32	s0, s15, s0
+ 768              	.LVL66:
+ 104:Core/Src/robocontrol.c ****         } else {
+ 769              		.loc 1 104 13 is_stmt 0 view .LVU158
+ 770 0076 FFF7FEFF 		bl	CalculateGait
+ 771              	.LVL67:
+ 772 007a CCE7     		b	.L54
+ 773              	.L58:
+ 104:Core/Src/robocontrol.c ****         } else {
+ 774              		.loc 1 104 13 view .LVU159
+ 775              	.LBE10:
+ 776              	.LBE8:
+ 118:Core/Src/robocontrol.c ****     }
+ 119:Core/Src/robocontrol.c **** }
+ 777              		.loc 1 119 1 view .LVU160
+ 778 007c 04B0     		add	sp, sp, #16
+ 779              	.LCFI12:
+ 780              		.cfi_def_cfa_offset 16
+ 781              		@ sp needed
+ARM GAS  /tmp/ccq3kZXF.s 			page 17
+
+
+ 782 007e 70BD     		pop	{r4, r5, r6, pc}
+ 783              	.LVL68:
+ 784              	.L60:
+ 785              		.loc 1 119 1 view .LVU161
+ 786              		.align	2
+ 787              	.L59:
+ 788 0080 00000000 		.word	0
+ 789              		.cfi_endproc
+ 790              	.LFE158:
+ 792              		.section	.text.Gait_Turn_Right,"ax",%progbits
+ 793              		.align	1
+ 794              		.global	Gait_Turn_Right
+ 795              		.syntax unified
+ 796              		.thumb
+ 797              		.thumb_func
+ 798              		.fpu fpv5-d16
+ 800              	Gait_Turn_Right:
+ 801              	.LFB159:
+ 120:Core/Src/robocontrol.c **** 
+ 121:Core/Src/robocontrol.c **** /*** 右转步态控制 ***/
+ 122:Core/Src/robocontrol.c **** void Gait_Turn_Right(void) {
+ 802              		.loc 1 122 28 is_stmt 1 view -0
+ 803              		.cfi_startproc
+ 804              		@ args = 0, pretend = 0, frame = 16
+ 805              		@ frame_needed = 0, uses_anonymous_args = 0
+ 806 0000 70B5     		push	{r4, r5, r6, lr}
+ 807              	.LCFI13:
+ 808              		.cfi_def_cfa_offset 16
+ 809              		.cfi_offset 4, -16
+ 810              		.cfi_offset 5, -12
+ 811              		.cfi_offset 6, -8
+ 812              		.cfi_offset 14, -4
+ 813 0002 84B0     		sub	sp, sp, #16
+ 814              	.LCFI14:
+ 815              		.cfi_def_cfa_offset 32
+ 123:Core/Src/robocontrol.c ****     for (int leg = 0; leg < NUM_SERVOS / 2; leg++) {
+ 816              		.loc 1 123 5 view .LVU163
+ 817              	.LBB11:
+ 818              		.loc 1 123 10 view .LVU164
+ 819              	.LVL69:
+ 820              		.loc 1 123 14 is_stmt 0 view .LVU165
+ 821 0004 0024     		movs	r4, #0
+ 822              		.loc 1 123 5 view .LVU166
+ 823 0006 27E0     		b	.L62
+ 824              	.LVL70:
+ 825              	.L67:
+ 826              	.LBB12:
+ 124:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 827              		.loc 1 124 51 view .LVU167
+ 828 0008 B6EE000A 		vmov.f32	s0, #5.0e-1
+ 829 000c 2FE0     		b	.L63
+ 830              	.LVL71:
+ 831              	.L64:
+ 125:Core/Src/robocontrol.c ****         float x, y;
+ 126:Core/Src/robocontrol.c **** 
+ 127:Core/Src/robocontrol.c ****         // 左侧腿向前，右侧腿向后
+ 128:Core/Src/robocontrol.c ****         if (leg == 0 || leg == 3) {
+ARM GAS  /tmp/ccq3kZXF.s 			page 18
+
+
+ 129:Core/Src/robocontrol.c ****             CalculateGait(time, &x, &y);  // 左侧腿前移
+ 130:Core/Src/robocontrol.c ****         } else {
+ 131:Core/Src/robocontrol.c ****             CalculateGait(1.0 - time, &x, &y);  // 右侧腿后移
+ 832              		.loc 1 131 13 is_stmt 1 view .LVU168
+ 833 000e 01A9     		add	r1, sp, #4
+ 834 0010 6846     		mov	r0, sp
+ 835 0012 F7EE007A 		vmov.f32	s15, #1.0e+0
+ 836 0016 37EEC00A 		vsub.f32	s0, s15, s0
+ 837              	.LVL72:
+ 838              		.loc 1 131 13 is_stmt 0 view .LVU169
+ 839 001a FFF7FEFF 		bl	CalculateGait
+ 840              	.LVL73:
+ 841              	.L65:
+ 132:Core/Src/robocontrol.c ****         }
+ 133:Core/Src/robocontrol.c **** 
+ 134:Core/Src/robocontrol.c ****         float theta1, theta2;
+ 842              		.loc 1 134 9 is_stmt 1 discriminator 2 view .LVU170
+ 135:Core/Src/robocontrol.c ****         InverseKinematics(x, y, &theta1, &theta2);
+ 843              		.loc 1 135 9 discriminator 2 view .LVU171
+ 844 001e 03A9     		add	r1, sp, #12
+ 845 0020 02A8     		add	r0, sp, #8
+ 846 0022 DDED010A 		vldr.32	s1, [sp, #4]
+ 847 0026 9DED000A 		vldr.32	s0, [sp]
+ 848 002a FFF7FEFF 		bl	InverseKinematics
+ 849              	.LVL74:
+ 136:Core/Src/robocontrol.c **** 
+ 137:Core/Src/robocontrol.c ****         // 局部变量定义，控制大腿和小腿舵机
+ 138:Core/Src/robocontrol.c ****         ServoID upperLegServo = GetServoIDForLeg(leg, true);
+ 850              		.loc 1 138 9 discriminator 2 view .LVU172
+ 851              		.loc 1 138 33 is_stmt 0 discriminator 2 view .LVU173
+ 852 002e 0121     		movs	r1, #1
+ 853 0030 2046     		mov	r0, r4
+ 854 0032 FFF7FEFF 		bl	GetServoIDForLeg
+ 855              	.LVL75:
+ 856 0036 0646     		mov	r6, r0
+ 857              	.LVL76:
+ 139:Core/Src/robocontrol.c ****         ServoID lowerLegServo = GetServoIDForLeg(leg, false);
+ 858              		.loc 1 139 9 is_stmt 1 discriminator 2 view .LVU174
+ 859              		.loc 1 139 33 is_stmt 0 discriminator 2 view .LVU175
+ 860 0038 0021     		movs	r1, #0
+ 861 003a 2046     		mov	r0, r4
+ 862 003c FFF7FEFF 		bl	GetServoIDForLeg
+ 863              	.LVL77:
+ 864 0040 0546     		mov	r5, r0
+ 865              	.LVL78:
+ 140:Core/Src/robocontrol.c **** 
+ 141:Core/Src/robocontrol.c ****         Set_Servo_Angle(upperLegServo, theta1);
+ 866              		.loc 1 141 9 is_stmt 1 discriminator 2 view .LVU176
+ 867 0042 9DED020A 		vldr.32	s0, [sp, #8]
+ 868 0046 3046     		mov	r0, r6
+ 869 0048 FFF7FEFF 		bl	Set_Servo_Angle
+ 870              	.LVL79:
+ 142:Core/Src/robocontrol.c ****         Set_Servo_Angle(lowerLegServo, theta2);
+ 871              		.loc 1 142 9 discriminator 2 view .LVU177
+ 872 004c 9DED030A 		vldr.32	s0, [sp, #12]
+ 873 0050 2846     		mov	r0, r5
+ 874 0052 FFF7FEFF 		bl	Set_Servo_Angle
+ARM GAS  /tmp/ccq3kZXF.s 			page 19
+
+
+ 875              	.LVL80:
+ 876              	.LBE12:
+ 123:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 877              		.loc 1 123 45 discriminator 2 view .LVU178
+ 123:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 878              		.loc 1 123 48 is_stmt 0 discriminator 2 view .LVU179
+ 879 0056 0134     		adds	r4, r4, #1
+ 880              	.LVL81:
+ 881              	.L62:
+ 123:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 882              		.loc 1 123 23 is_stmt 1 discriminator 1 view .LVU180
+ 123:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 883              		.loc 1 123 5 is_stmt 0 discriminator 1 view .LVU181
+ 884 0058 032C     		cmp	r4, #3
+ 885 005a 0FDC     		bgt	.L69
+ 886              	.LBB13:
+ 124:Core/Src/robocontrol.c ****         float x, y;
+ 887              		.loc 1 124 9 is_stmt 1 view .LVU182
+ 124:Core/Src/robocontrol.c ****         float x, y;
+ 888              		.loc 1 124 51 is_stmt 0 view .LVU183
+ 889 005c 032C     		cmp	r4, #3
+ 890 005e 18BF     		it	ne
+ 891 0060 002C     		cmpne	r4, #0
+ 892 0062 0CBF     		ite	eq
+ 893 0064 0123     		moveq	r3, #1
+ 894 0066 0023     		movne	r3, #0
+ 895 0068 CED1     		bne	.L67
+ 896 006a 9FED050A 		vldr.32	s0, .L70
+ 897              	.L63:
+ 898              	.LVL82:
+ 125:Core/Src/robocontrol.c **** 
+ 899              		.loc 1 125 9 is_stmt 1 discriminator 4 view .LVU184
+ 128:Core/Src/robocontrol.c ****             CalculateGait(time, &x, &y);  // 左侧腿前移
+ 900              		.loc 1 128 9 discriminator 4 view .LVU185
+ 128:Core/Src/robocontrol.c ****             CalculateGait(time, &x, &y);  // 左侧腿前移
+ 901              		.loc 1 128 12 is_stmt 0 discriminator 4 view .LVU186
+ 902 006e 002B     		cmp	r3, #0
+ 903 0070 CDD0     		beq	.L64
+ 129:Core/Src/robocontrol.c ****         } else {
+ 904              		.loc 1 129 13 is_stmt 1 view .LVU187
+ 905 0072 01A9     		add	r1, sp, #4
+ 906 0074 6846     		mov	r0, sp
+ 907 0076 FFF7FEFF 		bl	CalculateGait
+ 908              	.LVL83:
+ 129:Core/Src/robocontrol.c ****         } else {
+ 909              		.loc 1 129 13 is_stmt 0 view .LVU188
+ 910 007a D0E7     		b	.L65
+ 911              	.L69:
+ 129:Core/Src/robocontrol.c ****         } else {
+ 912              		.loc 1 129 13 view .LVU189
+ 913              	.LBE13:
+ 914              	.LBE11:
+ 143:Core/Src/robocontrol.c ****     }
+ 144:Core/Src/robocontrol.c **** }
+ 915              		.loc 1 144 1 view .LVU190
+ 916 007c 04B0     		add	sp, sp, #16
+ 917              	.LCFI15:
+ARM GAS  /tmp/ccq3kZXF.s 			page 20
+
+
+ 918              		.cfi_def_cfa_offset 16
+ 919              		@ sp needed
+ 920 007e 70BD     		pop	{r4, r5, r6, pc}
+ 921              	.LVL84:
+ 922              	.L71:
+ 923              		.loc 1 144 1 view .LVU191
+ 924              		.align	2
+ 925              	.L70:
+ 926 0080 00000000 		.word	0
+ 927              		.cfi_endproc
+ 928              	.LFE159:
+ 930              		.section	.text.Gait_March_In_Place,"ax",%progbits
+ 931              		.align	1
+ 932              		.global	Gait_March_In_Place
+ 933              		.syntax unified
+ 934              		.thumb
+ 935              		.thumb_func
+ 936              		.fpu fpv5-d16
+ 938              	Gait_March_In_Place:
+ 939              	.LFB160:
+ 145:Core/Src/robocontrol.c **** 
+ 146:Core/Src/robocontrol.c **** /*** 原地踏步步态控制 ***/
+ 147:Core/Src/robocontrol.c **** void Gait_March_In_Place(void) {
+ 940              		.loc 1 147 32 is_stmt 1 view -0
+ 941              		.cfi_startproc
+ 942              		@ args = 0, pretend = 0, frame = 16
+ 943              		@ frame_needed = 0, uses_anonymous_args = 0
+ 944 0000 70B5     		push	{r4, r5, r6, lr}
+ 945              	.LCFI16:
+ 946              		.cfi_def_cfa_offset 16
+ 947              		.cfi_offset 4, -16
+ 948              		.cfi_offset 5, -12
+ 949              		.cfi_offset 6, -8
+ 950              		.cfi_offset 14, -4
+ 951 0002 84B0     		sub	sp, sp, #16
+ 952              	.LCFI17:
+ 953              		.cfi_def_cfa_offset 32
+ 148:Core/Src/robocontrol.c ****     for (int leg = 0; leg < NUM_SERVOS / 2; leg++) {
+ 954              		.loc 1 148 5 view .LVU193
+ 955              	.LBB14:
+ 956              		.loc 1 148 10 view .LVU194
+ 957              	.LVL85:
+ 958              		.loc 1 148 14 is_stmt 0 view .LVU195
+ 959 0004 0024     		movs	r4, #0
+ 960              		.loc 1 148 5 view .LVU196
+ 961 0006 22E0     		b	.L73
+ 962              	.LVL86:
+ 963              	.L76:
+ 964              	.LBB15:
+ 149:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 965              		.loc 1 149 51 view .LVU197
+ 966 0008 B6EE000A 		vmov.f32	s0, #5.0e-1
+ 967              	.L74:
+ 968              	.LVL87:
+ 150:Core/Src/robocontrol.c ****         float x, y;
+ 969              		.loc 1 150 9 is_stmt 1 discriminator 4 view .LVU198
+ 151:Core/Src/robocontrol.c **** 
+ARM GAS  /tmp/ccq3kZXF.s 			page 21
+
+
+ 152:Core/Src/robocontrol.c ****         CalculateGait(time, &x, &y);  // 在原地移动
+ 970              		.loc 1 152 9 discriminator 4 view .LVU199
+ 971 000c 01A9     		add	r1, sp, #4
+ 972 000e 6846     		mov	r0, sp
+ 973 0010 FFF7FEFF 		bl	CalculateGait
+ 974              	.LVL88:
+ 153:Core/Src/robocontrol.c **** 
+ 154:Core/Src/robocontrol.c ****         float theta1, theta2;
+ 975              		.loc 1 154 9 discriminator 4 view .LVU200
+ 155:Core/Src/robocontrol.c ****         InverseKinematics(x, y, &theta1, &theta2);
+ 976              		.loc 1 155 9 discriminator 4 view .LVU201
+ 977 0014 03A9     		add	r1, sp, #12
+ 978 0016 02A8     		add	r0, sp, #8
+ 979 0018 DDED010A 		vldr.32	s1, [sp, #4]
+ 980 001c 9DED000A 		vldr.32	s0, [sp]
+ 981 0020 FFF7FEFF 		bl	InverseKinematics
+ 982              	.LVL89:
+ 156:Core/Src/robocontrol.c **** 
+ 157:Core/Src/robocontrol.c ****         // 局部变量定义，控制大腿和小腿舵机
+ 158:Core/Src/robocontrol.c ****         ServoID upperLegServo = GetServoIDForLeg(leg, true);
+ 983              		.loc 1 158 9 discriminator 4 view .LVU202
+ 984              		.loc 1 158 33 is_stmt 0 discriminator 4 view .LVU203
+ 985 0024 0121     		movs	r1, #1
+ 986 0026 2046     		mov	r0, r4
+ 987 0028 FFF7FEFF 		bl	GetServoIDForLeg
+ 988              	.LVL90:
+ 989 002c 0646     		mov	r6, r0
+ 990              	.LVL91:
+ 159:Core/Src/robocontrol.c ****         ServoID lowerLegServo = GetServoIDForLeg(leg, false);
+ 991              		.loc 1 159 9 is_stmt 1 discriminator 4 view .LVU204
+ 992              		.loc 1 159 33 is_stmt 0 discriminator 4 view .LVU205
+ 993 002e 0021     		movs	r1, #0
+ 994 0030 2046     		mov	r0, r4
+ 995 0032 FFF7FEFF 		bl	GetServoIDForLeg
+ 996              	.LVL92:
+ 997 0036 0546     		mov	r5, r0
+ 998              	.LVL93:
+ 160:Core/Src/robocontrol.c **** 
+ 161:Core/Src/robocontrol.c ****         Set_Servo_Angle(upperLegServo, theta1);  // 控制大腿舵机
+ 999              		.loc 1 161 9 is_stmt 1 discriminator 4 view .LVU206
+ 1000 0038 9DED020A 		vldr.32	s0, [sp, #8]
+ 1001 003c 3046     		mov	r0, r6
+ 1002 003e FFF7FEFF 		bl	Set_Servo_Angle
+ 1003              	.LVL94:
+ 162:Core/Src/robocontrol.c ****         Set_Servo_Angle(lowerLegServo, theta2);  // 控制小腿舵机
+ 1004              		.loc 1 162 9 discriminator 4 view .LVU207
+ 1005 0042 9DED030A 		vldr.32	s0, [sp, #12]
+ 1006 0046 2846     		mov	r0, r5
+ 1007 0048 FFF7FEFF 		bl	Set_Servo_Angle
+ 1008              	.LVL95:
+ 1009              	.LBE15:
+ 148:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 1010              		.loc 1 148 45 discriminator 4 view .LVU208
+ 148:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 1011              		.loc 1 148 48 is_stmt 0 discriminator 4 view .LVU209
+ 1012 004c 0134     		adds	r4, r4, #1
+ 1013              	.LVL96:
+ARM GAS  /tmp/ccq3kZXF.s 			page 22
+
+
+ 1014              	.L73:
+ 148:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 1015              		.loc 1 148 23 is_stmt 1 discriminator 2 view .LVU210
+ 148:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
+ 1016              		.loc 1 148 5 is_stmt 0 discriminator 2 view .LVU211
+ 1017 004e 032C     		cmp	r4, #3
+ 1018 0050 06DC     		bgt	.L78
+ 1019              	.LBB16:
+ 149:Core/Src/robocontrol.c ****         float x, y;
+ 1020              		.loc 1 149 9 is_stmt 1 view .LVU212
+ 149:Core/Src/robocontrol.c ****         float x, y;
+ 1021              		.loc 1 149 51 is_stmt 0 view .LVU213
+ 1022 0052 032C     		cmp	r4, #3
+ 1023 0054 18BF     		it	ne
+ 1024 0056 002C     		cmpne	r4, #0
+ 1025 0058 D6D1     		bne	.L76
+ 1026 005a 9FED020A 		vldr.32	s0, .L79
+ 1027 005e D5E7     		b	.L74
+ 1028              	.L78:
+ 1029              	.LBE16:
+ 1030              	.LBE14:
+ 163:Core/Src/robocontrol.c ****     }
+ 164:Core/Src/robocontrol.c **** }
+ 1031              		.loc 1 164 1 view .LVU214
+ 1032 0060 04B0     		add	sp, sp, #16
+ 1033              	.LCFI18:
+ 1034              		.cfi_def_cfa_offset 16
+ 1035              		@ sp needed
+ 1036 0062 70BD     		pop	{r4, r5, r6, pc}
+ 1037              	.LVL97:
+ 1038              	.L80:
+ 1039              		.loc 1 164 1 view .LVU215
+ 1040              		.align	2
+ 1041              	.L79:
+ 1042 0064 00000000 		.word	0
+ 1043              		.cfi_endproc
+ 1044              	.LFE160:
+ 1046              		.global	current_action
+ 1047              		.section	.bss.current_action,"aw",%nobits
+ 1048              		.set	.LANCHOR0,. + 0
+ 1051              	current_action:
+ 1052 0000 00       		.space	1
+ 1053              		.text
+ 1054              	.Letext0:
+ 1055              		.file 2 "Core/Inc/servo_control.h"
+ 1056              		.file 3 "Core/Inc/robocontrol.h"
+ 1057              		.file 4 "/usr/include/newlib/math.h"
+ARM GAS  /tmp/ccq3kZXF.s 			page 23
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 robocontrol.c
+     /tmp/ccq3kZXF.s:17     .text.Move_Forward:0000000000000000 $t
+     /tmp/ccq3kZXF.s:25     .text.Move_Forward:0000000000000000 Move_Forward
+     /tmp/ccq3kZXF.s:43     .text.Move_Forward:0000000000000008 $d
+     /tmp/ccq3kZXF.s:48     .text.Move_Backward:0000000000000000 $t
+     /tmp/ccq3kZXF.s:55     .text.Move_Backward:0000000000000000 Move_Backward
+     /tmp/ccq3kZXF.s:72     .text.Move_Backward:0000000000000008 $d
+     /tmp/ccq3kZXF.s:77     .text.Turn_Left:0000000000000000 $t
+     /tmp/ccq3kZXF.s:84     .text.Turn_Left:0000000000000000 Turn_Left
+     /tmp/ccq3kZXF.s:101    .text.Turn_Left:0000000000000008 $d
+     /tmp/ccq3kZXF.s:106    .text.Turn_Right:0000000000000000 $t
+     /tmp/ccq3kZXF.s:113    .text.Turn_Right:0000000000000000 Turn_Right
+     /tmp/ccq3kZXF.s:130    .text.Turn_Right:0000000000000008 $d
+     /tmp/ccq3kZXF.s:135    .text.Stop:0000000000000000 $t
+     /tmp/ccq3kZXF.s:142    .text.Stop:0000000000000000 Stop
+     /tmp/ccq3kZXF.s:159    .text.Stop:0000000000000008 $d
+     /tmp/ccq3kZXF.s:164    .text.InverseKinematics:0000000000000000 $t
+     /tmp/ccq3kZXF.s:171    .text.InverseKinematics:0000000000000000 InverseKinematics
+     /tmp/ccq3kZXF.s:280    .text.InverseKinematics:000000000000008c $d
+     /tmp/ccq3kZXF.s:289    .text.CalculateGait:0000000000000000 $t
+     /tmp/ccq3kZXF.s:296    .text.CalculateGait:0000000000000000 CalculateGait
+     /tmp/ccq3kZXF.s:372    .text.CalculateGait:0000000000000070 $d
+     /tmp/ccq3kZXF.s:381    .text.GetServoIDForLeg:0000000000000000 $t
+     /tmp/ccq3kZXF.s:388    .text.GetServoIDForLeg:0000000000000000 GetServoIDForLeg
+     /tmp/ccq3kZXF.s:422    .text.Gait_Forward:0000000000000000 $t
+     /tmp/ccq3kZXF.s:429    .text.Gait_Forward:0000000000000000 Gait_Forward
+     /tmp/ccq3kZXF.s:533    .text.Gait_Forward:0000000000000064 $d
+     /tmp/ccq3kZXF.s:538    .text.Gait_Backward:0000000000000000 $t
+     /tmp/ccq3kZXF.s:545    .text.Gait_Backward:0000000000000000 Gait_Backward
+     /tmp/ccq3kZXF.s:651    .text.Gait_Backward:000000000000006c $d
+     /tmp/ccq3kZXF.s:656    .text.Gait_Turn_Left:0000000000000000 $t
+     /tmp/ccq3kZXF.s:663    .text.Gait_Turn_Left:0000000000000000 Gait_Turn_Left
+     /tmp/ccq3kZXF.s:788    .text.Gait_Turn_Left:0000000000000080 $d
+     /tmp/ccq3kZXF.s:793    .text.Gait_Turn_Right:0000000000000000 $t
+     /tmp/ccq3kZXF.s:800    .text.Gait_Turn_Right:0000000000000000 Gait_Turn_Right
+     /tmp/ccq3kZXF.s:926    .text.Gait_Turn_Right:0000000000000080 $d
+     /tmp/ccq3kZXF.s:931    .text.Gait_March_In_Place:0000000000000000 $t
+     /tmp/ccq3kZXF.s:938    .text.Gait_March_In_Place:0000000000000000 Gait_March_In_Place
+     /tmp/ccq3kZXF.s:1042   .text.Gait_March_In_Place:0000000000000064 $d
+     /tmp/ccq3kZXF.s:1051   .bss.current_action:0000000000000000 current_action
+     /tmp/ccq3kZXF.s:1052   .bss.current_action:0000000000000000 $d
+
+UNDEFINED SYMBOLS
+acosf
+atan2f
+sinf
+cosf
+Set_Servo_Angle

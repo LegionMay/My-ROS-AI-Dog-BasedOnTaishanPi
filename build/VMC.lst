@@ -1,0 +1,292 @@
+ARM GAS  /tmp/ccaCqVYh.s 			page 1
+
+
+   1              		.cpu cortex-m7
+   2              		.eabi_attribute 28, 1
+   3              		.eabi_attribute 20, 1
+   4              		.eabi_attribute 21, 1
+   5              		.eabi_attribute 23, 3
+   6              		.eabi_attribute 24, 1
+   7              		.eabi_attribute 25, 1
+   8              		.eabi_attribute 26, 1
+   9              		.eabi_attribute 30, 1
+  10              		.eabi_attribute 34, 1
+  11              		.eabi_attribute 18, 4
+  12              		.file	"VMC.c"
+  13              		.text
+  14              	.Ltext0:
+  15              		.cfi_sections	.debug_frame
+  16              		.section	.text.VMC_GenerateForces,"ax",%progbits
+  17              		.align	1
+  18              		.global	VMC_GenerateForces
+  19              		.arch armv7e-m
+  20              		.syntax unified
+  21              		.thumb
+  22              		.thumb_func
+  23              		.fpu fpv5-d16
+  25              	VMC_GenerateForces:
+  26              	.LVL0:
+  27              	.LFB144:
+  28              		.file 1 "Core/Src/VMC.c"
+   1:Core/Src/VMC.c **** #include "VMC.h"
+   2:Core/Src/VMC.c **** #include "math.h"
+   3:Core/Src/VMC.c **** #include "servo_control.h"
+   4:Core/Src/VMC.c **** #include "robocontrol.h"
+   5:Core/Src/VMC.c **** 
+   6:Core/Src/VMC.c **** #define K_POSITION 1.0f
+   7:Core/Src/VMC.c **** #define GRAVITY_COMPENSATION 9.81f
+   8:Core/Src/VMC.c **** 
+   9:Core/Src/VMC.c **** void VMC_GenerateForces(int leg, float* quat, float* targetX, float* targetY, float* targetZ) {
+  29              		.loc 1 9 95 view -0
+  30              		.cfi_startproc
+  31              		@ args = 4, pretend = 0, frame = 0
+  32              		@ frame_needed = 0, uses_anonymous_args = 0
+  33              		.loc 1 9 95 is_stmt 0 view .LVU1
+  34 0000 70B5     		push	{r4, r5, r6, lr}
+  35              	.LCFI0:
+  36              		.cfi_def_cfa_offset 16
+  37              		.cfi_offset 4, -16
+  38              		.cfi_offset 5, -12
+  39              		.cfi_offset 6, -8
+  40              		.cfi_offset 14, -4
+  41 0002 2DED028B 		vpush.64	{d8}
+  42              	.LCFI1:
+  43              		.cfi_def_cfa_offset 24
+  44              		.cfi_offset 80, -24
+  45              		.cfi_offset 81, -20
+  46 0006 0C46     		mov	r4, r1
+  47 0008 1646     		mov	r6, r2
+  48 000a 1D46     		mov	r5, r3
+  10:Core/Src/VMC.c ****     float roll = atan2f(2.0f * (quat[0] * quat[1] + quat[2] * quat[3]), 1.0f - 2.0f * (quat[1] * qu
+ARM GAS  /tmp/ccaCqVYh.s 			page 2
+
+
+  49              		.loc 1 10 5 is_stmt 1 view .LVU2
+  50              		.loc 1 10 37 is_stmt 0 view .LVU3
+  51 000c 91ED000A 		vldr.32	s0, [r1]
+  52              		.loc 1 10 47 view .LVU4
+  53 0010 D1ED010A 		vldr.32	s1, [r1, #4]
+  54              		.loc 1 10 41 view .LVU5
+  55 0014 20EE200A 		vmul.f32	s0, s0, s1
+  56              		.loc 1 10 57 view .LVU6
+  57 0018 D1ED027A 		vldr.32	s15, [r1, #8]
+  58              		.loc 1 10 67 view .LVU7
+  59 001c 91ED037A 		vldr.32	s14, [r1, #12]
+  60              		.loc 1 10 61 view .LVU8
+  61 0020 27EE877A 		vmul.f32	s14, s15, s14
+  62              		.loc 1 10 51 view .LVU9
+  63 0024 30EE070A 		vadd.f32	s0, s0, s14
+  64              		.loc 1 10 96 view .LVU10
+  65 0028 60EEA00A 		vmul.f32	s1, s1, s1
+  66              		.loc 1 10 116 view .LVU11
+  67 002c 67EEA77A 		vmul.f32	s15, s15, s15
+  68              		.loc 1 10 106 view .LVU12
+  69 0030 70EEA70A 		vadd.f32	s1, s1, s15
+  70              		.loc 1 10 85 view .LVU13
+  71 0034 70EEA00A 		vadd.f32	s1, s1, s1
+  72              		.loc 1 10 18 view .LVU14
+  73 0038 F7EE007A 		vmov.f32	s15, #1.0e+0
+  74 003c 77EEE00A 		vsub.f32	s1, s15, s1
+  75 0040 30EE000A 		vadd.f32	s0, s0, s0
+  76 0044 FFF7FEFF 		bl	atan2f
+  77              	.LVL1:
+  78              		.loc 1 10 18 view .LVU15
+  79 0048 F0EE408A 		vmov.f32	s17, s0
+  80              	.LVL2:
+  11:Core/Src/VMC.c ****     float pitch = asinf(2.0f * (quat[0] * quat[2] - quat[3] * quat[1]));
+  81              		.loc 1 11 5 is_stmt 1 view .LVU16
+  82              		.loc 1 11 37 is_stmt 0 view .LVU17
+  83 004c D4ED007A 		vldr.32	s15, [r4]
+  84              		.loc 1 11 47 view .LVU18
+  85 0050 94ED020A 		vldr.32	s0, [r4, #8]
+  86              	.LVL3:
+  87              		.loc 1 11 41 view .LVU19
+  88 0054 67EE807A 		vmul.f32	s15, s15, s0
+  89              		.loc 1 11 57 view .LVU20
+  90 0058 94ED030A 		vldr.32	s0, [r4, #12]
+  91              		.loc 1 11 67 view .LVU21
+  92 005c 94ED017A 		vldr.32	s14, [r4, #4]
+  93              		.loc 1 11 61 view .LVU22
+  94 0060 20EE070A 		vmul.f32	s0, s0, s14
+  95              		.loc 1 11 51 view .LVU23
+  96 0064 37EEC00A 		vsub.f32	s0, s15, s0
+  97              		.loc 1 11 19 view .LVU24
+  98 0068 30EE000A 		vadd.f32	s0, s0, s0
+  99 006c FFF7FEFF 		bl	asinf
+ 100              	.LVL4:
+  12:Core/Src/VMC.c **** 
+  13:Core/Src/VMC.c ****     float position_error_x = -sin(pitch);
+ 101              		.loc 1 13 5 is_stmt 1 view .LVU25
+ 102              		.loc 1 13 31 is_stmt 0 view .LVU26
+ARM GAS  /tmp/ccaCqVYh.s 			page 3
+
+
+ 103 0070 B7EEC00A 		vcvt.f64.f32	d0, s0
+ 104              	.LVL5:
+ 105              		.loc 1 13 31 view .LVU27
+ 106 0074 FFF7FEFF 		bl	sin
+ 107              	.LVL6:
+ 108 0078 B7EEC08B 		vcvt.f32.f64	s16, d0
+ 109              	.LVL7:
+  14:Core/Src/VMC.c ****     float position_error_y = sin(roll);
+ 110              		.loc 1 14 5 is_stmt 1 view .LVU28
+ 111              		.loc 1 14 30 is_stmt 0 view .LVU29
+ 112 007c B7EEE80A 		vcvt.f64.f32	d0, s17
+ 113 0080 FFF7FEFF 		bl	sin
+ 114              	.LVL8:
+ 115              		.loc 1 14 11 view .LVU30
+ 116 0084 B7EEC00B 		vcvt.f32.f64	s0, d0
+ 117              	.LVL9:
+  15:Core/Src/VMC.c **** 
+  16:Core/Src/VMC.c ****     float virtualForceX = -K_POSITION * position_error_x;
+ 118              		.loc 1 16 5 is_stmt 1 view .LVU31
+  17:Core/Src/VMC.c ****     float virtualForceY = -K_POSITION * position_error_y;
+ 119              		.loc 1 17 5 view .LVU32
+  18:Core/Src/VMC.c ****     float virtualForceZ = GRAVITY_COMPENSATION;
+ 120              		.loc 1 18 5 view .LVU33
+  19:Core/Src/VMC.c **** 
+  20:Core/Src/VMC.c ****     *targetX = virtualForceX * 10.0f;
+ 121              		.loc 1 20 5 view .LVU34
+ 122              		.loc 1 20 30 is_stmt 0 view .LVU35
+ 123 0088 F2EE047A 		vmov.f32	s15, #1.0e+1
+ 124 008c 28EE278A 		vmul.f32	s16, s16, s15
+ 125              	.LVL10:
+ 126              		.loc 1 20 14 view .LVU36
+ 127 0090 86ED008A 		vstr.32	s16, [r6]
+  21:Core/Src/VMC.c ****     *targetY = virtualForceY * 10.0f;
+ 128              		.loc 1 21 5 is_stmt 1 view .LVU37
+ 129              		.loc 1 21 30 is_stmt 0 view .LVU38
+ 130 0094 20EE670A 		vnmul.f32	s0, s0, s15
+ 131              	.LVL11:
+ 132              		.loc 1 21 14 view .LVU39
+ 133 0098 85ED000A 		vstr.32	s0, [r5]
+  22:Core/Src/VMC.c ****     *targetZ = virtualForceZ * 10.0f;
+ 134              		.loc 1 22 5 is_stmt 1 view .LVU40
+ 135              		.loc 1 22 14 is_stmt 0 view .LVU41
+ 136 009c 069B     		ldr	r3, [sp, #24]
+ 137 009e 024A     		ldr	r2, .L3
+ 138 00a0 1A60     		str	r2, [r3]	@ float
+  23:Core/Src/VMC.c **** }
+ 139              		.loc 1 23 1 view .LVU42
+ 140 00a2 BDEC028B 		vldm	sp!, {d8}
+ 141              	.LCFI2:
+ 142              		.cfi_restore 80
+ 143              		.cfi_restore 81
+ 144              		.cfi_def_cfa_offset 16
+ 145 00a6 70BD     		pop	{r4, r5, r6, pc}
+ 146              	.LVL12:
+ 147              	.L4:
+ 148              		.loc 1 23 1 view .LVU43
+ 149              		.align	2
+ARM GAS  /tmp/ccaCqVYh.s 			page 4
+
+
+ 150              	.L3:
+ 151 00a8 3433C442 		.word	1120154420
+ 152              		.cfi_endproc
+ 153              	.LFE144:
+ 155              		.section	.text.VMC_LegControl,"ax",%progbits
+ 156              		.align	1
+ 157              		.global	VMC_LegControl
+ 158              		.syntax unified
+ 159              		.thumb
+ 160              		.thumb_func
+ 161              		.fpu fpv5-d16
+ 163              	VMC_LegControl:
+ 164              	.LVL13:
+ 165              	.LFB145:
+  24:Core/Src/VMC.c **** 
+  25:Core/Src/VMC.c **** void VMC_LegControl(int leg, float x, float y, float z) {
+ 166              		.loc 1 25 57 is_stmt 1 view -0
+ 167              		.cfi_startproc
+ 168              		@ args = 0, pretend = 0, frame = 8
+ 169              		@ frame_needed = 0, uses_anonymous_args = 0
+ 170              		.loc 1 25 57 is_stmt 0 view .LVU45
+ 171 0000 30B5     		push	{r4, r5, lr}
+ 172              	.LCFI3:
+ 173              		.cfi_def_cfa_offset 12
+ 174              		.cfi_offset 4, -12
+ 175              		.cfi_offset 5, -8
+ 176              		.cfi_offset 14, -4
+ 177 0002 83B0     		sub	sp, sp, #12
+ 178              	.LCFI4:
+ 179              		.cfi_def_cfa_offset 24
+ 180 0004 0446     		mov	r4, r0
+  26:Core/Src/VMC.c ****     float theta1, theta2;
+ 181              		.loc 1 26 5 is_stmt 1 view .LVU46
+  27:Core/Src/VMC.c ****     InverseKinematics(x, y, &theta1, &theta2);
+ 182              		.loc 1 27 5 view .LVU47
+ 183 0006 6946     		mov	r1, sp
+ 184 0008 01A8     		add	r0, sp, #4
+ 185              	.LVL14:
+ 186              		.loc 1 27 5 is_stmt 0 view .LVU48
+ 187 000a FFF7FEFF 		bl	InverseKinematics
+ 188              	.LVL15:
+  28:Core/Src/VMC.c ****     
+  29:Core/Src/VMC.c ****     ServoID upperLegServo = GetServoIDForLeg(leg, true);
+ 189              		.loc 1 29 5 is_stmt 1 view .LVU49
+ 190              		.loc 1 29 29 is_stmt 0 view .LVU50
+ 191 000e 0121     		movs	r1, #1
+ 192 0010 2046     		mov	r0, r4
+ 193 0012 FFF7FEFF 		bl	GetServoIDForLeg
+ 194              	.LVL16:
+ 195 0016 0546     		mov	r5, r0
+ 196              	.LVL17:
+  30:Core/Src/VMC.c ****     ServoID lowerLegServo = GetServoIDForLeg(leg, false);
+ 197              		.loc 1 30 5 is_stmt 1 view .LVU51
+ 198              		.loc 1 30 29 is_stmt 0 view .LVU52
+ 199 0018 0021     		movs	r1, #0
+ 200 001a 2046     		mov	r0, r4
+ 201 001c FFF7FEFF 		bl	GetServoIDForLeg
+ARM GAS  /tmp/ccaCqVYh.s 			page 5
+
+
+ 202              	.LVL18:
+ 203 0020 0446     		mov	r4, r0
+ 204              	.LVL19:
+  31:Core/Src/VMC.c **** 
+  32:Core/Src/VMC.c ****     Set_Servo_Angle(upperLegServo, theta1);
+ 205              		.loc 1 32 5 is_stmt 1 view .LVU53
+ 206 0022 9DED010A 		vldr.32	s0, [sp, #4]
+ 207 0026 2846     		mov	r0, r5
+ 208 0028 FFF7FEFF 		bl	Set_Servo_Angle
+ 209              	.LVL20:
+  33:Core/Src/VMC.c ****     Set_Servo_Angle(lowerLegServo, theta2);
+ 210              		.loc 1 33 5 view .LVU54
+ 211 002c 9DED000A 		vldr.32	s0, [sp]
+ 212 0030 2046     		mov	r0, r4
+ 213 0032 FFF7FEFF 		bl	Set_Servo_Angle
+ 214              	.LVL21:
+  34:Core/Src/VMC.c **** }
+ 215              		.loc 1 34 1 is_stmt 0 view .LVU55
+ 216 0036 03B0     		add	sp, sp, #12
+ 217              	.LCFI5:
+ 218              		.cfi_def_cfa_offset 12
+ 219              		@ sp needed
+ 220 0038 30BD     		pop	{r4, r5, pc}
+ 221              		.loc 1 34 1 view .LVU56
+ 222              		.cfi_endproc
+ 223              	.LFE145:
+ 225              		.text
+ 226              	.Letext0:
+ 227              		.file 2 "Core/Inc/robocontrol.h"
+ 228              		.file 3 "Core/Inc/servo_control.h"
+ 229              		.file 4 "/usr/include/newlib/math.h"
+ARM GAS  /tmp/ccaCqVYh.s 			page 6
+
+
+DEFINED SYMBOLS
+                            *ABS*:0000000000000000 VMC.c
+     /tmp/ccaCqVYh.s:17     .text.VMC_GenerateForces:0000000000000000 $t
+     /tmp/ccaCqVYh.s:25     .text.VMC_GenerateForces:0000000000000000 VMC_GenerateForces
+     /tmp/ccaCqVYh.s:151    .text.VMC_GenerateForces:00000000000000a8 $d
+     /tmp/ccaCqVYh.s:156    .text.VMC_LegControl:0000000000000000 $t
+     /tmp/ccaCqVYh.s:163    .text.VMC_LegControl:0000000000000000 VMC_LegControl
+
+UNDEFINED SYMBOLS
+atan2f
+asinf
+sin
+InverseKinematics
+GetServoIDForLeg
+Set_Servo_Angle
