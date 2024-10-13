@@ -328,7 +328,7 @@ void StartGaitControlTask(void *argument)
             case ACTION_STOP:
             default:
                 
-                break;
+                 break;
         }
         vTaskDelay(pdMS_TO_TICKS(50)); // 每50ms更新一次步态
     osDelay(1);
