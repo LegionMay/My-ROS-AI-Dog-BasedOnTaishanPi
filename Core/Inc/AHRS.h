@@ -6,8 +6,8 @@
 
 void AHRS_Init(void);
 void AHRS_Update(void);
-void AHRS_GetQuaternion(int16_t* quat);
-int16_t MedianFilter(int16_t input);
+void AHRS_GetQuaternion(float* quat);
+int16_t MedianFilter(float input);
 int compare_int16(const void* a, const void* b);
 
 #endif

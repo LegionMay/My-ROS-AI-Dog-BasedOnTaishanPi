@@ -234,20 +234,23 @@ void StartAttitudeTask(void *argument)
         
         MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
         // 获取加速度、陀螺仪和磁力计原始数据
-        int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
-        int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
-        int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+        float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
+        float ay = imuData.accel[1] * 4.0f * 9.81f / 32768.0f;
+        float az = imuData.accel[2] * 4.0f * 9.81f / 32768.0f;
+        float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+        float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+        float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+        float mx = imuData.mag[0] * 0.146f; // 将原始数据转换为 µT
+        float my = imuData.mag[1] * 0.146f;
+        float mz = imuData.mag[2] * 0.146f;
          // 打印四元数数据
         char printBuffer[256];
-        int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, az, gx,gy,gz);
-        //taskENTER_CRITICAL(); // 进入临界区
-        HAL_UART_Transmit_DMA(&huart1, (uint8_t*)printBuffer, len);
-        HAL_UART_Transmit_IT(&huart1, (uint8_t*)printBuffer, len);
-        //taskEXIT_CRITICAL(); // 退出临界区   
+        int len = snprintf(printBuffer, sizeof(printBuffer), "A:%.2f,%.2f,%.2f,%.2f,G:%.2f,%.2f,%.2f\n", ax, ay, az, gx,gy,gz);
+        HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 
         AHRS_Update();  // 更新姿态四元数
         // 获取并处理姿态四元数
-        int16_t quat[4] = {0};
+        float quat[4] = {0};
         SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态四元数给上位机
         AHRS_GetQuaternion(quat);
         
@@ -278,14 +281,20 @@ void StartServoControlTask(void *argument)
         Set_Servo_Angle(H4,30);
        
     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
-        // 获取加速度、陀螺仪和磁力计原始数据
-        int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
-        int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
-        int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+       // 获取加速度、陀螺仪和磁力计原始数据
+        float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
+        float ay = imuData.accel[1] * 4.0f * 9.81f / 32768.0f;
+        float az = imuData.accel[2] * 4.0f * 9.81f / 32768.0f;
+        float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+        float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+        float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+        float mx = imuData.mag[0] * 0.146f; // 将原始数据转换为 µT
+        float my = imuData.mag[1] * 0.146f;
+        float mz = imuData.mag[2] * 0.146f;
          // 打印四元数数据
         char printBuffer[256];
-        int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, az, gx,gy,gz);
-        //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+        int len = snprintf(printBuffer, sizeof(printBuffer), "A:%.2f,%.2f,%.2f,%.2f,G:%.2f,%.2f,%.2f\n", ax, ay, az, gx,gy,gz);
+        HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 
     osDelay(1);
   }
@@ -308,13 +317,19 @@ void StartGaitControlTask(void *argument)
 
     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
         // 获取加速度、陀螺仪和磁力计原始数据
-        int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
-        int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
-        int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+        float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
+        float ay = imuData.accel[1] * 4.0f * 9.81f / 32768.0f;
+        float az = imuData.accel[2] * 4.0f * 9.81f / 32768.0f;
+        float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+        float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+        float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+        float mx = imuData.mag[0] * 0.146f; // 将原始数据转换为 µT
+        float my = imuData.mag[1] * 0.146f;
+        float mz = imuData.mag[2] * 0.146f;
          // 打印四元数数据
         char printBuffer[256];
-        int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, az, gx,gy,gz);
-        //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+        int len = snprintf(printBuffer, sizeof(printBuffer), "A:%.2f,%.2f,%.2f,%.2f,G:%.2f,%.2f,%.2f\n", ax, ay, az, gx,gy,gz);
+        HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 
 
     switch (current_action) {
@@ -359,15 +374,21 @@ void StartSerialCommTask(void *argument)
   for(;;)
   {
 
-    MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
-        // 获取加速度、陀螺仪和磁力计原始数据
-        int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
-        int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
-        int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+   // 获取加速度、陀螺仪和磁力计原始数据
+        float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
+        float ay = imuData.accel[1] * 4.0f * 9.81f / 32768.0f;
+        float az = imuData.accel[2] * 4.0f * 9.81f / 32768.0f;
+        float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+        float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+        float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+        float mx = imuData.mag[0] * 0.146f; // 将原始数据转换为 µT
+        float my = imuData.mag[1] * 0.146f;
+        float mz = imuData.mag[2] * 0.146f;
          // 打印四元数数据
         char printBuffer[256];
-        int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, az, gx,gy,gz);
+        int len = snprintf(printBuffer, sizeof(printBuffer), "A:%.2f,%.2f,%.2f,%.2f,G:%.2f,%.2f,%.2f\n", ax, ay, az, gx,gy,gz);
         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+
         osDelay(1);
 
     // 监听串口命令
@@ -403,7 +424,7 @@ void print_gyro_data(int16_t GyroData[3]) {
 void UART_ProcessCommand(uint8_t* buffer) {
     if (buffer[0] == 0xAA && buffer[2] == 0x55) {  // 判断头和尾标志
         uint8_t command = buffer[1];  // 提取指令类型
-        int16_t quat[4];
+        float quat[4];
         switch (command) {
             case 0x01:  // 前进
                 Move_Forward();
@@ -432,36 +453,34 @@ void UART_ProcessCommand(uint8_t* buffer) {
 }
 
 /* SendAttitudeToHost - Sends the current attitude (quaternion) to the host via UART */
-void SendAttitudeToHost(int16_t q0, int16_t q1, int16_t q2, int16_t q3) {
-    uint8_t txBuffer[18];  // 传输数据缓存，18字节
+void SendAttitudeToHost(float q[4]) {
+    uint8_t txBuffer[22];  // 传输数据缓存，22字节
     txBuffer[0] = 0xAA;  // 开头标志
     txBuffer[1] = 0x06;  // 数据类型（姿态数据）
-    
+
     // 将四元数数据转换为字节
-    memcpy(&txBuffer[2], &q0, sizeof(int16_t));
-    memcpy(&txBuffer[6], &q1, sizeof(int16_t));
-    memcpy(&txBuffer[10], &q2, sizeof(int16_t));
-    memcpy(&txBuffer[14], &q3, sizeof(int16_t));
-    
-    txBuffer[17] = 0x55;  // 结束标志
-    
+    memcpy(&txBuffer[2], &q[0], sizeof(float));
+    memcpy(&txBuffer[6], &q[1], sizeof(float));
+    memcpy(&txBuffer[10], &q[2], sizeof(float));
+    memcpy(&txBuffer[14], &q[3], sizeof(float));
+
+    txBuffer[18] = 0x55;  // 结束标志
+
     // 通过UART发送姿态数据
     HAL_UART_Transmit(&huart1, txBuffer, sizeof(txBuffer), HAL_MAX_DELAY);
 
     // 打印四元数数据
     char printBuffer[128];
-    int len = snprintf(printBuffer, sizeof(printBuffer), "%d,%d,%d,%d\n", q0, q1, q2, q3);
+    int len = snprintf(printBuffer, sizeof(printBuffer), "%.6f,%.6f,%.6f,%.6f\n", q[0], q[1], q[2], q[3]);
     HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 }
 
+void SendAttitudeToPC(float q[4]) {
+    char txBuffer[50];  // 传输数据缓存
+    int len = snprintf(txBuffer, sizeof(txBuffer), "%.6f,%.6f,%.6f,%.6f\n", q[0], q[1], q[2], q[3]);
 
-
-void SendAttitudeToPC(int16_t q0, int16_t q1, int16_t q2, int16_t q3) {
-  char txBuffer[50];  // 传输数据缓存
-  int len = snprintf(txBuffer, sizeof(txBuffer), "%d,%d,%d,%d\n", q0, q1, q2, q3);
-
-  // 通过UART发送姿态数据
-  HAL_UART_Transmit(&huart1, (uint8_t*)txBuffer, len, HAL_MAX_DELAY);
+    // 通过UART发送姿态数据
+    HAL_UART_Transmit(&huart1, (uint8_t*)txBuffer, len, HAL_MAX_DELAY);
 }
 /* USER CODE END Application */
 

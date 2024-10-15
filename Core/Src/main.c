@@ -164,7 +164,7 @@ int main(void)
    // 初始化 MPU9250 传感器
     MPU9250_Init();
     // 设置传感器的配置参数
-    MPU9250_SetAccelRange(ACCEL_RANGE_8G);    // 设置加速度计量程为 8G
+    MPU9250_SetAccelRange(ACCEL_RANGE_4G);    // 设置加速度计量程为 4G
     MPU9250_SetGyroRange(GYRO_RANGE_500DPS);  // 设置陀螺仪量程为 500DPS
     MPU9250_SetDLPFBandwidth(DLPF_BANDWIDTH_92HZ); // 设置低通滤波带宽为 92Hz
     MPU9250_SetSampleRateDivider(LP_ACCEL_ODR_125HZ); // 设置采样率为 125Hz
