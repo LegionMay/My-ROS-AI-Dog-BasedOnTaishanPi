@@ -8,7 +8,7 @@
 #define LEG_UPPER_LENGTH 80.9 // 大腿长度，单位：毫米
 #define LEG_LOWER_LENGTH 68.75 // 小腿长度，单位：毫米
 #define NUM_SERVOS 8
-#define MAX_ROTATION_TIME_PER_DEGREE 1000.0f / 545.0f
+
 
 
 

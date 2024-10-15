@@ -89,7 +89,7 @@ osThreadId_t AttitudeTaskHandle;
 const osThreadAttr_t AttitudeTask_attributes = {
   .name = "AttitudeTask",
   .stack_size = 256 * 4,
-  .priority = (osPriority_t) osPriorityRealtime,
+  .priority = (osPriority_t) osPriorityRealtime3,
 };
 /* Definitions for ServoControlTas */
 osThreadId_t ServoControlTasHandle;
@@ -209,7 +209,7 @@ void StartDefaultTask(void *argument)
          // 打印四元数数据
         char printBuffer[256];
         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, az, gx,gy,gz);
-        HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+        //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 
     osDelay(1);
   }
@@ -231,6 +231,7 @@ void StartAttitudeTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
+        
         MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
         // 获取加速度、陀螺仪和磁力计原始数据
         int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
@@ -239,8 +240,10 @@ void StartAttitudeTask(void *argument)
          // 打印四元数数据
         char printBuffer[256];
         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, az, gx,gy,gz);
-        HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
-        
+        //taskENTER_CRITICAL(); // 进入临界区
+        HAL_UART_Transmit_DMA(&huart1, (uint8_t*)printBuffer, len);
+        HAL_UART_Transmit_IT(&huart1, (uint8_t*)printBuffer, len);
+        //taskEXIT_CRITICAL(); // 退出临界区   
 
         AHRS_Update();  // 更新姿态四元数
         // 获取并处理姿态四元数
@@ -269,6 +272,11 @@ void StartServoControlTask(void *argument)
   /* Infinite loop */
   for(;;)
   {
+        Set_Servo_Angle(H1, 30);  // 设置舵机角度
+        Set_Servo_Angle(H2, 30);
+        Set_Servo_Angle(H3, 30);
+        Set_Servo_Angle(H4,30);
+       
     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
         // 获取加速度、陀螺仪和磁力计原始数据
         int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
@@ -277,7 +285,7 @@ void StartServoControlTask(void *argument)
          // 打印四元数数据
         char printBuffer[256];
         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, az, gx,gy,gz);
-        HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+        //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 
     osDelay(1);
   }
@@ -306,7 +314,7 @@ void StartGaitControlTask(void *argument)
          // 打印四元数数据
         char printBuffer[256];
         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, az, gx,gy,gz);
-        HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+        //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 
 
     switch (current_action) {

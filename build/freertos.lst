@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccE24TNm.s 			page 1
+ARM GAS  /tmp/ccZG0cTT.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
   21:Core/Src/freertos.c **** #include "FreeRTOS.h"
   22:Core/Src/freertos.c **** #include "task.h"
   23:Core/Src/freertos.c **** #include "main.h"
-ARM GAS  /tmp/ccE24TNm.s 			page 2
+ARM GAS  /tmp/ccZG0cTT.s 			page 2
 
 
   24:Core/Src/freertos.c **** #include "cmsis_os.h"
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
   78:Core/Src/freertos.c **** 
   79:Core/Src/freertos.c **** /* USER CODE END Variables */
   80:Core/Src/freertos.c **** /* Definitions for defaultTask */
-ARM GAS  /tmp/ccE24TNm.s 			page 3
+ARM GAS  /tmp/ccZG0cTT.s 			page 3
 
 
   81:Core/Src/freertos.c **** osThreadId_t defaultTaskHandle;
@@ -132,7 +132,7 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
   89:Core/Src/freertos.c **** const osThreadAttr_t AttitudeTask_attributes = {
   90:Core/Src/freertos.c ****   .name = "AttitudeTask",
   91:Core/Src/freertos.c ****   .stack_size = 256 * 4,
-  92:Core/Src/freertos.c ****   .priority = (osPriority_t) osPriorityRealtime,
+  92:Core/Src/freertos.c ****   .priority = (osPriority_t) osPriorityRealtime3,
   93:Core/Src/freertos.c **** };
   94:Core/Src/freertos.c **** /* Definitions for ServoControlTas */
   95:Core/Src/freertos.c **** osThreadId_t ServoControlTasHandle;
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
  135:Core/Src/freertos.c **** 
  136:Core/Src/freertos.c **** /**
  137:Core/Src/freertos.c ****   * @brief  FreeRTOS initialization
-ARM GAS  /tmp/ccE24TNm.s 			page 4
+ARM GAS  /tmp/ccZG0cTT.s 			page 4
 
 
  138:Core/Src/freertos.c ****   * @param  None
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
  192:Core/Src/freertos.c **** /**
  193:Core/Src/freertos.c ****   * @brief  Function implementing the defaultTask thread.
  194:Core/Src/freertos.c ****   * @param  argument: Not used
-ARM GAS  /tmp/ccE24TNm.s 			page 5
+ARM GAS  /tmp/ccZG0cTT.s 			page 5
 
 
  195:Core/Src/freertos.c ****   * @retval None
@@ -271,7 +271,7 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
  203:Core/Src/freertos.c ****   {
  204:Core/Src/freertos.c ****     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
   51              		.loc 1 204 5 discriminator 1 view .LVU3
-  52 0004 144C     		ldr	r4, .L4
+  52 0004 114C     		ldr	r4, .L4
   53 0006 0023     		movs	r3, #0
   54 0008 A21D     		adds	r2, r4, #6
   55 000a 04F10C01 		add	r1, r4, #12
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
   73              		.loc 1 207 63 discriminator 1 view .LVU10
   74 0024 B4F90A50 		ldrsh	r5, [r4, #10]
   75              	.LVL7:
-ARM GAS  /tmp/ccE24TNm.s 			page 6
+ARM GAS  /tmp/ccZG0cTT.s 			page 6
 
 
  208:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
@@ -317,7 +317,7 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
   85 0032 B4F90030 		ldrsh	r3, [r4]
   86              	.LVL8:
   87              		.loc 1 211 19 discriminator 1 view .LVU15
-  88 0036 094A     		ldr	r2, .L4+4
+  88 0036 064A     		ldr	r2, .L4+4
   89              	.LVL9:
   90              		.loc 1 211 19 discriminator 1 view .LVU16
   91 0038 4FF48071 		mov	r1, #256
@@ -328,49 +328,39 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
   96              		.loc 1 211 19 discriminator 1 view .LVU18
   97 003e FFF7FEFF 		bl	snprintf
   98              	.LVL12:
- 212:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
-  99              		.loc 1 212 9 is_stmt 1 discriminator 1 view .LVU19
- 100 0042 4FF0FF33 		mov	r3, #-1
- 101 0046 82B2     		uxth	r2, r0
- 102 0048 06A9     		add	r1, sp, #24
- 103 004a 0548     		ldr	r0, .L4+8
- 104              	.LVL13:
- 105              		.loc 1 212 9 is_stmt 0 discriminator 1 view .LVU20
- 106 004c FFF7FEFF 		bl	HAL_UART_Transmit
- 107              	.LVL14:
+ 212:Core/Src/freertos.c ****         //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
  213:Core/Src/freertos.c **** 
  214:Core/Src/freertos.c ****     osDelay(1);
- 108              		.loc 1 214 5 is_stmt 1 discriminator 1 view .LVU21
- 109 0050 0120     		movs	r0, #1
- 110 0052 FFF7FEFF 		bl	osDelay
- 111              	.LVL15:
- 112              	.LBE2:
+  99              		.loc 1 214 5 is_stmt 1 discriminator 1 view .LVU19
+ 100 0042 0120     		movs	r0, #1
+ 101 0044 FFF7FEFF 		bl	osDelay
+ 102              	.LVL13:
+ 103              	.LBE2:
  202:Core/Src/freertos.c ****   {
- 113              		.loc 1 202 8 discriminator 1 view .LVU22
- 114 0056 D5E7     		b	.L2
- 115              	.L5:
- 116              		.align	2
- 117              	.L4:
- 118 0058 00000000 		.word	.LANCHOR0
- 119 005c 00000000 		.word	.LC0
- 120 0060 00000000 		.word	huart1
- 121              		.cfi_endproc
- 122              	.LFE152:
- 124              		.section	.text.StartServoControlTask,"ax",%progbits
- 125              		.align	1
-ARM GAS  /tmp/ccE24TNm.s 			page 7
-
-
- 126              		.global	StartServoControlTask
- 127              		.syntax unified
- 128              		.thumb
- 129              		.thumb_func
- 130              		.fpu fpv5-d16
- 132              	StartServoControlTask:
- 133              	.LFB154:
+ 104              		.loc 1 202 8 discriminator 1 view .LVU20
+ 105 0048 DCE7     		b	.L2
+ 106              	.L5:
+ 107 004a 00BF     		.align	2
+ 108              	.L4:
+ 109 004c 00000000 		.word	.LANCHOR0
+ 110 0050 00000000 		.word	.LC0
+ 111              		.cfi_endproc
+ 112              	.LFE152:
+ 114              		.section	.text.StartServoControlTask,"ax",%progbits
+ 115              		.align	1
+ 116              		.global	StartServoControlTask
+ 117              		.syntax unified
+ 118              		.thumb
+ 119              		.thumb_func
+ 120              		.fpu fpv5-d16
+ 122              	StartServoControlTask:
+ 123              	.LFB154:
  215:Core/Src/freertos.c ****   }
  216:Core/Src/freertos.c ****   /* USER CODE END StartDefaultTask */
  217:Core/Src/freertos.c **** }
+ARM GAS  /tmp/ccZG0cTT.s 			page 7
+
+
  218:Core/Src/freertos.c **** 
  219:Core/Src/freertos.c **** /* USER CODE BEGIN Header_StartAttitudeTask */
  220:Core/Src/freertos.c **** /**
@@ -387,184 +377,202 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
  231:Core/Src/freertos.c ****   /* Infinite loop */
  232:Core/Src/freertos.c ****   for(;;)
  233:Core/Src/freertos.c ****   {
- 234:Core/Src/freertos.c ****         MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
- 235:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
- 236:Core/Src/freertos.c ****         int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
- 237:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 238:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 239:Core/Src/freertos.c ****          // 打印四元数数据
- 240:Core/Src/freertos.c ****         char printBuffer[256];
- 241:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
- 242:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 243:Core/Src/freertos.c ****         
- 244:Core/Src/freertos.c **** 
- 245:Core/Src/freertos.c ****         AHRS_Update();  // 更新姿态四元数
- 246:Core/Src/freertos.c ****         // 获取并处理姿态四元数
- 247:Core/Src/freertos.c ****         int16_t quat[4] = {0};
- 248:Core/Src/freertos.c ****         SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态四元数给上位�
- 249:Core/Src/freertos.c ****         AHRS_GetQuaternion(quat);
- 250:Core/Src/freertos.c ****         
- 251:Core/Src/freertos.c ****         
- 252:Core/Src/freertos.c ****         // 将姿态四元数发送给GaitControlTask
- 253:Core/Src/freertos.c ****         xQueueSend(quatQueue, &quat, portMAX_DELAY);
- 254:Core/Src/freertos.c ****         vTaskDelay(pdMS_TO_TICKS(10)); 
- 255:Core/Src/freertos.c ****   }
- 256:Core/Src/freertos.c ****   /* USER CODE END StartAttitudeTask */
- 257:Core/Src/freertos.c **** }
- 258:Core/Src/freertos.c **** 
- 259:Core/Src/freertos.c **** /* USER CODE BEGIN Header_StartServoControlTask */
- 260:Core/Src/freertos.c **** /**
- 261:Core/Src/freertos.c **** * @brief Function implementing the ServoControlTas thread.
- 262:Core/Src/freertos.c **** * @param argument: Not used
- 263:Core/Src/freertos.c **** * @retval None
- 264:Core/Src/freertos.c **** */
-ARM GAS  /tmp/ccE24TNm.s 			page 8
+ 234:Core/Src/freertos.c ****         
+ 235:Core/Src/freertos.c ****         MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
+ 236:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
+ 237:Core/Src/freertos.c ****         int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
+ 238:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 239:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 240:Core/Src/freertos.c ****          // 打印四元数数据
+ 241:Core/Src/freertos.c ****         char printBuffer[256];
+ 242:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
+ 243:Core/Src/freertos.c ****         //taskENTER_CRITICAL(); // 进入临界区
+ 244:Core/Src/freertos.c ****         HAL_UART_Transmit_DMA(&huart1, (uint8_t*)printBuffer, len);
+ 245:Core/Src/freertos.c ****         HAL_UART_Transmit_IT(&huart1, (uint8_t*)printBuffer, len);
+ 246:Core/Src/freertos.c ****         //taskEXIT_CRITICAL(); // 退出临界区   
+ 247:Core/Src/freertos.c **** 
+ 248:Core/Src/freertos.c ****         AHRS_Update();  // 更新姿态四元数
+ 249:Core/Src/freertos.c ****         // 获取并处理姿态四元数
+ 250:Core/Src/freertos.c ****         int16_t quat[4] = {0};
+ 251:Core/Src/freertos.c ****         SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态四元数给上位�
+ 252:Core/Src/freertos.c ****         AHRS_GetQuaternion(quat);
+ 253:Core/Src/freertos.c ****         
+ 254:Core/Src/freertos.c ****         
+ 255:Core/Src/freertos.c ****         // 将姿态四元数发送给GaitControlTask
+ 256:Core/Src/freertos.c ****         xQueueSend(quatQueue, &quat, portMAX_DELAY);
+ 257:Core/Src/freertos.c ****         vTaskDelay(pdMS_TO_TICKS(10)); 
+ 258:Core/Src/freertos.c ****   }
+ 259:Core/Src/freertos.c ****   /* USER CODE END StartAttitudeTask */
+ 260:Core/Src/freertos.c **** }
+ 261:Core/Src/freertos.c **** 
+ 262:Core/Src/freertos.c **** /* USER CODE BEGIN Header_StartServoControlTask */
+ 263:Core/Src/freertos.c **** /**
+ 264:Core/Src/freertos.c **** * @brief Function implementing the ServoControlTas thread.
+ 265:Core/Src/freertos.c **** * @param argument: Not used
+ 266:Core/Src/freertos.c **** * @retval None
+ 267:Core/Src/freertos.c **** */
+ 268:Core/Src/freertos.c **** /* USER CODE END Header_StartServoControlTask */
+ 269:Core/Src/freertos.c **** void StartServoControlTask(void *argument)
+ 270:Core/Src/freertos.c **** {
+ 124              		.loc 1 270 1 view -0
+ 125              		.cfi_startproc
+ 126              		@ args = 0, pretend = 0, frame = 256
+ 127              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccZG0cTT.s 			page 8
 
 
- 265:Core/Src/freertos.c **** /* USER CODE END Header_StartServoControlTask */
- 266:Core/Src/freertos.c **** void StartServoControlTask(void *argument)
- 267:Core/Src/freertos.c **** {
- 134              		.loc 1 267 1 view -0
- 135              		.cfi_startproc
- 136              		@ args = 0, pretend = 0, frame = 256
- 137              		@ frame_needed = 0, uses_anonymous_args = 0
- 138              	.LVL16:
- 139              		.loc 1 267 1 is_stmt 0 view .LVU24
- 140 0000 30B5     		push	{r4, r5, lr}
- 141              	.LCFI2:
- 142              		.cfi_def_cfa_offset 12
- 143              		.cfi_offset 4, -12
- 144              		.cfi_offset 5, -8
- 145              		.cfi_offset 14, -4
- 146 0002 C7B0     		sub	sp, sp, #284
- 147              	.LCFI3:
- 148              		.cfi_def_cfa_offset 296
- 149              	.LVL17:
- 150              	.L7:
- 268:Core/Src/freertos.c ****   /* USER CODE BEGIN StartServoControlTask */
- 269:Core/Src/freertos.c ****   /* Infinite loop */
- 270:Core/Src/freertos.c ****   for(;;)
- 151              		.loc 1 270 3 is_stmt 1 discriminator 1 view .LVU25
- 152              	.LBB3:
- 271:Core/Src/freertos.c ****   {
- 272:Core/Src/freertos.c ****     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
- 153              		.loc 1 272 5 discriminator 1 view .LVU26
- 154 0004 144C     		ldr	r4, .L9
- 155 0006 0023     		movs	r3, #0
- 156 0008 A21D     		adds	r2, r4, #6
- 157 000a 04F10C01 		add	r1, r4, #12
- 158 000e 2046     		mov	r0, r4
- 159 0010 FFF7FEFF 		bl	MPU9250_GetData
- 160              	.LVL18:
- 273:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
- 274:Core/Src/freertos.c ****         int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
- 161              		.loc 1 274 9 discriminator 1 view .LVU27
- 162              		.loc 1 274 40 is_stmt 0 discriminator 1 view .LVU28
- 163 0014 B4F90230 		ldrsh	r3, [r4, #2]
- 164              	.LVL19:
- 165              		.loc 1 274 63 discriminator 1 view .LVU29
- 166 0018 B4F90420 		ldrsh	r2, [r4, #4]
- 167              	.LVL20:
- 275:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 168              		.loc 1 275 9 is_stmt 1 discriminator 1 view .LVU30
- 169              		.loc 1 275 17 is_stmt 0 discriminator 1 view .LVU31
- 170 001c B4F90610 		ldrsh	r1, [r4, #6]
- 171              	.LVL21:
- 172              		.loc 1 275 40 discriminator 1 view .LVU32
- 173 0020 B4F90800 		ldrsh	r0, [r4, #8]
- 174              	.LVL22:
- 175              		.loc 1 275 63 discriminator 1 view .LVU33
- 176 0024 B4F90A50 		ldrsh	r5, [r4, #10]
- 177              	.LVL23:
- 276:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 178              		.loc 1 276 9 is_stmt 1 discriminator 1 view .LVU34
-ARM GAS  /tmp/ccE24TNm.s 			page 9
+ 128              	.LVL14:
+ 129              		.loc 1 270 1 is_stmt 0 view .LVU22
+ 130 0000 30B5     		push	{r4, r5, lr}
+ 131              	.LCFI2:
+ 132              		.cfi_def_cfa_offset 12
+ 133              		.cfi_offset 4, -12
+ 134              		.cfi_offset 5, -8
+ 135              		.cfi_offset 14, -4
+ 136 0002 C7B0     		sub	sp, sp, #284
+ 137              	.LCFI3:
+ 138              		.cfi_def_cfa_offset 296
+ 139              	.LVL15:
+ 140              	.L7:
+ 271:Core/Src/freertos.c ****   /* USER CODE BEGIN StartServoControlTask */
+ 272:Core/Src/freertos.c ****   /* Infinite loop */
+ 273:Core/Src/freertos.c ****   for(;;)
+ 141              		.loc 1 273 3 is_stmt 1 discriminator 1 view .LVU23
+ 142              	.LBB3:
+ 274:Core/Src/freertos.c ****   {
+ 275:Core/Src/freertos.c ****         Set_Servo_Angle(H1, 30);  // 设置舵机角度
+ 143              		.loc 1 275 9 discriminator 1 view .LVU24
+ 144 0004 B3EE0E0A 		vmov.f32	s0, #3.0e+1
+ 145 0008 0020     		movs	r0, #0
+ 146 000a FFF7FEFF 		bl	Set_Servo_Angle
+ 147              	.LVL16:
+ 276:Core/Src/freertos.c ****         Set_Servo_Angle(H2, 30);
+ 148              		.loc 1 276 9 discriminator 1 view .LVU25
+ 149 000e B3EE0E0A 		vmov.f32	s0, #3.0e+1
+ 150 0012 0120     		movs	r0, #1
+ 151 0014 FFF7FEFF 		bl	Set_Servo_Angle
+ 152              	.LVL17:
+ 277:Core/Src/freertos.c ****         Set_Servo_Angle(H3, 30);
+ 153              		.loc 1 277 9 discriminator 1 view .LVU26
+ 154 0018 B3EE0E0A 		vmov.f32	s0, #3.0e+1
+ 155 001c 0220     		movs	r0, #2
+ 156 001e FFF7FEFF 		bl	Set_Servo_Angle
+ 157              	.LVL18:
+ 278:Core/Src/freertos.c ****         Set_Servo_Angle(H4,30);
+ 158              		.loc 1 278 9 discriminator 1 view .LVU27
+ 159 0022 B3EE0E0A 		vmov.f32	s0, #3.0e+1
+ 160 0026 0320     		movs	r0, #3
+ 161 0028 FFF7FEFF 		bl	Set_Servo_Angle
+ 162              	.LVL19:
+ 279:Core/Src/freertos.c ****        
+ 280:Core/Src/freertos.c ****     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
+ 163              		.loc 1 280 5 discriminator 1 view .LVU28
+ 164 002c 114C     		ldr	r4, .L9
+ 165 002e 0023     		movs	r3, #0
+ 166 0030 A21D     		adds	r2, r4, #6
+ 167 0032 04F10C01 		add	r1, r4, #12
+ 168 0036 2046     		mov	r0, r4
+ 169 0038 FFF7FEFF 		bl	MPU9250_GetData
+ 170              	.LVL20:
+ 281:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
+ 282:Core/Src/freertos.c ****         int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
+ 171              		.loc 1 282 9 discriminator 1 view .LVU29
+ 172              		.loc 1 282 40 is_stmt 0 discriminator 1 view .LVU30
+ARM GAS  /tmp/ccZG0cTT.s 			page 9
 
 
- 277:Core/Src/freertos.c ****          // 打印四元数数据
- 278:Core/Src/freertos.c ****         char printBuffer[256];
- 179              		.loc 1 278 9 discriminator 1 view .LVU35
- 279:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
- 180              		.loc 1 279 9 discriminator 1 view .LVU36
- 181              		.loc 1 279 19 is_stmt 0 discriminator 1 view .LVU37
- 182 0028 0495     		str	r5, [sp, #16]
- 183 002a 0390     		str	r0, [sp, #12]
- 184 002c 0291     		str	r1, [sp, #8]
- 185 002e 0192     		str	r2, [sp, #4]
- 186 0030 0093     		str	r3, [sp]
- 187 0032 B4F90030 		ldrsh	r3, [r4]
- 188              	.LVL24:
- 189              		.loc 1 279 19 discriminator 1 view .LVU38
- 190 0036 094A     		ldr	r2, .L9+4
- 191              	.LVL25:
- 192              		.loc 1 279 19 discriminator 1 view .LVU39
- 193 0038 4FF48071 		mov	r1, #256
- 194              	.LVL26:
- 195              		.loc 1 279 19 discriminator 1 view .LVU40
- 196 003c 06A8     		add	r0, sp, #24
- 197              	.LVL27:
- 198              		.loc 1 279 19 discriminator 1 view .LVU41
- 199 003e FFF7FEFF 		bl	snprintf
- 200              	.LVL28:
- 280:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 201              		.loc 1 280 9 is_stmt 1 discriminator 1 view .LVU42
- 202 0042 4FF0FF33 		mov	r3, #-1
- 203 0046 82B2     		uxth	r2, r0
- 204 0048 06A9     		add	r1, sp, #24
- 205 004a 0548     		ldr	r0, .L9+8
- 206              	.LVL29:
- 207              		.loc 1 280 9 is_stmt 0 discriminator 1 view .LVU43
- 208 004c FFF7FEFF 		bl	HAL_UART_Transmit
- 209              	.LVL30:
- 281:Core/Src/freertos.c **** 
- 282:Core/Src/freertos.c ****     osDelay(1);
- 210              		.loc 1 282 5 is_stmt 1 discriminator 1 view .LVU44
- 211 0050 0120     		movs	r0, #1
- 212 0052 FFF7FEFF 		bl	osDelay
- 213              	.LVL31:
- 214              	.LBE3:
- 270:Core/Src/freertos.c ****   {
- 215              		.loc 1 270 8 discriminator 1 view .LVU45
- 216 0056 D5E7     		b	.L7
- 217              	.L10:
- 218              		.align	2
- 219              	.L9:
- 220 0058 00000000 		.word	.LANCHOR0
- 221 005c 00000000 		.word	.LC0
- 222 0060 00000000 		.word	huart1
+ 173 003c B4F90230 		ldrsh	r3, [r4, #2]
+ 174              	.LVL21:
+ 175              		.loc 1 282 63 discriminator 1 view .LVU31
+ 176 0040 B4F90420 		ldrsh	r2, [r4, #4]
+ 177              	.LVL22:
+ 283:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 178              		.loc 1 283 9 is_stmt 1 discriminator 1 view .LVU32
+ 179              		.loc 1 283 17 is_stmt 0 discriminator 1 view .LVU33
+ 180 0044 B4F90610 		ldrsh	r1, [r4, #6]
+ 181              	.LVL23:
+ 182              		.loc 1 283 40 discriminator 1 view .LVU34
+ 183 0048 B4F90800 		ldrsh	r0, [r4, #8]
+ 184              	.LVL24:
+ 185              		.loc 1 283 63 discriminator 1 view .LVU35
+ 186 004c B4F90A50 		ldrsh	r5, [r4, #10]
+ 187              	.LVL25:
+ 284:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 188              		.loc 1 284 9 is_stmt 1 discriminator 1 view .LVU36
+ 285:Core/Src/freertos.c ****          // 打印四元数数据
+ 286:Core/Src/freertos.c ****         char printBuffer[256];
+ 189              		.loc 1 286 9 discriminator 1 view .LVU37
+ 287:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
+ 190              		.loc 1 287 9 discriminator 1 view .LVU38
+ 191              		.loc 1 287 19 is_stmt 0 discriminator 1 view .LVU39
+ 192 0050 0495     		str	r5, [sp, #16]
+ 193 0052 0390     		str	r0, [sp, #12]
+ 194 0054 0291     		str	r1, [sp, #8]
+ 195 0056 0192     		str	r2, [sp, #4]
+ 196 0058 0093     		str	r3, [sp]
+ 197 005a B4F90030 		ldrsh	r3, [r4]
+ 198              	.LVL26:
+ 199              		.loc 1 287 19 discriminator 1 view .LVU40
+ 200 005e 064A     		ldr	r2, .L9+4
+ 201              	.LVL27:
+ 202              		.loc 1 287 19 discriminator 1 view .LVU41
+ 203 0060 4FF48071 		mov	r1, #256
+ 204              	.LVL28:
+ 205              		.loc 1 287 19 discriminator 1 view .LVU42
+ 206 0064 06A8     		add	r0, sp, #24
+ 207              	.LVL29:
+ 208              		.loc 1 287 19 discriminator 1 view .LVU43
+ 209 0066 FFF7FEFF 		bl	snprintf
+ 210              	.LVL30:
+ 288:Core/Src/freertos.c ****         //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 289:Core/Src/freertos.c **** 
+ 290:Core/Src/freertos.c ****     osDelay(1);
+ 211              		.loc 1 290 5 is_stmt 1 discriminator 1 view .LVU44
+ 212 006a 0120     		movs	r0, #1
+ 213 006c FFF7FEFF 		bl	osDelay
+ 214              	.LVL31:
+ 215              	.LBE3:
+ 273:Core/Src/freertos.c ****   {
+ 216              		.loc 1 273 8 discriminator 1 view .LVU45
+ 217 0070 C8E7     		b	.L7
+ 218              	.L10:
+ 219 0072 00BF     		.align	2
+ 220              	.L9:
+ARM GAS  /tmp/ccZG0cTT.s 			page 10
+
+
+ 221 0074 00000000 		.word	.LANCHOR0
+ 222 0078 00000000 		.word	.LC0
  223              		.cfi_endproc
  224              	.LFE154:
  226              		.section	.text.StartGaitControlTask,"ax",%progbits
  227              		.align	1
  228              		.global	StartGaitControlTask
  229              		.syntax unified
-ARM GAS  /tmp/ccE24TNm.s 			page 10
-
-
  230              		.thumb
  231              		.thumb_func
  232              		.fpu fpv5-d16
  234              	StartGaitControlTask:
  235              	.LFB155:
- 283:Core/Src/freertos.c ****   }
- 284:Core/Src/freertos.c ****   /* USER CODE END StartServoControlTask */
- 285:Core/Src/freertos.c **** }
- 286:Core/Src/freertos.c **** 
- 287:Core/Src/freertos.c **** /* USER CODE BEGIN Header_StartGaitControlTask */
- 288:Core/Src/freertos.c **** /**
- 289:Core/Src/freertos.c **** * @brief Function implementing the GaitControlTask thread.
- 290:Core/Src/freertos.c **** * @param argument: Not used
- 291:Core/Src/freertos.c **** * @retval None
- 292:Core/Src/freertos.c **** */
- 293:Core/Src/freertos.c **** /* USER CODE END Header_StartGaitControlTask */
- 294:Core/Src/freertos.c **** void StartGaitControlTask(void *argument)
- 295:Core/Src/freertos.c **** {
- 236              		.loc 1 295 1 view -0
+ 291:Core/Src/freertos.c ****   }
+ 292:Core/Src/freertos.c ****   /* USER CODE END StartServoControlTask */
+ 293:Core/Src/freertos.c **** }
+ 294:Core/Src/freertos.c **** 
+ 295:Core/Src/freertos.c **** /* USER CODE BEGIN Header_StartGaitControlTask */
+ 296:Core/Src/freertos.c **** /**
+ 297:Core/Src/freertos.c **** * @brief Function implementing the GaitControlTask thread.
+ 298:Core/Src/freertos.c **** * @param argument: Not used
+ 299:Core/Src/freertos.c **** * @retval None
+ 300:Core/Src/freertos.c **** */
+ 301:Core/Src/freertos.c **** /* USER CODE END Header_StartGaitControlTask */
+ 302:Core/Src/freertos.c **** void StartGaitControlTask(void *argument)
+ 303:Core/Src/freertos.c **** {
+ 236              		.loc 1 303 1 view -0
  237              		.cfi_startproc
  238              		@ args = 0, pretend = 0, frame = 256
  239              		@ frame_needed = 0, uses_anonymous_args = 0
  240              	.LVL32:
- 241              		.loc 1 295 1 is_stmt 0 view .LVU47
+ 241              		.loc 1 303 1 is_stmt 0 view .LVU47
  242 0000 30B5     		push	{r4, r5, lr}
  243              	.LCFI4:
  244              		.cfi_def_cfa_offset 12
@@ -578,112 +586,112 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
  252              	.LVL33:
  253              	.L18:
  254              	.LBB4:
- 296:Core/Src/freertos.c ****   /* USER CODE BEGIN StartGaitControlTask */
- 297:Core/Src/freertos.c ****   /* Infinite loop */
- 298:Core/Src/freertos.c ****   for(;;)
- 299:Core/Src/freertos.c ****   {
- 300:Core/Src/freertos.c **** 
- 301:Core/Src/freertos.c ****     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
- 302:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
- 303:Core/Src/freertos.c ****         int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
- 304:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 305:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 306:Core/Src/freertos.c ****          // 打印四元数数据
- 307:Core/Src/freertos.c ****         char printBuffer[256];
- 308:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
- 309:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 310:Core/Src/freertos.c **** 
- 311:Core/Src/freertos.c **** 
- 312:Core/Src/freertos.c ****     switch (current_action) {
- 313:Core/Src/freertos.c ****             case ACTION_FORWARD:
- 314:Core/Src/freertos.c ****                 Gait_Forward();
- 255              		.loc 1 314 17 is_stmt 1 view .LVU48
-ARM GAS  /tmp/ccE24TNm.s 			page 11
+ 304:Core/Src/freertos.c ****   /* USER CODE BEGIN StartGaitControlTask */
+ 305:Core/Src/freertos.c ****   /* Infinite loop */
+ 306:Core/Src/freertos.c ****   for(;;)
+ 307:Core/Src/freertos.c ****   {
+ 308:Core/Src/freertos.c **** 
+ 309:Core/Src/freertos.c ****     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
+ 310:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
+ 311:Core/Src/freertos.c ****         int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
+ 312:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 313:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 314:Core/Src/freertos.c ****          // 打印四元数数据
+ 315:Core/Src/freertos.c ****         char printBuffer[256];
+ARM GAS  /tmp/ccZG0cTT.s 			page 11
 
 
+ 316:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
+ 317:Core/Src/freertos.c ****         //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 318:Core/Src/freertos.c **** 
+ 319:Core/Src/freertos.c **** 
+ 320:Core/Src/freertos.c ****     switch (current_action) {
+ 321:Core/Src/freertos.c ****             case ACTION_FORWARD:
+ 322:Core/Src/freertos.c ****                 Gait_Forward();
+ 255              		.loc 1 322 17 is_stmt 1 view .LVU48
  256 0006 FFF7FEFF 		bl	Gait_Forward
  257              	.LVL34:
- 315:Core/Src/freertos.c ****                 break;
- 258              		.loc 1 315 17 view .LVU49
+ 323:Core/Src/freertos.c ****                 break;
+ 258              		.loc 1 323 17 view .LVU49
  259              	.L12:
- 316:Core/Src/freertos.c ****             case ACTION_BACKWARD:
- 317:Core/Src/freertos.c ****                 Gait_Backward();
- 318:Core/Src/freertos.c ****                 break;
- 319:Core/Src/freertos.c ****             case ACTION_TURN_LEFT:
- 320:Core/Src/freertos.c ****                 Gait_Turn_Left();
- 321:Core/Src/freertos.c ****                 break;
- 322:Core/Src/freertos.c ****             case ACTION_TURN_RIGHT:
- 323:Core/Src/freertos.c ****                 Gait_Turn_Right();
- 324:Core/Src/freertos.c ****                 break;
- 325:Core/Src/freertos.c ****             case ACTION_MARCH_IN_PLACE:
- 326:Core/Src/freertos.c ****                 Gait_March_In_Place();
- 327:Core/Src/freertos.c ****                 break;
- 328:Core/Src/freertos.c ****             case ACTION_STOP:
- 329:Core/Src/freertos.c ****             default:
- 330:Core/Src/freertos.c ****                 
- 331:Core/Src/freertos.c ****                 break;
- 332:Core/Src/freertos.c ****         }
- 333:Core/Src/freertos.c ****         vTaskDelay(pdMS_TO_TICKS(50)); // 每50ms更新一次步态
- 260              		.loc 1 333 9 view .LVU50
+ 324:Core/Src/freertos.c ****             case ACTION_BACKWARD:
+ 325:Core/Src/freertos.c ****                 Gait_Backward();
+ 326:Core/Src/freertos.c ****                 break;
+ 327:Core/Src/freertos.c ****             case ACTION_TURN_LEFT:
+ 328:Core/Src/freertos.c ****                 Gait_Turn_Left();
+ 329:Core/Src/freertos.c ****                 break;
+ 330:Core/Src/freertos.c ****             case ACTION_TURN_RIGHT:
+ 331:Core/Src/freertos.c ****                 Gait_Turn_Right();
+ 332:Core/Src/freertos.c ****                 break;
+ 333:Core/Src/freertos.c ****             case ACTION_MARCH_IN_PLACE:
+ 334:Core/Src/freertos.c ****                 Gait_March_In_Place();
+ 335:Core/Src/freertos.c ****                 break;
+ 336:Core/Src/freertos.c ****             case ACTION_STOP:
+ 337:Core/Src/freertos.c ****             default:
+ 338:Core/Src/freertos.c ****                 
+ 339:Core/Src/freertos.c ****                  break;
+ 340:Core/Src/freertos.c ****         }
+ 341:Core/Src/freertos.c ****         vTaskDelay(pdMS_TO_TICKS(50)); // 每50ms更新一次步态
+ 260              		.loc 1 341 9 view .LVU50
  261 000a 3220     		movs	r0, #50
  262 000c FFF7FEFF 		bl	vTaskDelay
  263              	.LVL35:
- 334:Core/Src/freertos.c ****     osDelay(1);
- 264              		.loc 1 334 5 view .LVU51
+ 342:Core/Src/freertos.c ****     osDelay(1);
+ 264              		.loc 1 342 5 view .LVU51
  265 0010 0120     		movs	r0, #1
  266 0012 FFF7FEFF 		bl	osDelay
  267              	.LVL36:
  268              	.LBE4:
- 298:Core/Src/freertos.c ****   {
- 269              		.loc 1 298 8 view .LVU52
+ 306:Core/Src/freertos.c ****   {
+ 269              		.loc 1 306 8 view .LVU52
  270              	.L19:
- 298:Core/Src/freertos.c ****   {
- 271              		.loc 1 298 3 view .LVU53
+ 306:Core/Src/freertos.c ****   {
+ 271              		.loc 1 306 3 view .LVU53
  272              	.LBB5:
- 301:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
- 273              		.loc 1 301 5 view .LVU54
- 274 0016 224C     		ldr	r4, .L21
+ 309:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
+ 273              		.loc 1 309 5 view .LVU54
+ 274 0016 1E4C     		ldr	r4, .L21
  275 0018 0023     		movs	r3, #0
  276 001a A21D     		adds	r2, r4, #6
  277 001c 04F10C01 		add	r1, r4, #12
  278 0020 2046     		mov	r0, r4
  279 0022 FFF7FEFF 		bl	MPU9250_GetData
  280              	.LVL37:
- 303:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 281              		.loc 1 303 9 view .LVU55
- 303:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 282              		.loc 1 303 40 is_stmt 0 view .LVU56
+ 311:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ARM GAS  /tmp/ccZG0cTT.s 			page 12
+
+
+ 281              		.loc 1 311 9 view .LVU55
+ 311:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 282              		.loc 1 311 40 is_stmt 0 view .LVU56
  283 0026 B4F90230 		ldrsh	r3, [r4, #2]
  284              	.LVL38:
- 303:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 285              		.loc 1 303 63 view .LVU57
+ 311:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 285              		.loc 1 311 63 view .LVU57
  286 002a B4F90420 		ldrsh	r2, [r4, #4]
-ARM GAS  /tmp/ccE24TNm.s 			page 12
-
-
  287              	.LVL39:
- 304:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 288              		.loc 1 304 9 is_stmt 1 view .LVU58
- 304:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 289              		.loc 1 304 17 is_stmt 0 view .LVU59
+ 312:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 288              		.loc 1 312 9 is_stmt 1 view .LVU58
+ 312:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 289              		.loc 1 312 17 is_stmt 0 view .LVU59
  290 002e B4F90610 		ldrsh	r1, [r4, #6]
  291              	.LVL40:
- 304:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 292              		.loc 1 304 40 view .LVU60
+ 312:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 292              		.loc 1 312 40 view .LVU60
  293 0032 B4F90800 		ldrsh	r0, [r4, #8]
  294              	.LVL41:
- 304:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 295              		.loc 1 304 63 view .LVU61
+ 312:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 295              		.loc 1 312 63 view .LVU61
  296 0036 B4F90A50 		ldrsh	r5, [r4, #10]
  297              	.LVL42:
- 305:Core/Src/freertos.c ****          // 打印四元数数据
- 298              		.loc 1 305 9 is_stmt 1 view .LVU62
- 307:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
- 299              		.loc 1 307 9 view .LVU63
- 308:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 300              		.loc 1 308 9 view .LVU64
- 308:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 301              		.loc 1 308 19 is_stmt 0 view .LVU65
+ 313:Core/Src/freertos.c ****          // 打印四元数数据
+ 298              		.loc 1 313 9 is_stmt 1 view .LVU62
+ 315:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
+ 299              		.loc 1 315 9 view .LVU63
+ 316:Core/Src/freertos.c ****         //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 300              		.loc 1 316 9 view .LVU64
+ 316:Core/Src/freertos.c ****         //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 301              		.loc 1 316 19 is_stmt 0 view .LVU65
  302 003a 0495     		str	r5, [sp, #16]
  303 003c 0390     		str	r0, [sp, #12]
  304 003e 0291     		str	r1, [sp, #8]
@@ -691,1532 +699,1528 @@ ARM GAS  /tmp/ccE24TNm.s 			page 1
  306 0042 0093     		str	r3, [sp]
  307 0044 B4F90030 		ldrsh	r3, [r4]
  308              	.LVL43:
- 308:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 309              		.loc 1 308 19 view .LVU66
- 310 0048 164A     		ldr	r2, .L21+4
+ 316:Core/Src/freertos.c ****         //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 309              		.loc 1 316 19 view .LVU66
+ 310 0048 124A     		ldr	r2, .L21+4
  311              	.LVL44:
- 308:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 312              		.loc 1 308 19 view .LVU67
+ 316:Core/Src/freertos.c ****         //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 312              		.loc 1 316 19 view .LVU67
  313 004a 4FF48071 		mov	r1, #256
  314              	.LVL45:
- 308:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 315              		.loc 1 308 19 view .LVU68
+ 316:Core/Src/freertos.c ****         //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 315              		.loc 1 316 19 view .LVU68
  316 004e 06A8     		add	r0, sp, #24
  317              	.LVL46:
- 308:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 318              		.loc 1 308 19 view .LVU69
+ 316:Core/Src/freertos.c ****         //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 318              		.loc 1 316 19 view .LVU69
  319 0050 FFF7FEFF 		bl	snprintf
  320              	.LVL47:
- 309:Core/Src/freertos.c **** 
- 321              		.loc 1 309 9 is_stmt 1 view .LVU70
- 322 0054 4FF0FF33 		mov	r3, #-1
- 323 0058 82B2     		uxth	r2, r0
- 324 005a 06A9     		add	r1, sp, #24
- 325 005c 1248     		ldr	r0, .L21+8
- 326              	.LVL48:
- 309:Core/Src/freertos.c **** 
- 327              		.loc 1 309 9 is_stmt 0 view .LVU71
- 328 005e FFF7FEFF 		bl	HAL_UART_Transmit
- 329              	.LVL49:
-ARM GAS  /tmp/ccE24TNm.s 			page 13
+ 320:Core/Src/freertos.c ****             case ACTION_FORWARD:
+ 321              		.loc 1 320 5 is_stmt 1 view .LVU70
+ 322 0054 104B     		ldr	r3, .L21+8
+ARM GAS  /tmp/ccZG0cTT.s 			page 13
 
 
- 312:Core/Src/freertos.c ****             case ACTION_FORWARD:
- 330              		.loc 1 312 5 is_stmt 1 view .LVU72
- 331 0062 124B     		ldr	r3, .L21+12
- 332 0064 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
- 333 0066 013B     		subs	r3, r3, #1
- 334 0068 042B     		cmp	r3, #4
- 335 006a CED8     		bhi	.L12
- 336 006c 01A2     		adr	r2, .L14
- 337 006e 52F823F0 		ldr	pc, [r2, r3, lsl #2]
- 338 0072 00BF     		.p2align 2
- 339              	.L14:
- 340 0074 07000000 		.word	.L18+1
- 341 0078 89000000 		.word	.L17+1
- 342 007c 8F000000 		.word	.L16+1
- 343 0080 95000000 		.word	.L15+1
- 344 0084 9B000000 		.word	.L13+1
- 345              		.p2align 1
- 346              	.L17:
- 317:Core/Src/freertos.c ****                 break;
- 347              		.loc 1 317 17 view .LVU73
- 348 0088 FFF7FEFF 		bl	Gait_Backward
- 349              	.LVL50:
- 318:Core/Src/freertos.c ****             case ACTION_TURN_LEFT:
- 350              		.loc 1 318 17 view .LVU74
- 351 008c BDE7     		b	.L12
- 352              	.L16:
- 320:Core/Src/freertos.c ****                 break;
- 353              		.loc 1 320 17 view .LVU75
- 354 008e FFF7FEFF 		bl	Gait_Turn_Left
- 355              	.LVL51:
- 321:Core/Src/freertos.c ****             case ACTION_TURN_RIGHT:
- 356              		.loc 1 321 17 view .LVU76
- 357 0092 BAE7     		b	.L12
- 358              	.L15:
- 323:Core/Src/freertos.c ****                 break;
- 359              		.loc 1 323 17 view .LVU77
- 360 0094 FFF7FEFF 		bl	Gait_Turn_Right
- 361              	.LVL52:
- 324:Core/Src/freertos.c ****             case ACTION_MARCH_IN_PLACE:
- 362              		.loc 1 324 17 view .LVU78
- 363 0098 B7E7     		b	.L12
- 364              	.L13:
- 326:Core/Src/freertos.c ****                 break;
- 365              		.loc 1 326 17 view .LVU79
- 366 009a FFF7FEFF 		bl	Gait_March_In_Place
- 367              	.LVL53:
- 327:Core/Src/freertos.c ****             case ACTION_STOP:
- 368              		.loc 1 327 17 view .LVU80
- 369 009e B4E7     		b	.L12
- 370              	.L22:
- 371              		.align	2
- 372              	.L21:
- 373 00a0 00000000 		.word	.LANCHOR0
- 374 00a4 00000000 		.word	.LC0
- 375 00a8 00000000 		.word	huart1
- 376 00ac 00000000 		.word	current_action
- 377              	.LBE5:
-ARM GAS  /tmp/ccE24TNm.s 			page 14
+ 323 0056 1B78     		ldrb	r3, [r3]	@ zero_extendqisi2
+ 324 0058 013B     		subs	r3, r3, #1
+ 325 005a 042B     		cmp	r3, #4
+ 326 005c D5D8     		bhi	.L12
+ 327 005e 01A2     		adr	r2, .L14
+ 328 0060 52F823F0 		ldr	pc, [r2, r3, lsl #2]
+ 329              		.p2align 2
+ 330              	.L14:
+ 331 0064 07000000 		.word	.L18+1
+ 332 0068 79000000 		.word	.L17+1
+ 333 006c 7F000000 		.word	.L16+1
+ 334 0070 85000000 		.word	.L15+1
+ 335 0074 8B000000 		.word	.L13+1
+ 336              		.p2align 1
+ 337              	.L17:
+ 325:Core/Src/freertos.c ****                 break;
+ 338              		.loc 1 325 17 view .LVU71
+ 339 0078 FFF7FEFF 		bl	Gait_Backward
+ 340              	.LVL48:
+ 326:Core/Src/freertos.c ****             case ACTION_TURN_LEFT:
+ 341              		.loc 1 326 17 view .LVU72
+ 342 007c C5E7     		b	.L12
+ 343              	.L16:
+ 328:Core/Src/freertos.c ****                 break;
+ 344              		.loc 1 328 17 view .LVU73
+ 345 007e FFF7FEFF 		bl	Gait_Turn_Left
+ 346              	.LVL49:
+ 329:Core/Src/freertos.c ****             case ACTION_TURN_RIGHT:
+ 347              		.loc 1 329 17 view .LVU74
+ 348 0082 C2E7     		b	.L12
+ 349              	.L15:
+ 331:Core/Src/freertos.c ****                 break;
+ 350              		.loc 1 331 17 view .LVU75
+ 351 0084 FFF7FEFF 		bl	Gait_Turn_Right
+ 352              	.LVL50:
+ 332:Core/Src/freertos.c ****             case ACTION_MARCH_IN_PLACE:
+ 353              		.loc 1 332 17 view .LVU76
+ 354 0088 BFE7     		b	.L12
+ 355              	.L13:
+ 334:Core/Src/freertos.c ****                 break;
+ 356              		.loc 1 334 17 view .LVU77
+ 357 008a FFF7FEFF 		bl	Gait_March_In_Place
+ 358              	.LVL51:
+ 335:Core/Src/freertos.c ****             case ACTION_STOP:
+ 359              		.loc 1 335 17 view .LVU78
+ 360 008e BCE7     		b	.L12
+ 361              	.L22:
+ 362              		.align	2
+ 363              	.L21:
+ 364 0090 00000000 		.word	.LANCHOR0
+ 365 0094 00000000 		.word	.LC0
+ 366 0098 00000000 		.word	current_action
+ 367              	.LBE5:
+ 368              		.cfi_endproc
+ 369              	.LFE155:
+ 371              		.section	.text.MX_FREERTOS_Init,"ax",%progbits
+ 372              		.align	1
+ARM GAS  /tmp/ccZG0cTT.s 			page 14
 
 
- 378              		.cfi_endproc
- 379              	.LFE155:
- 381              		.section	.text.MX_FREERTOS_Init,"ax",%progbits
- 382              		.align	1
- 383              		.global	MX_FREERTOS_Init
- 384              		.syntax unified
- 385              		.thumb
- 386              		.thumb_func
- 387              		.fpu fpv5-d16
- 389              	MX_FREERTOS_Init:
- 390              	.LFB151:
+ 373              		.global	MX_FREERTOS_Init
+ 374              		.syntax unified
+ 375              		.thumb
+ 376              		.thumb_func
+ 377              		.fpu fpv5-d16
+ 379              	MX_FREERTOS_Init:
+ 380              	.LFB151:
  141:Core/Src/freertos.c ****   /* USER CODE BEGIN Init */
- 391              		.loc 1 141 29 view -0
- 392              		.cfi_startproc
- 393              		@ args = 0, pretend = 0, frame = 0
- 394              		@ frame_needed = 0, uses_anonymous_args = 0
- 395 0000 08B5     		push	{r3, lr}
- 396              	.LCFI6:
- 397              		.cfi_def_cfa_offset 8
- 398              		.cfi_offset 3, -8
- 399              		.cfi_offset 14, -4
+ 381              		.loc 1 141 29 view -0
+ 382              		.cfi_startproc
+ 383              		@ args = 0, pretend = 0, frame = 0
+ 384              		@ frame_needed = 0, uses_anonymous_args = 0
+ 385 0000 08B5     		push	{r3, lr}
+ 386              	.LCFI6:
+ 387              		.cfi_def_cfa_offset 8
+ 388              		.cfi_offset 3, -8
+ 389              		.cfi_offset 14, -4
  143:Core/Src/freertos.c ****     //MPU9250_Init();
- 400              		.loc 1 143 5 view .LVU82
- 401 0002 FFF7FEFF 		bl	Servo_Init
- 402              	.LVL54:
+ 390              		.loc 1 143 5 view .LVU80
+ 391 0002 FFF7FEFF 		bl	Servo_Init
+ 392              	.LVL52:
  145:Core/Src/freertos.c ****   /* USER CODE END Init */
- 403              		.loc 1 145 5 view .LVU83
- 404 0006 FFF7FEFF 		bl	AHRS_Init
- 405              	.LVL55:
+ 393              		.loc 1 145 5 view .LVU81
+ 394 0006 FFF7FEFF 		bl	AHRS_Init
+ 395              	.LVL53:
  161:Core/Src/freertos.c ****   /* add queues, ... */
- 406              		.loc 1 161 4 view .LVU84
+ 396              		.loc 1 161 4 view .LVU82
  161:Core/Src/freertos.c ****   /* add queues, ... */
- 407              		.loc 1 161 16 is_stmt 0 view .LVU85
- 408 000a 0022     		movs	r2, #0
- 409 000c 0821     		movs	r1, #8
- 410 000e 0A20     		movs	r0, #10
- 411 0010 FFF7FEFF 		bl	xQueueGenericCreate
- 412              	.LVL56:
+ 397              		.loc 1 161 16 is_stmt 0 view .LVU83
+ 398 000a 0022     		movs	r2, #0
+ 399 000c 0821     		movs	r1, #8
+ 400 000e 0A20     		movs	r0, #10
+ 401 0010 FFF7FEFF 		bl	xQueueGenericCreate
+ 402              	.LVL54:
  161:Core/Src/freertos.c ****   /* add queues, ... */
- 413              		.loc 1 161 14 view .LVU86
- 414 0014 124B     		ldr	r3, .L25
- 415 0016 1860     		str	r0, [r3]
+ 403              		.loc 1 161 14 view .LVU84
+ 404 0014 124B     		ldr	r3, .L25
+ 405 0016 1860     		str	r0, [r3]
  167:Core/Src/freertos.c **** 
- 416              		.loc 1 167 3 is_stmt 1 view .LVU87
+ 406              		.loc 1 167 3 is_stmt 1 view .LVU85
  167:Core/Src/freertos.c **** 
- 417              		.loc 1 167 23 is_stmt 0 view .LVU88
- 418 0018 124A     		ldr	r2, .L25+4
- 419 001a 0021     		movs	r1, #0
- 420 001c 1248     		ldr	r0, .L25+8
- 421 001e FFF7FEFF 		bl	osThreadNew
- 422              	.LVL57:
+ 407              		.loc 1 167 23 is_stmt 0 view .LVU86
+ 408 0018 124A     		ldr	r2, .L25+4
+ 409 001a 0021     		movs	r1, #0
+ 410 001c 1248     		ldr	r0, .L25+8
+ 411 001e FFF7FEFF 		bl	osThreadNew
+ 412              	.LVL55:
  167:Core/Src/freertos.c **** 
- 423              		.loc 1 167 21 view .LVU89
- 424 0022 124B     		ldr	r3, .L25+12
- 425 0024 1860     		str	r0, [r3]
+ 413              		.loc 1 167 21 view .LVU87
+ 414 0022 124B     		ldr	r3, .L25+12
+ 415 0024 1860     		str	r0, [r3]
  170:Core/Src/freertos.c **** 
- 426              		.loc 1 170 3 is_stmt 1 view .LVU90
-ARM GAS  /tmp/ccE24TNm.s 			page 15
+ 416              		.loc 1 170 3 is_stmt 1 view .LVU88
+ 170:Core/Src/freertos.c **** 
+ 417              		.loc 1 170 24 is_stmt 0 view .LVU89
+ 418 0026 124A     		ldr	r2, .L25+16
+ 419 0028 0021     		movs	r1, #0
+ARM GAS  /tmp/ccZG0cTT.s 			page 15
 
 
+ 420 002a 1248     		ldr	r0, .L25+20
+ 421 002c FFF7FEFF 		bl	osThreadNew
+ 422              	.LVL56:
  170:Core/Src/freertos.c **** 
- 427              		.loc 1 170 24 is_stmt 0 view .LVU91
- 428 0026 124A     		ldr	r2, .L25+16
- 429 0028 0021     		movs	r1, #0
- 430 002a 1248     		ldr	r0, .L25+20
- 431 002c FFF7FEFF 		bl	osThreadNew
- 432              	.LVL58:
- 170:Core/Src/freertos.c **** 
- 433              		.loc 1 170 22 view .LVU92
- 434 0030 114B     		ldr	r3, .L25+24
- 435 0032 1860     		str	r0, [r3]
+ 423              		.loc 1 170 22 view .LVU90
+ 424 0030 114B     		ldr	r3, .L25+24
+ 425 0032 1860     		str	r0, [r3]
  173:Core/Src/freertos.c **** 
- 436              		.loc 1 173 3 is_stmt 1 view .LVU93
+ 426              		.loc 1 173 3 is_stmt 1 view .LVU91
  173:Core/Src/freertos.c **** 
- 437              		.loc 1 173 27 is_stmt 0 view .LVU94
- 438 0034 114A     		ldr	r2, .L25+28
- 439 0036 0021     		movs	r1, #0
- 440 0038 1148     		ldr	r0, .L25+32
- 441 003a FFF7FEFF 		bl	osThreadNew
- 442              	.LVL59:
+ 427              		.loc 1 173 27 is_stmt 0 view .LVU92
+ 428 0034 114A     		ldr	r2, .L25+28
+ 429 0036 0021     		movs	r1, #0
+ 430 0038 1148     		ldr	r0, .L25+32
+ 431 003a FFF7FEFF 		bl	osThreadNew
+ 432              	.LVL57:
  173:Core/Src/freertos.c **** 
- 443              		.loc 1 173 25 view .LVU95
- 444 003e 114B     		ldr	r3, .L25+36
- 445 0040 1860     		str	r0, [r3]
+ 433              		.loc 1 173 25 view .LVU93
+ 434 003e 114B     		ldr	r3, .L25+36
+ 435 0040 1860     		str	r0, [r3]
  176:Core/Src/freertos.c **** 
- 446              		.loc 1 176 3 is_stmt 1 view .LVU96
+ 436              		.loc 1 176 3 is_stmt 1 view .LVU94
  176:Core/Src/freertos.c **** 
- 447              		.loc 1 176 27 is_stmt 0 view .LVU97
- 448 0042 114A     		ldr	r2, .L25+40
- 449 0044 0021     		movs	r1, #0
- 450 0046 1148     		ldr	r0, .L25+44
- 451 0048 FFF7FEFF 		bl	osThreadNew
- 452              	.LVL60:
+ 437              		.loc 1 176 27 is_stmt 0 view .LVU95
+ 438 0042 114A     		ldr	r2, .L25+40
+ 439 0044 0021     		movs	r1, #0
+ 440 0046 1148     		ldr	r0, .L25+44
+ 441 0048 FFF7FEFF 		bl	osThreadNew
+ 442              	.LVL58:
  176:Core/Src/freertos.c **** 
- 453              		.loc 1 176 25 view .LVU98
- 454 004c 104B     		ldr	r3, .L25+48
- 455 004e 1860     		str	r0, [r3]
+ 443              		.loc 1 176 25 view .LVU96
+ 444 004c 104B     		ldr	r3, .L25+48
+ 445 004e 1860     		str	r0, [r3]
  179:Core/Src/freertos.c **** 
- 456              		.loc 1 179 3 is_stmt 1 view .LVU99
+ 446              		.loc 1 179 3 is_stmt 1 view .LVU97
  179:Core/Src/freertos.c **** 
- 457              		.loc 1 179 26 is_stmt 0 view .LVU100
- 458 0050 104A     		ldr	r2, .L25+52
- 459 0052 0021     		movs	r1, #0
- 460 0054 1048     		ldr	r0, .L25+56
- 461 0056 FFF7FEFF 		bl	osThreadNew
- 462              	.LVL61:
+ 447              		.loc 1 179 26 is_stmt 0 view .LVU98
+ 448 0050 104A     		ldr	r2, .L25+52
+ 449 0052 0021     		movs	r1, #0
+ 450 0054 1048     		ldr	r0, .L25+56
+ 451 0056 FFF7FEFF 		bl	osThreadNew
+ 452              	.LVL59:
  179:Core/Src/freertos.c **** 
- 463              		.loc 1 179 24 view .LVU101
- 464 005a 104B     		ldr	r3, .L25+60
- 465 005c 1860     		str	r0, [r3]
+ 453              		.loc 1 179 24 view .LVU99
+ 454 005a 104B     		ldr	r3, .L25+60
+ 455 005c 1860     		str	r0, [r3]
  189:Core/Src/freertos.c **** 
- 466              		.loc 1 189 1 view .LVU102
- 467 005e 08BD     		pop	{r3, pc}
- 468              	.L26:
- 469              		.align	2
- 470              	.L25:
- 471 0060 00000000 		.word	.LANCHOR1
-ARM GAS  /tmp/ccE24TNm.s 			page 16
+ 456              		.loc 1 189 1 view .LVU100
+ 457 005e 08BD     		pop	{r3, pc}
+ 458              	.L26:
+ 459              		.align	2
+ 460              	.L25:
+ 461 0060 00000000 		.word	.LANCHOR1
+ 462 0064 00000000 		.word	.LANCHOR2
+ 463 0068 00000000 		.word	StartDefaultTask
+ 464 006c 00000000 		.word	.LANCHOR3
+ 465 0070 00000000 		.word	.LANCHOR4
+ARM GAS  /tmp/ccZG0cTT.s 			page 16
 
 
- 472 0064 00000000 		.word	.LANCHOR2
- 473 0068 00000000 		.word	StartDefaultTask
- 474 006c 00000000 		.word	.LANCHOR3
- 475 0070 00000000 		.word	.LANCHOR4
- 476 0074 00000000 		.word	StartAttitudeTask
- 477 0078 00000000 		.word	.LANCHOR5
- 478 007c 00000000 		.word	.LANCHOR6
- 479 0080 00000000 		.word	StartServoControlTask
- 480 0084 00000000 		.word	.LANCHOR7
- 481 0088 00000000 		.word	.LANCHOR8
- 482 008c 00000000 		.word	StartGaitControlTask
- 483 0090 00000000 		.word	.LANCHOR9
- 484 0094 00000000 		.word	.LANCHOR10
- 485 0098 00000000 		.word	StartSerialCommTask
- 486 009c 00000000 		.word	.LANCHOR11
- 487              		.cfi_endproc
- 488              	.LFE151:
- 490              		.section	.rodata.print_accel_data.str1.4,"aMS",%progbits,1
- 491              		.align	2
- 492              	.LC1:
- 493 0000 41636344 		.ascii	"AccData: X=%d, Y=%d, Z=%d\012\000"
- 493      6174613A 
- 493      20583D25 
- 493      642C2059 
- 493      3D25642C 
- 494              		.section	.text.print_accel_data,"ax",%progbits
- 495              		.align	1
- 496              		.global	print_accel_data
- 497              		.syntax unified
- 498              		.thumb
- 499              		.thumb_func
- 500              		.fpu fpv5-d16
- 502              	print_accel_data:
- 503              	.LVL62:
- 504              	.LFB157:
- 335:Core/Src/freertos.c ****   }
- 336:Core/Src/freertos.c ****   /* USER CODE END StartGaitControlTask */
- 337:Core/Src/freertos.c **** }
- 338:Core/Src/freertos.c **** 
- 339:Core/Src/freertos.c **** /* USER CODE BEGIN Header_StartSerialCommTask */
- 340:Core/Src/freertos.c **** /**
- 341:Core/Src/freertos.c **** * @brief Function implementing the SerialCommTask thread.
- 342:Core/Src/freertos.c **** * @param argument: Not used
- 343:Core/Src/freertos.c **** * @retval None
- 344:Core/Src/freertos.c **** */
- 345:Core/Src/freertos.c **** /* USER CODE END Header_StartSerialCommTask */
- 346:Core/Src/freertos.c **** void StartSerialCommTask(void *argument)
- 347:Core/Src/freertos.c **** {
- 348:Core/Src/freertos.c ****   /* USER CODE BEGIN StartSerialCommTask */
- 349:Core/Src/freertos.c ****   uint8_t rxBuffer[10];  // 接收缓存
- 350:Core/Src/freertos.c ****   /* Infinite loop */
- 351:Core/Src/freertos.c ****   for(;;)
- 352:Core/Src/freertos.c ****   {
- 353:Core/Src/freertos.c **** 
- 354:Core/Src/freertos.c ****     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
- 355:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
- 356:Core/Src/freertos.c ****         int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
-ARM GAS  /tmp/ccE24TNm.s 			page 17
+ 466 0074 00000000 		.word	StartAttitudeTask
+ 467 0078 00000000 		.word	.LANCHOR5
+ 468 007c 00000000 		.word	.LANCHOR6
+ 469 0080 00000000 		.word	StartServoControlTask
+ 470 0084 00000000 		.word	.LANCHOR7
+ 471 0088 00000000 		.word	.LANCHOR8
+ 472 008c 00000000 		.word	StartGaitControlTask
+ 473 0090 00000000 		.word	.LANCHOR9
+ 474 0094 00000000 		.word	.LANCHOR10
+ 475 0098 00000000 		.word	StartSerialCommTask
+ 476 009c 00000000 		.word	.LANCHOR11
+ 477              		.cfi_endproc
+ 478              	.LFE151:
+ 480              		.section	.rodata.print_accel_data.str1.4,"aMS",%progbits,1
+ 481              		.align	2
+ 482              	.LC1:
+ 483 0000 41636344 		.ascii	"AccData: X=%d, Y=%d, Z=%d\012\000"
+ 483      6174613A 
+ 483      20583D25 
+ 483      642C2059 
+ 483      3D25642C 
+ 484              		.section	.text.print_accel_data,"ax",%progbits
+ 485              		.align	1
+ 486              		.global	print_accel_data
+ 487              		.syntax unified
+ 488              		.thumb
+ 489              		.thumb_func
+ 490              		.fpu fpv5-d16
+ 492              	print_accel_data:
+ 493              	.LVL60:
+ 494              	.LFB157:
+ 343:Core/Src/freertos.c ****   }
+ 344:Core/Src/freertos.c ****   /* USER CODE END StartGaitControlTask */
+ 345:Core/Src/freertos.c **** }
+ 346:Core/Src/freertos.c **** 
+ 347:Core/Src/freertos.c **** /* USER CODE BEGIN Header_StartSerialCommTask */
+ 348:Core/Src/freertos.c **** /**
+ 349:Core/Src/freertos.c **** * @brief Function implementing the SerialCommTask thread.
+ 350:Core/Src/freertos.c **** * @param argument: Not used
+ 351:Core/Src/freertos.c **** * @retval None
+ 352:Core/Src/freertos.c **** */
+ 353:Core/Src/freertos.c **** /* USER CODE END Header_StartSerialCommTask */
+ 354:Core/Src/freertos.c **** void StartSerialCommTask(void *argument)
+ 355:Core/Src/freertos.c **** {
+ 356:Core/Src/freertos.c ****   /* USER CODE BEGIN StartSerialCommTask */
+ 357:Core/Src/freertos.c ****   uint8_t rxBuffer[10];  // 接收缓存
+ 358:Core/Src/freertos.c ****   /* Infinite loop */
+ 359:Core/Src/freertos.c ****   for(;;)
+ 360:Core/Src/freertos.c ****   {
+ 361:Core/Src/freertos.c **** 
+ 362:Core/Src/freertos.c ****     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
+ 363:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
+ 364:Core/Src/freertos.c ****         int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
+ 365:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 366:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 367:Core/Src/freertos.c ****          // 打印四元数数据
+ 368:Core/Src/freertos.c ****         char printBuffer[256];
+ARM GAS  /tmp/ccZG0cTT.s 			page 17
 
 
- 357:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 358:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 359:Core/Src/freertos.c ****          // 打印四元数数据
- 360:Core/Src/freertos.c ****         char printBuffer[256];
- 361:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
- 362:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 363:Core/Src/freertos.c ****         osDelay(1);
- 364:Core/Src/freertos.c **** 
- 365:Core/Src/freertos.c ****     // 监听串口命令
- 366:Core/Src/freertos.c ****     if (HAL_UART_Receive(&huart1, rxBuffer, sizeof(rxBuffer), HAL_MAX_DELAY) == HAL_OK) {
- 367:Core/Src/freertos.c ****       UART_ProcessCommand(rxBuffer);  // 处理命令
- 368:Core/Src/freertos.c ****     }
- 369:Core/Src/freertos.c ****   }
- 370:Core/Src/freertos.c ****   /* USER CODE END StartSerialCommTask */
- 371:Core/Src/freertos.c **** }
+ 369:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
+ 370:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 371:Core/Src/freertos.c ****         osDelay(1);
  372:Core/Src/freertos.c **** 
- 373:Core/Src/freertos.c **** /* Private application code --------------------------------------------------*/
- 374:Core/Src/freertos.c **** /* USER CODE BEGIN Application */
- 375:Core/Src/freertos.c **** void print_accel_data(int16_t AccData[3]) {
- 505              		.loc 1 375 43 is_stmt 1 view -0
- 506              		.cfi_startproc
- 507              		@ args = 0, pretend = 0, frame = 56
- 508              		@ frame_needed = 0, uses_anonymous_args = 0
- 509              		.loc 1 375 43 is_stmt 0 view .LVU104
- 510 0000 00B5     		push	{lr}
- 511              	.LCFI7:
- 512              		.cfi_def_cfa_offset 4
- 513              		.cfi_offset 14, -4
- 514 0002 91B0     		sub	sp, sp, #68
- 515              	.LCFI8:
- 516              		.cfi_def_cfa_offset 72
- 376:Core/Src/freertos.c ****   char buffer[50];
- 517              		.loc 1 376 3 is_stmt 1 view .LVU105
- 377:Core/Src/freertos.c ****   int len = snprintf(buffer, sizeof(buffer), "AccData: X=%d, Y=%d, Z=%d\n", AccData[0], AccData[1],
- 518              		.loc 1 377 3 view .LVU106
- 519              		.loc 1 377 96 is_stmt 0 view .LVU107
- 520 0004 B0F90230 		ldrsh	r3, [r0, #2]
- 521              		.loc 1 377 108 view .LVU108
- 522 0008 B0F90420 		ldrsh	r2, [r0, #4]
- 523              		.loc 1 377 13 view .LVU109
- 524 000c 0192     		str	r2, [sp, #4]
- 525 000e 0093     		str	r3, [sp]
- 526 0010 B0F90030 		ldrsh	r3, [r0]
- 527 0014 074A     		ldr	r2, .L29
- 528 0016 3221     		movs	r1, #50
- 529 0018 03A8     		add	r0, sp, #12
- 530              	.LVL63:
- 531              		.loc 1 377 13 view .LVU110
- 532 001a FFF7FEFF 		bl	snprintf
- 533              	.LVL64:
- 378:Core/Src/freertos.c ****   HAL_UART_Transmit(&huart1, (uint8_t*)buffer, len, HAL_MAX_DELAY);
- 534              		.loc 1 378 3 is_stmt 1 view .LVU111
- 535 001e 4FF0FF33 		mov	r3, #-1
- 536 0022 82B2     		uxth	r2, r0
- 537 0024 03A9     		add	r1, sp, #12
- 538 0026 0448     		ldr	r0, .L29+4
- 539              	.LVL65:
-ARM GAS  /tmp/ccE24TNm.s 			page 18
-
-
- 540              		.loc 1 378 3 is_stmt 0 view .LVU112
- 541 0028 FFF7FEFF 		bl	HAL_UART_Transmit
- 542              	.LVL66:
+ 373:Core/Src/freertos.c ****     // 监听串口命令
+ 374:Core/Src/freertos.c ****     if (HAL_UART_Receive(&huart1, rxBuffer, sizeof(rxBuffer), HAL_MAX_DELAY) == HAL_OK) {
+ 375:Core/Src/freertos.c ****       UART_ProcessCommand(rxBuffer);  // 处理命令
+ 376:Core/Src/freertos.c ****     }
+ 377:Core/Src/freertos.c ****   }
+ 378:Core/Src/freertos.c ****   /* USER CODE END StartSerialCommTask */
  379:Core/Src/freertos.c **** }
- 543              		.loc 1 379 1 view .LVU113
- 544 002c 11B0     		add	sp, sp, #68
- 545              	.LCFI9:
- 546              		.cfi_def_cfa_offset 4
- 547              		@ sp needed
- 548 002e 5DF804FB 		ldr	pc, [sp], #4
- 549              	.L30:
- 550 0032 00BF     		.align	2
- 551              	.L29:
- 552 0034 00000000 		.word	.LC1
- 553 0038 00000000 		.word	huart1
- 554              		.cfi_endproc
- 555              	.LFE157:
- 557              		.section	.rodata.print_mag_data.str1.4,"aMS",%progbits,1
- 558              		.align	2
- 559              	.LC2:
- 560 0000 4D616744 		.ascii	"MagData: X=%d, Y=%d, Z=%d\012\000"
- 560      6174613A 
- 560      20583D25 
- 560      642C2059 
- 560      3D25642C 
- 561              		.section	.text.print_mag_data,"ax",%progbits
- 562              		.align	1
- 563              		.global	print_mag_data
- 564              		.syntax unified
- 565              		.thumb
- 566              		.thumb_func
- 567              		.fpu fpv5-d16
- 569              	print_mag_data:
- 570              	.LVL67:
- 571              	.LFB158:
  380:Core/Src/freertos.c **** 
- 381:Core/Src/freertos.c **** void print_mag_data(int16_t MagData[3]) {
- 572              		.loc 1 381 41 is_stmt 1 view -0
- 573              		.cfi_startproc
- 574              		@ args = 0, pretend = 0, frame = 56
- 575              		@ frame_needed = 0, uses_anonymous_args = 0
- 576              		.loc 1 381 41 is_stmt 0 view .LVU115
- 577 0000 00B5     		push	{lr}
- 578              	.LCFI10:
- 579              		.cfi_def_cfa_offset 4
- 580              		.cfi_offset 14, -4
- 581 0002 91B0     		sub	sp, sp, #68
- 582              	.LCFI11:
- 583              		.cfi_def_cfa_offset 72
- 382:Core/Src/freertos.c ****   char buffer[50];
- 584              		.loc 1 382 3 is_stmt 1 view .LVU116
- 383:Core/Src/freertos.c ****   int len = snprintf(buffer, sizeof(buffer), "MagData: X=%d, Y=%d, Z=%d\n", MagData[0], MagData[1],
- 585              		.loc 1 383 3 view .LVU117
- 586              		.loc 1 383 96 is_stmt 0 view .LVU118
- 587 0004 B0F90230 		ldrsh	r3, [r0, #2]
- 588              		.loc 1 383 108 view .LVU119
- 589 0008 B0F90420 		ldrsh	r2, [r0, #4]
-ARM GAS  /tmp/ccE24TNm.s 			page 19
+ 381:Core/Src/freertos.c **** /* Private application code --------------------------------------------------*/
+ 382:Core/Src/freertos.c **** /* USER CODE BEGIN Application */
+ 383:Core/Src/freertos.c **** void print_accel_data(int16_t AccData[3]) {
+ 495              		.loc 1 383 43 is_stmt 1 view -0
+ 496              		.cfi_startproc
+ 497              		@ args = 0, pretend = 0, frame = 56
+ 498              		@ frame_needed = 0, uses_anonymous_args = 0
+ 499              		.loc 1 383 43 is_stmt 0 view .LVU102
+ 500 0000 00B5     		push	{lr}
+ 501              	.LCFI7:
+ 502              		.cfi_def_cfa_offset 4
+ 503              		.cfi_offset 14, -4
+ 504 0002 91B0     		sub	sp, sp, #68
+ 505              	.LCFI8:
+ 506              		.cfi_def_cfa_offset 72
+ 384:Core/Src/freertos.c ****   char buffer[50];
+ 507              		.loc 1 384 3 is_stmt 1 view .LVU103
+ 385:Core/Src/freertos.c ****   int len = snprintf(buffer, sizeof(buffer), "AccData: X=%d, Y=%d, Z=%d\n", AccData[0], AccData[1],
+ 508              		.loc 1 385 3 view .LVU104
+ 509              		.loc 1 385 96 is_stmt 0 view .LVU105
+ 510 0004 B0F90230 		ldrsh	r3, [r0, #2]
+ 511              		.loc 1 385 108 view .LVU106
+ 512 0008 B0F90420 		ldrsh	r2, [r0, #4]
+ 513              		.loc 1 385 13 view .LVU107
+ 514 000c 0192     		str	r2, [sp, #4]
+ 515 000e 0093     		str	r3, [sp]
+ 516 0010 B0F90030 		ldrsh	r3, [r0]
+ 517 0014 074A     		ldr	r2, .L29
+ 518 0016 3221     		movs	r1, #50
+ 519 0018 03A8     		add	r0, sp, #12
+ 520              	.LVL61:
+ 521              		.loc 1 385 13 view .LVU108
+ 522 001a FFF7FEFF 		bl	snprintf
+ 523              	.LVL62:
+ 386:Core/Src/freertos.c ****   HAL_UART_Transmit(&huart1, (uint8_t*)buffer, len, HAL_MAX_DELAY);
+ 524              		.loc 1 386 3 is_stmt 1 view .LVU109
+ 525 001e 4FF0FF33 		mov	r3, #-1
+ 526 0022 82B2     		uxth	r2, r0
+ 527 0024 03A9     		add	r1, sp, #12
+ 528 0026 0448     		ldr	r0, .L29+4
+ 529              	.LVL63:
+ 530              		.loc 1 386 3 is_stmt 0 view .LVU110
+ 531 0028 FFF7FEFF 		bl	HAL_UART_Transmit
+ 532              	.LVL64:
+ 387:Core/Src/freertos.c **** }
+ARM GAS  /tmp/ccZG0cTT.s 			page 18
 
 
- 590              		.loc 1 383 13 view .LVU120
- 591 000c 0192     		str	r2, [sp, #4]
- 592 000e 0093     		str	r3, [sp]
- 593 0010 B0F90030 		ldrsh	r3, [r0]
- 594 0014 074A     		ldr	r2, .L33
- 595 0016 3221     		movs	r1, #50
- 596 0018 03A8     		add	r0, sp, #12
- 597              	.LVL68:
- 598              		.loc 1 383 13 view .LVU121
- 599 001a FFF7FEFF 		bl	snprintf
- 600              	.LVL69:
- 384:Core/Src/freertos.c ****   HAL_UART_Transmit(&huart1, (uint8_t*)buffer, len, HAL_MAX_DELAY);
- 601              		.loc 1 384 3 is_stmt 1 view .LVU122
- 602 001e 4FF0FF33 		mov	r3, #-1
- 603 0022 82B2     		uxth	r2, r0
- 604 0024 03A9     		add	r1, sp, #12
- 605 0026 0448     		ldr	r0, .L33+4
- 606              	.LVL70:
- 607              		.loc 1 384 3 is_stmt 0 view .LVU123
- 608 0028 FFF7FEFF 		bl	HAL_UART_Transmit
- 609              	.LVL71:
- 385:Core/Src/freertos.c **** }
- 610              		.loc 1 385 1 view .LVU124
- 611 002c 11B0     		add	sp, sp, #68
- 612              	.LCFI12:
- 613              		.cfi_def_cfa_offset 4
- 614              		@ sp needed
- 615 002e 5DF804FB 		ldr	pc, [sp], #4
- 616              	.L34:
- 617 0032 00BF     		.align	2
- 618              	.L33:
- 619 0034 00000000 		.word	.LC2
- 620 0038 00000000 		.word	huart1
- 621              		.cfi_endproc
- 622              	.LFE158:
- 624              		.section	.rodata.print_gyro_data.str1.4,"aMS",%progbits,1
- 625              		.align	2
- 626              	.LC3:
- 627 0000 4779726F 		.ascii	"GyroData: X=%d, Y=%d, Z=%d\012\000"
- 627      44617461 
- 627      3A20583D 
- 627      25642C20 
- 627      593D2564 
- 628              		.section	.text.print_gyro_data,"ax",%progbits
- 629              		.align	1
- 630              		.global	print_gyro_data
- 631              		.syntax unified
- 632              		.thumb
- 633              		.thumb_func
- 634              		.fpu fpv5-d16
- 636              	print_gyro_data:
- 637              	.LVL72:
- 638              	.LFB159:
- 386:Core/Src/freertos.c **** 
- 387:Core/Src/freertos.c **** void print_gyro_data(int16_t GyroData[3]) {
- 639              		.loc 1 387 43 is_stmt 1 view -0
- 640              		.cfi_startproc
-ARM GAS  /tmp/ccE24TNm.s 			page 20
+ 533              		.loc 1 387 1 view .LVU111
+ 534 002c 11B0     		add	sp, sp, #68
+ 535              	.LCFI9:
+ 536              		.cfi_def_cfa_offset 4
+ 537              		@ sp needed
+ 538 002e 5DF804FB 		ldr	pc, [sp], #4
+ 539              	.L30:
+ 540 0032 00BF     		.align	2
+ 541              	.L29:
+ 542 0034 00000000 		.word	.LC1
+ 543 0038 00000000 		.word	huart1
+ 544              		.cfi_endproc
+ 545              	.LFE157:
+ 547              		.section	.rodata.print_mag_data.str1.4,"aMS",%progbits,1
+ 548              		.align	2
+ 549              	.LC2:
+ 550 0000 4D616744 		.ascii	"MagData: X=%d, Y=%d, Z=%d\012\000"
+ 550      6174613A 
+ 550      20583D25 
+ 550      642C2059 
+ 550      3D25642C 
+ 551              		.section	.text.print_mag_data,"ax",%progbits
+ 552              		.align	1
+ 553              		.global	print_mag_data
+ 554              		.syntax unified
+ 555              		.thumb
+ 556              		.thumb_func
+ 557              		.fpu fpv5-d16
+ 559              	print_mag_data:
+ 560              	.LVL65:
+ 561              	.LFB158:
+ 388:Core/Src/freertos.c **** 
+ 389:Core/Src/freertos.c **** void print_mag_data(int16_t MagData[3]) {
+ 562              		.loc 1 389 41 is_stmt 1 view -0
+ 563              		.cfi_startproc
+ 564              		@ args = 0, pretend = 0, frame = 56
+ 565              		@ frame_needed = 0, uses_anonymous_args = 0
+ 566              		.loc 1 389 41 is_stmt 0 view .LVU113
+ 567 0000 00B5     		push	{lr}
+ 568              	.LCFI10:
+ 569              		.cfi_def_cfa_offset 4
+ 570              		.cfi_offset 14, -4
+ 571 0002 91B0     		sub	sp, sp, #68
+ 572              	.LCFI11:
+ 573              		.cfi_def_cfa_offset 72
+ 390:Core/Src/freertos.c ****   char buffer[50];
+ 574              		.loc 1 390 3 is_stmt 1 view .LVU114
+ 391:Core/Src/freertos.c ****   int len = snprintf(buffer, sizeof(buffer), "MagData: X=%d, Y=%d, Z=%d\n", MagData[0], MagData[1],
+ 575              		.loc 1 391 3 view .LVU115
+ 576              		.loc 1 391 96 is_stmt 0 view .LVU116
+ 577 0004 B0F90230 		ldrsh	r3, [r0, #2]
+ 578              		.loc 1 391 108 view .LVU117
+ 579 0008 B0F90420 		ldrsh	r2, [r0, #4]
+ 580              		.loc 1 391 13 view .LVU118
+ 581 000c 0192     		str	r2, [sp, #4]
+ 582 000e 0093     		str	r3, [sp]
+ 583 0010 B0F90030 		ldrsh	r3, [r0]
+ARM GAS  /tmp/ccZG0cTT.s 			page 19
 
 
- 641              		@ args = 0, pretend = 0, frame = 56
- 642              		@ frame_needed = 0, uses_anonymous_args = 0
- 643              		.loc 1 387 43 is_stmt 0 view .LVU126
- 644 0000 00B5     		push	{lr}
- 645              	.LCFI13:
- 646              		.cfi_def_cfa_offset 4
- 647              		.cfi_offset 14, -4
- 648 0002 91B0     		sub	sp, sp, #68
- 649              	.LCFI14:
- 650              		.cfi_def_cfa_offset 72
- 388:Core/Src/freertos.c ****   char buffer[50];
- 651              		.loc 1 388 3 is_stmt 1 view .LVU127
- 389:Core/Src/freertos.c ****   int len = snprintf(buffer, sizeof(buffer), "GyroData: X=%d, Y=%d, Z=%d\n", GyroData[0], GyroData[
- 652              		.loc 1 389 3 view .LVU128
- 653              		.loc 1 389 99 is_stmt 0 view .LVU129
- 654 0004 B0F90230 		ldrsh	r3, [r0, #2]
- 655              		.loc 1 389 112 view .LVU130
- 656 0008 B0F90420 		ldrsh	r2, [r0, #4]
- 657              		.loc 1 389 13 view .LVU131
- 658 000c 0192     		str	r2, [sp, #4]
- 659 000e 0093     		str	r3, [sp]
- 660 0010 B0F90030 		ldrsh	r3, [r0]
- 661 0014 074A     		ldr	r2, .L37
- 662 0016 3221     		movs	r1, #50
- 663 0018 03A8     		add	r0, sp, #12
- 664              	.LVL73:
- 665              		.loc 1 389 13 view .LVU132
- 666 001a FFF7FEFF 		bl	snprintf
- 667              	.LVL74:
- 390:Core/Src/freertos.c ****   HAL_UART_Transmit(&huart1, (uint8_t*)buffer, len, HAL_MAX_DELAY);
- 668              		.loc 1 390 3 is_stmt 1 view .LVU133
- 669 001e 4FF0FF33 		mov	r3, #-1
- 670 0022 82B2     		uxth	r2, r0
- 671 0024 03A9     		add	r1, sp, #12
- 672 0026 0448     		ldr	r0, .L37+4
- 673              	.LVL75:
- 674              		.loc 1 390 3 is_stmt 0 view .LVU134
- 675 0028 FFF7FEFF 		bl	HAL_UART_Transmit
- 676              	.LVL76:
- 391:Core/Src/freertos.c **** }
- 677              		.loc 1 391 1 view .LVU135
- 678 002c 11B0     		add	sp, sp, #68
- 679              	.LCFI15:
- 680              		.cfi_def_cfa_offset 4
- 681              		@ sp needed
- 682 002e 5DF804FB 		ldr	pc, [sp], #4
- 683              	.L38:
- 684 0032 00BF     		.align	2
- 685              	.L37:
- 686 0034 00000000 		.word	.LC3
- 687 0038 00000000 		.word	huart1
- 688              		.cfi_endproc
- 689              	.LFE159:
- 691              		.section	.rodata.SendAttitudeToHost.str1.4,"aMS",%progbits,1
- 692              		.align	2
- 693              	.LC4:
- 694 0000 25642C25 		.ascii	"%d,%d,%d,%d\012\000"
-ARM GAS  /tmp/ccE24TNm.s 			page 21
-
-
- 694      642C2564 
- 694      2C25640A 
- 694      00
- 695              		.section	.text.SendAttitudeToHost,"ax",%progbits
- 696              		.align	1
- 697              		.global	SendAttitudeToHost
- 698              		.syntax unified
- 699              		.thumb
- 700              		.thumb_func
- 701              		.fpu fpv5-d16
- 703              	SendAttitudeToHost:
- 704              	.LVL77:
- 705              	.LFB161:
- 392:Core/Src/freertos.c **** 
- 393:Core/Src/freertos.c **** 
+ 584 0014 074A     		ldr	r2, .L33
+ 585 0016 3221     		movs	r1, #50
+ 586 0018 03A8     		add	r0, sp, #12
+ 587              	.LVL66:
+ 588              		.loc 1 391 13 view .LVU119
+ 589 001a FFF7FEFF 		bl	snprintf
+ 590              	.LVL67:
+ 392:Core/Src/freertos.c ****   HAL_UART_Transmit(&huart1, (uint8_t*)buffer, len, HAL_MAX_DELAY);
+ 591              		.loc 1 392 3 is_stmt 1 view .LVU120
+ 592 001e 4FF0FF33 		mov	r3, #-1
+ 593 0022 82B2     		uxth	r2, r0
+ 594 0024 03A9     		add	r1, sp, #12
+ 595 0026 0448     		ldr	r0, .L33+4
+ 596              	.LVL68:
+ 597              		.loc 1 392 3 is_stmt 0 view .LVU121
+ 598 0028 FFF7FEFF 		bl	HAL_UART_Transmit
+ 599              	.LVL69:
+ 393:Core/Src/freertos.c **** }
+ 600              		.loc 1 393 1 view .LVU122
+ 601 002c 11B0     		add	sp, sp, #68
+ 602              	.LCFI12:
+ 603              		.cfi_def_cfa_offset 4
+ 604              		@ sp needed
+ 605 002e 5DF804FB 		ldr	pc, [sp], #4
+ 606              	.L34:
+ 607 0032 00BF     		.align	2
+ 608              	.L33:
+ 609 0034 00000000 		.word	.LC2
+ 610 0038 00000000 		.word	huart1
+ 611              		.cfi_endproc
+ 612              	.LFE158:
+ 614              		.section	.rodata.print_gyro_data.str1.4,"aMS",%progbits,1
+ 615              		.align	2
+ 616              	.LC3:
+ 617 0000 4779726F 		.ascii	"GyroData: X=%d, Y=%d, Z=%d\012\000"
+ 617      44617461 
+ 617      3A20583D 
+ 617      25642C20 
+ 617      593D2564 
+ 618              		.section	.text.print_gyro_data,"ax",%progbits
+ 619              		.align	1
+ 620              		.global	print_gyro_data
+ 621              		.syntax unified
+ 622              		.thumb
+ 623              		.thumb_func
+ 624              		.fpu fpv5-d16
+ 626              	print_gyro_data:
+ 627              	.LVL70:
+ 628              	.LFB159:
  394:Core/Src/freertos.c **** 
- 395:Core/Src/freertos.c **** void UART_ProcessCommand(uint8_t* buffer) {
- 396:Core/Src/freertos.c ****     if (buffer[0] == 0xAA && buffer[2] == 0x55) {  // 判断头和尾标志
- 397:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
- 398:Core/Src/freertos.c ****         int16_t quat[4];
- 399:Core/Src/freertos.c ****         switch (command) {
- 400:Core/Src/freertos.c ****             case 0x01:  // 前进
- 401:Core/Src/freertos.c ****                 Move_Forward();
- 402:Core/Src/freertos.c ****                 break;
- 403:Core/Src/freertos.c ****             case 0x02:  // 后退
- 404:Core/Src/freertos.c ****                 Move_Backward();
- 405:Core/Src/freertos.c ****                 break;
- 406:Core/Src/freertos.c ****             case 0x03:  // 左转
- 407:Core/Src/freertos.c ****                 Turn_Left();
- 408:Core/Src/freertos.c ****                 break;
- 409:Core/Src/freertos.c ****             case 0x04:  // 右转
- 410:Core/Src/freertos.c ****                 Turn_Right();
- 411:Core/Src/freertos.c ****                 break;
- 412:Core/Src/freertos.c ****             case 0x05:  // 停止
- 413:Core/Src/freertos.c ****                 Stop();
- 414:Core/Src/freertos.c ****                 break;
- 415:Core/Src/freertos.c ****             case 0x06:  // 请求姿态数据
- 416:Core/Src/freertos.c ****                 
- 417:Core/Src/freertos.c ****                 AHRS_GetQuaternion(quat);  // 获取当前四元数姿态数据
- 418:Core/Src/freertos.c ****                 SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态数据给�
- 419:Core/Src/freertos.c ****                 break;
- 420:Core/Src/freertos.c ****             default:
- 421:Core/Src/freertos.c ****                 break;
- 422:Core/Src/freertos.c ****         }
- 423:Core/Src/freertos.c ****     }
- 424:Core/Src/freertos.c **** }
- 425:Core/Src/freertos.c **** 
- 426:Core/Src/freertos.c **** /* SendAttitudeToHost - Sends the current attitude (quaternion) to the host via UART */
- 427:Core/Src/freertos.c **** void SendAttitudeToHost(int16_t q0, int16_t q1, int16_t q2, int16_t q3) {
- 706              		.loc 1 427 73 is_stmt 1 view -0
- 707              		.cfi_startproc
- 708              		@ args = 0, pretend = 0, frame = 152
- 709              		@ frame_needed = 0, uses_anonymous_args = 0
- 710              		.loc 1 427 73 is_stmt 0 view .LVU137
- 711 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
- 712              	.LCFI16:
- 713              		.cfi_def_cfa_offset 24
-ARM GAS  /tmp/ccE24TNm.s 			page 22
+ 395:Core/Src/freertos.c **** void print_gyro_data(int16_t GyroData[3]) {
+ 629              		.loc 1 395 43 is_stmt 1 view -0
+ 630              		.cfi_startproc
+ 631              		@ args = 0, pretend = 0, frame = 56
+ 632              		@ frame_needed = 0, uses_anonymous_args = 0
+ 633              		.loc 1 395 43 is_stmt 0 view .LVU124
+ 634 0000 00B5     		push	{lr}
+ARM GAS  /tmp/ccZG0cTT.s 			page 20
 
 
- 714              		.cfi_offset 4, -24
- 715              		.cfi_offset 5, -20
- 716              		.cfi_offset 6, -16
- 717              		.cfi_offset 7, -12
- 718              		.cfi_offset 8, -8
- 719              		.cfi_offset 14, -4
- 720 0004 AAB0     		sub	sp, sp, #168
- 721              	.LCFI17:
- 722              		.cfi_def_cfa_offset 192
- 723 0006 0446     		mov	r4, r0
- 724 0008 0D46     		mov	r5, r1
- 725 000a 1646     		mov	r6, r2
- 726 000c 1F46     		mov	r7, r3
- 428:Core/Src/freertos.c ****     uint8_t txBuffer[18];  // 传输数据缓存，18字节
- 727              		.loc 1 428 5 is_stmt 1 view .LVU138
- 429:Core/Src/freertos.c ****     txBuffer[0] = 0xAA;  // 开头标志
- 728              		.loc 1 429 5 view .LVU139
- 729              		.loc 1 429 17 is_stmt 0 view .LVU140
- 730 000e AA23     		movs	r3, #170
- 731              	.LVL78:
- 732              		.loc 1 429 17 view .LVU141
- 733 0010 8DF89430 		strb	r3, [sp, #148]
- 430:Core/Src/freertos.c ****     txBuffer[1] = 0x06;  // 数据类型（姿态数据）
- 734              		.loc 1 430 5 is_stmt 1 view .LVU142
- 735              		.loc 1 430 17 is_stmt 0 view .LVU143
- 736 0014 0623     		movs	r3, #6
- 737 0016 8DF89530 		strb	r3, [sp, #149]
- 431:Core/Src/freertos.c ****     
- 432:Core/Src/freertos.c ****     // 将四元数数据转换为字节
- 433:Core/Src/freertos.c ****     memcpy(&txBuffer[2], &q0, sizeof(int16_t));
- 738              		.loc 1 433 5 is_stmt 1 view .LVU144
- 739 001a ADF89600 		strh	r0, [sp, #150]	@ movhi
- 434:Core/Src/freertos.c ****     memcpy(&txBuffer[6], &q1, sizeof(int16_t));
- 740              		.loc 1 434 5 view .LVU145
- 741 001e ADF89A10 		strh	r1, [sp, #154]	@ movhi
- 435:Core/Src/freertos.c ****     memcpy(&txBuffer[10], &q2, sizeof(int16_t));
- 742              		.loc 1 435 5 view .LVU146
- 743 0022 ADF89E20 		strh	r2, [sp, #158]	@ movhi
- 436:Core/Src/freertos.c ****     memcpy(&txBuffer[14], &q3, sizeof(int16_t));
- 744              		.loc 1 436 5 view .LVU147
- 745 0026 ADF8A270 		strh	r7, [sp, #162]	@ movhi
- 437:Core/Src/freertos.c ****     
- 438:Core/Src/freertos.c ****     txBuffer[17] = 0x55;  // 结束标志
- 746              		.loc 1 438 5 view .LVU148
- 747              		.loc 1 438 18 is_stmt 0 view .LVU149
- 748 002a 5523     		movs	r3, #85
- 749 002c 8DF8A530 		strb	r3, [sp, #165]
- 439:Core/Src/freertos.c ****     
- 440:Core/Src/freertos.c ****     // 通过UART发送姿态数据
- 441:Core/Src/freertos.c ****     HAL_UART_Transmit(&huart1, txBuffer, sizeof(txBuffer), HAL_MAX_DELAY);
- 750              		.loc 1 441 5 is_stmt 1 view .LVU150
- 751 0030 DFF83880 		ldr	r8, .L41+4
- 752 0034 4FF0FF33 		mov	r3, #-1
- 753 0038 1222     		movs	r2, #18
- 754              	.LVL79:
- 755              		.loc 1 441 5 is_stmt 0 view .LVU151
- 756 003a 25A9     		add	r1, sp, #148
-ARM GAS  /tmp/ccE24TNm.s 			page 23
+ 635              	.LCFI13:
+ 636              		.cfi_def_cfa_offset 4
+ 637              		.cfi_offset 14, -4
+ 638 0002 91B0     		sub	sp, sp, #68
+ 639              	.LCFI14:
+ 640              		.cfi_def_cfa_offset 72
+ 396:Core/Src/freertos.c ****   char buffer[50];
+ 641              		.loc 1 396 3 is_stmt 1 view .LVU125
+ 397:Core/Src/freertos.c ****   int len = snprintf(buffer, sizeof(buffer), "GyroData: X=%d, Y=%d, Z=%d\n", GyroData[0], GyroData[
+ 642              		.loc 1 397 3 view .LVU126
+ 643              		.loc 1 397 99 is_stmt 0 view .LVU127
+ 644 0004 B0F90230 		ldrsh	r3, [r0, #2]
+ 645              		.loc 1 397 112 view .LVU128
+ 646 0008 B0F90420 		ldrsh	r2, [r0, #4]
+ 647              		.loc 1 397 13 view .LVU129
+ 648 000c 0192     		str	r2, [sp, #4]
+ 649 000e 0093     		str	r3, [sp]
+ 650 0010 B0F90030 		ldrsh	r3, [r0]
+ 651 0014 074A     		ldr	r2, .L37
+ 652 0016 3221     		movs	r1, #50
+ 653 0018 03A8     		add	r0, sp, #12
+ 654              	.LVL71:
+ 655              		.loc 1 397 13 view .LVU130
+ 656 001a FFF7FEFF 		bl	snprintf
+ 657              	.LVL72:
+ 398:Core/Src/freertos.c ****   HAL_UART_Transmit(&huart1, (uint8_t*)buffer, len, HAL_MAX_DELAY);
+ 658              		.loc 1 398 3 is_stmt 1 view .LVU131
+ 659 001e 4FF0FF33 		mov	r3, #-1
+ 660 0022 82B2     		uxth	r2, r0
+ 661 0024 03A9     		add	r1, sp, #12
+ 662 0026 0448     		ldr	r0, .L37+4
+ 663              	.LVL73:
+ 664              		.loc 1 398 3 is_stmt 0 view .LVU132
+ 665 0028 FFF7FEFF 		bl	HAL_UART_Transmit
+ 666              	.LVL74:
+ 399:Core/Src/freertos.c **** }
+ 667              		.loc 1 399 1 view .LVU133
+ 668 002c 11B0     		add	sp, sp, #68
+ 669              	.LCFI15:
+ 670              		.cfi_def_cfa_offset 4
+ 671              		@ sp needed
+ 672 002e 5DF804FB 		ldr	pc, [sp], #4
+ 673              	.L38:
+ 674 0032 00BF     		.align	2
+ 675              	.L37:
+ 676 0034 00000000 		.word	.LC3
+ 677 0038 00000000 		.word	huart1
+ 678              		.cfi_endproc
+ 679              	.LFE159:
+ 681              		.section	.rodata.SendAttitudeToHost.str1.4,"aMS",%progbits,1
+ 682              		.align	2
+ 683              	.LC4:
+ 684 0000 25642C25 		.ascii	"%d,%d,%d,%d\012\000"
+ 684      642C2564 
+ 684      2C25640A 
+ 684      00
+ 685              		.section	.text.SendAttitudeToHost,"ax",%progbits
+ARM GAS  /tmp/ccZG0cTT.s 			page 21
 
 
- 757              	.LVL80:
- 758              		.loc 1 441 5 view .LVU152
- 759 003c 4046     		mov	r0, r8
- 760              	.LVL81:
- 761              		.loc 1 441 5 view .LVU153
- 762 003e FFF7FEFF 		bl	HAL_UART_Transmit
- 763              	.LVL82:
- 442:Core/Src/freertos.c **** 
- 443:Core/Src/freertos.c ****     // 打印四元数数据
- 444:Core/Src/freertos.c ****     char printBuffer[128];
- 764              		.loc 1 444 5 is_stmt 1 view .LVU154
- 445:Core/Src/freertos.c ****     int len = snprintf(printBuffer, sizeof(printBuffer), "%d,%d,%d,%d\n", q0, q1, q2, q3);
- 765              		.loc 1 445 5 view .LVU155
- 766              		.loc 1 445 15 is_stmt 0 view .LVU156
- 767 0042 0297     		str	r7, [sp, #8]
- 768 0044 0196     		str	r6, [sp, #4]
- 769 0046 0095     		str	r5, [sp]
- 770 0048 2346     		mov	r3, r4
- 771 004a 074A     		ldr	r2, .L41
- 772 004c 8021     		movs	r1, #128
- 773 004e 05A8     		add	r0, sp, #20
- 774 0050 FFF7FEFF 		bl	snprintf
- 775              	.LVL83:
- 446:Core/Src/freertos.c ****     HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 776              		.loc 1 446 5 is_stmt 1 view .LVU157
- 777 0054 4FF0FF33 		mov	r3, #-1
- 778 0058 82B2     		uxth	r2, r0
- 779 005a 05A9     		add	r1, sp, #20
- 780 005c 4046     		mov	r0, r8
- 781              	.LVL84:
- 782              		.loc 1 446 5 is_stmt 0 view .LVU158
- 783 005e FFF7FEFF 		bl	HAL_UART_Transmit
- 784              	.LVL85:
- 447:Core/Src/freertos.c **** }
- 785              		.loc 1 447 1 view .LVU159
- 786 0062 2AB0     		add	sp, sp, #168
- 787              	.LCFI18:
- 788              		.cfi_def_cfa_offset 24
- 789              		@ sp needed
- 790 0064 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
- 791              	.L42:
- 792              		.align	2
- 793              	.L41:
- 794 0068 00000000 		.word	.LC4
- 795 006c 00000000 		.word	huart1
- 796              		.cfi_endproc
- 797              	.LFE161:
- 799              		.section	.text.StartAttitudeTask,"ax",%progbits
- 800              		.align	1
- 801              		.global	StartAttitudeTask
- 802              		.syntax unified
- 803              		.thumb
- 804              		.thumb_func
- 805              		.fpu fpv5-d16
- 807              	StartAttitudeTask:
- 808              	.LFB153:
- 227:Core/Src/freertos.c ****   /* USER CODE BEGIN StartAttitudeTask */
-ARM GAS  /tmp/ccE24TNm.s 			page 24
-
-
- 809              		.loc 1 227 1 is_stmt 1 view -0
- 810              		.cfi_startproc
- 811              		@ args = 0, pretend = 0, frame = 288
- 812              		@ frame_needed = 0, uses_anonymous_args = 0
- 813              	.LVL86:
- 227:Core/Src/freertos.c ****   /* USER CODE BEGIN StartAttitudeTask */
- 814              		.loc 1 227 1 is_stmt 0 view .LVU161
- 815 0000 10B5     		push	{r4, lr}
- 816              	.LCFI19:
- 817              		.cfi_def_cfa_offset 8
- 818              		.cfi_offset 4, -8
- 819              		.cfi_offset 14, -4
- 820 0002 CEB0     		sub	sp, sp, #312
- 821              	.LCFI20:
- 822              		.cfi_def_cfa_offset 320
- 823              	.LVL87:
- 824              	.L44:
- 230:Core/Src/freertos.c ****   /* Infinite loop */
- 825              		.loc 1 230 3 is_stmt 1 discriminator 1 view .LVU162
- 232:Core/Src/freertos.c ****   {
- 826              		.loc 1 232 3 discriminator 1 view .LVU163
- 827              	.LBB6:
- 234:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
- 828              		.loc 1 234 9 discriminator 1 view .LVU164
- 829 0004 0023     		movs	r3, #0
- 830 0006 0DF59372 		add	r2, sp, #294
- 831 000a 4BA9     		add	r1, sp, #300
- 832 000c 48A8     		add	r0, sp, #288
- 833 000e FFF7FEFF 		bl	MPU9250_GetData
- 834              	.LVL88:
- 236:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 835              		.loc 1 236 9 discriminator 1 view .LVU165
- 236:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 836              		.loc 1 236 40 is_stmt 0 discriminator 1 view .LVU166
- 837 0012 BDF92231 		ldrsh	r3, [sp, #290]
- 838              	.LVL89:
- 236:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 839              		.loc 1 236 63 discriminator 1 view .LVU167
- 840 0016 BDF92421 		ldrsh	r2, [sp, #292]
- 841              	.LVL90:
- 237:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 842              		.loc 1 237 9 is_stmt 1 discriminator 1 view .LVU168
- 237:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 843              		.loc 1 237 17 is_stmt 0 discriminator 1 view .LVU169
- 844 001a BDF92611 		ldrsh	r1, [sp, #294]
- 845              	.LVL91:
- 237:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 846              		.loc 1 237 40 discriminator 1 view .LVU170
- 847 001e BDF92801 		ldrsh	r0, [sp, #296]
- 848              	.LVL92:
- 237:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 849              		.loc 1 237 63 discriminator 1 view .LVU171
- 850 0022 BDF92A41 		ldrsh	r4, [sp, #298]
- 851              	.LVL93:
- 238:Core/Src/freertos.c ****          // 打印四元数数据
- 852              		.loc 1 238 9 is_stmt 1 discriminator 1 view .LVU172
- 240:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
-ARM GAS  /tmp/ccE24TNm.s 			page 25
-
-
- 853              		.loc 1 240 9 discriminator 1 view .LVU173
- 241:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 854              		.loc 1 241 9 discriminator 1 view .LVU174
- 241:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 855              		.loc 1 241 19 is_stmt 0 discriminator 1 view .LVU175
- 856 0026 0494     		str	r4, [sp, #16]
- 857 0028 0390     		str	r0, [sp, #12]
- 858 002a 0291     		str	r1, [sp, #8]
- 859 002c 0192     		str	r2, [sp, #4]
- 860 002e 0093     		str	r3, [sp]
- 861 0030 BDF92031 		ldrsh	r3, [sp, #288]
- 862              	.LVL94:
- 241:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 863              		.loc 1 241 19 discriminator 1 view .LVU176
- 864 0034 134A     		ldr	r2, .L46
- 865              	.LVL95:
- 241:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 866              		.loc 1 241 19 discriminator 1 view .LVU177
- 867 0036 4FF48071 		mov	r1, #256
- 868              	.LVL96:
- 241:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 869              		.loc 1 241 19 discriminator 1 view .LVU178
- 870 003a 08A8     		add	r0, sp, #32
- 871              	.LVL97:
- 241:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 872              		.loc 1 241 19 discriminator 1 view .LVU179
- 873 003c FFF7FEFF 		bl	snprintf
- 874              	.LVL98:
- 242:Core/Src/freertos.c ****         
- 875              		.loc 1 242 9 is_stmt 1 discriminator 1 view .LVU180
- 876 0040 4FF0FF33 		mov	r3, #-1
- 877 0044 82B2     		uxth	r2, r0
- 878 0046 08A9     		add	r1, sp, #32
- 879 0048 0F48     		ldr	r0, .L46+4
- 880              	.LVL99:
- 242:Core/Src/freertos.c ****         
- 881              		.loc 1 242 9 is_stmt 0 discriminator 1 view .LVU181
- 882 004a FFF7FEFF 		bl	HAL_UART_Transmit
- 883              	.LVL100:
- 245:Core/Src/freertos.c ****         // 获取并处理姿态四元数
- 884              		.loc 1 245 9 is_stmt 1 discriminator 1 view .LVU182
- 885 004e FFF7FEFF 		bl	AHRS_Update
- 886              	.LVL101:
- 247:Core/Src/freertos.c ****         SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态四元数给上位�
- 887              		.loc 1 247 9 discriminator 1 view .LVU183
- 247:Core/Src/freertos.c ****         SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态四元数给上位�
- 888              		.loc 1 247 17 is_stmt 0 discriminator 1 view .LVU184
- 889 0052 0024     		movs	r4, #0
- 890              	.LVL102:
- 247:Core/Src/freertos.c ****         SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态四元数给上位�
- 891              		.loc 1 247 17 discriminator 1 view .LVU185
- 892 0054 0694     		str	r4, [sp, #24]
- 893 0056 0794     		str	r4, [sp, #28]
- 248:Core/Src/freertos.c ****         AHRS_GetQuaternion(quat);
- 894              		.loc 1 248 9 is_stmt 1 discriminator 1 view .LVU186
- 895 0058 2346     		mov	r3, r4
- 896 005a 2246     		mov	r2, r4
-ARM GAS  /tmp/ccE24TNm.s 			page 26
-
-
- 897 005c 2146     		mov	r1, r4
- 898 005e 2046     		mov	r0, r4
- 899 0060 FFF7FEFF 		bl	SendAttitudeToHost
- 900              	.LVL103:
- 249:Core/Src/freertos.c ****         
- 901              		.loc 1 249 9 discriminator 1 view .LVU187
- 902 0064 06A8     		add	r0, sp, #24
- 903 0066 FFF7FEFF 		bl	AHRS_GetQuaternion
- 904              	.LVL104:
- 253:Core/Src/freertos.c ****         vTaskDelay(pdMS_TO_TICKS(10)); 
- 905              		.loc 1 253 9 discriminator 1 view .LVU188
- 906 006a 2346     		mov	r3, r4
- 907 006c 4FF0FF32 		mov	r2, #-1
- 908 0070 06A9     		add	r1, sp, #24
- 909 0072 0648     		ldr	r0, .L46+8
- 910 0074 0068     		ldr	r0, [r0]
- 911 0076 FFF7FEFF 		bl	xQueueGenericSend
- 912              	.LVL105:
- 254:Core/Src/freertos.c ****   }
- 913              		.loc 1 254 9 discriminator 1 view .LVU189
- 914 007a 0A20     		movs	r0, #10
- 915 007c FFF7FEFF 		bl	vTaskDelay
- 916              	.LVL106:
- 917              	.LBE6:
- 232:Core/Src/freertos.c ****   {
- 918              		.loc 1 232 8 discriminator 1 view .LVU190
- 919 0080 C0E7     		b	.L44
- 920              	.L47:
- 921 0082 00BF     		.align	2
- 922              	.L46:
- 923 0084 00000000 		.word	.LC0
- 924 0088 00000000 		.word	huart1
- 925 008c 00000000 		.word	.LANCHOR1
- 926              		.cfi_endproc
- 927              	.LFE153:
- 929              		.section	.text.UART_ProcessCommand,"ax",%progbits
- 930              		.align	1
- 931              		.global	UART_ProcessCommand
- 932              		.syntax unified
- 933              		.thumb
- 934              		.thumb_func
- 935              		.fpu fpv5-d16
- 937              	UART_ProcessCommand:
- 938              	.LVL107:
- 939              	.LFB160:
- 395:Core/Src/freertos.c ****     if (buffer[0] == 0xAA && buffer[2] == 0x55) {  // 判断头和尾标志
- 940              		.loc 1 395 43 view -0
- 941              		.cfi_startproc
- 942              		@ args = 0, pretend = 0, frame = 8
- 943              		@ frame_needed = 0, uses_anonymous_args = 0
- 396:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
- 944              		.loc 1 396 5 view .LVU192
- 396:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
- 945              		.loc 1 396 15 is_stmt 0 view .LVU193
- 946 0000 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
- 396:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
- 947              		.loc 1 396 8 view .LVU194
-ARM GAS  /tmp/ccE24TNm.s 			page 27
-
-
- 948 0002 AA2B     		cmp	r3, #170
- 949 0004 00D0     		beq	.L62
- 950              	.L59:
- 951 0006 7047     		bx	lr
- 952              	.L62:
- 396:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
- 953              		.loc 1 396 36 discriminator 1 view .LVU195
- 954 0008 8378     		ldrb	r3, [r0, #2]	@ zero_extendqisi2
- 396:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
- 955              		.loc 1 396 27 discriminator 1 view .LVU196
- 956 000a 552B     		cmp	r3, #85
- 957 000c FBD1     		bne	.L59
- 395:Core/Src/freertos.c ****     if (buffer[0] == 0xAA && buffer[2] == 0x55) {  // 判断头和尾标志
- 958              		.loc 1 395 43 view .LVU197
- 959 000e 00B5     		push	{lr}
- 960              	.LCFI21:
- 961              		.cfi_def_cfa_offset 4
- 962              		.cfi_offset 14, -4
- 963 0010 83B0     		sub	sp, sp, #12
- 964              	.LCFI22:
- 965              		.cfi_def_cfa_offset 16
- 966              	.LBB7:
- 397:Core/Src/freertos.c ****         int16_t quat[4];
- 967              		.loc 1 397 9 is_stmt 1 view .LVU198
- 397:Core/Src/freertos.c ****         int16_t quat[4];
- 968              		.loc 1 397 17 is_stmt 0 view .LVU199
- 969 0012 4378     		ldrb	r3, [r0, #1]	@ zero_extendqisi2
- 970              	.LVL108:
- 398:Core/Src/freertos.c ****         switch (command) {
- 971              		.loc 1 398 9 is_stmt 1 view .LVU200
- 399:Core/Src/freertos.c ****             case 0x01:  // 前进
- 972              		.loc 1 399 9 view .LVU201
- 973 0014 013B     		subs	r3, r3, #1
- 974              	.LVL109:
- 399:Core/Src/freertos.c ****             case 0x01:  // 前进
- 975              		.loc 1 399 9 is_stmt 0 view .LVU202
- 976 0016 052B     		cmp	r3, #5
- 977 0018 06D8     		bhi	.L48
- 978 001a DFE803F0 		tbb	[pc, r3]
- 979              	.L52:
- 980 001e 03       		.byte	(.L57-.L52)/2
- 981 001f 08       		.byte	(.L56-.L52)/2
- 982 0020 0B       		.byte	(.L55-.L52)/2
- 983 0021 0E       		.byte	(.L54-.L52)/2
- 984 0022 11       		.byte	(.L53-.L52)/2
- 985 0023 14       		.byte	(.L51-.L52)/2
- 986              		.p2align 1
- 987              	.L57:
- 401:Core/Src/freertos.c ****                 break;
- 988              		.loc 1 401 17 is_stmt 1 view .LVU203
- 989 0024 FFF7FEFF 		bl	Move_Forward
- 990              	.LVL110:
- 402:Core/Src/freertos.c ****             case 0x02:  // 后退
- 991              		.loc 1 402 17 view .LVU204
- 992              	.L48:
- 993              	.LBE7:
- 424:Core/Src/freertos.c **** 
-ARM GAS  /tmp/ccE24TNm.s 			page 28
-
-
- 994              		.loc 1 424 1 is_stmt 0 view .LVU205
- 995 0028 03B0     		add	sp, sp, #12
- 996              	.LCFI23:
- 997              		.cfi_remember_state
- 998              		.cfi_def_cfa_offset 4
- 999              		@ sp needed
- 1000 002a 5DF804FB 		ldr	pc, [sp], #4
- 1001              	.LVL111:
- 1002              	.L56:
- 1003              	.LCFI24:
- 1004              		.cfi_restore_state
- 1005              	.LBB8:
- 404:Core/Src/freertos.c ****                 break;
- 1006              		.loc 1 404 17 is_stmt 1 view .LVU206
- 1007 002e FFF7FEFF 		bl	Move_Backward
- 1008              	.LVL112:
- 405:Core/Src/freertos.c ****             case 0x03:  // 左转
- 1009              		.loc 1 405 17 view .LVU207
- 1010 0032 F9E7     		b	.L48
- 1011              	.LVL113:
- 1012              	.L55:
- 407:Core/Src/freertos.c ****                 break;
- 1013              		.loc 1 407 17 view .LVU208
- 1014 0034 FFF7FEFF 		bl	Turn_Left
- 1015              	.LVL114:
- 408:Core/Src/freertos.c ****             case 0x04:  // 右转
- 1016              		.loc 1 408 17 view .LVU209
- 1017 0038 F6E7     		b	.L48
- 1018              	.LVL115:
- 1019              	.L54:
+ 686              		.align	1
+ 687              		.global	SendAttitudeToHost
+ 688              		.syntax unified
+ 689              		.thumb
+ 690              		.thumb_func
+ 691              		.fpu fpv5-d16
+ 693              	SendAttitudeToHost:
+ 694              	.LVL75:
+ 695              	.LFB161:
+ 400:Core/Src/freertos.c **** 
+ 401:Core/Src/freertos.c **** 
+ 402:Core/Src/freertos.c **** 
+ 403:Core/Src/freertos.c **** void UART_ProcessCommand(uint8_t* buffer) {
+ 404:Core/Src/freertos.c ****     if (buffer[0] == 0xAA && buffer[2] == 0x55) {  // 判断头和尾标志
+ 405:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
+ 406:Core/Src/freertos.c ****         int16_t quat[4];
+ 407:Core/Src/freertos.c ****         switch (command) {
+ 408:Core/Src/freertos.c ****             case 0x01:  // 前进
+ 409:Core/Src/freertos.c ****                 Move_Forward();
  410:Core/Src/freertos.c ****                 break;
- 1020              		.loc 1 410 17 view .LVU210
- 1021 003a FFF7FEFF 		bl	Turn_Right
- 1022              	.LVL116:
- 411:Core/Src/freertos.c ****             case 0x05:  // 停止
- 1023              		.loc 1 411 17 view .LVU211
- 1024 003e F3E7     		b	.L48
- 1025              	.LVL117:
- 1026              	.L53:
+ 411:Core/Src/freertos.c ****             case 0x02:  // 后退
+ 412:Core/Src/freertos.c ****                 Move_Backward();
  413:Core/Src/freertos.c ****                 break;
- 1027              		.loc 1 413 17 view .LVU212
- 1028 0040 FFF7FEFF 		bl	Stop
- 1029              	.LVL118:
- 414:Core/Src/freertos.c ****             case 0x06:  // 请求姿态数据
- 1030              		.loc 1 414 17 view .LVU213
- 1031 0044 F0E7     		b	.L48
- 1032              	.LVL119:
- 1033              	.L51:
- 417:Core/Src/freertos.c ****                 SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态数据给�
- 1034              		.loc 1 417 17 view .LVU214
- 1035 0046 6846     		mov	r0, sp
- 1036              	.LVL120:
- 417:Core/Src/freertos.c ****                 SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态数据给�
- 1037              		.loc 1 417 17 is_stmt 0 view .LVU215
- 1038 0048 FFF7FEFF 		bl	AHRS_GetQuaternion
- 1039              	.LVL121:
- 418:Core/Src/freertos.c ****                 break;
-ARM GAS  /tmp/ccE24TNm.s 			page 29
+ 414:Core/Src/freertos.c ****             case 0x03:  // 左转
+ 415:Core/Src/freertos.c ****                 Turn_Left();
+ 416:Core/Src/freertos.c ****                 break;
+ 417:Core/Src/freertos.c ****             case 0x04:  // 右转
+ 418:Core/Src/freertos.c ****                 Turn_Right();
+ 419:Core/Src/freertos.c ****                 break;
+ 420:Core/Src/freertos.c ****             case 0x05:  // 停止
+ 421:Core/Src/freertos.c ****                 Stop();
+ 422:Core/Src/freertos.c ****                 break;
+ 423:Core/Src/freertos.c ****             case 0x06:  // 请求姿态数据
+ 424:Core/Src/freertos.c ****                 
+ 425:Core/Src/freertos.c ****                 AHRS_GetQuaternion(quat);  // 获取当前四元数姿态数据
+ 426:Core/Src/freertos.c ****                 SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态数据给�
+ 427:Core/Src/freertos.c ****                 break;
+ 428:Core/Src/freertos.c ****             default:
+ 429:Core/Src/freertos.c ****                 break;
+ 430:Core/Src/freertos.c ****         }
+ 431:Core/Src/freertos.c ****     }
+ 432:Core/Src/freertos.c **** }
+ 433:Core/Src/freertos.c **** 
+ 434:Core/Src/freertos.c **** /* SendAttitudeToHost - Sends the current attitude (quaternion) to the host via UART */
+ 435:Core/Src/freertos.c **** void SendAttitudeToHost(int16_t q0, int16_t q1, int16_t q2, int16_t q3) {
+ 696              		.loc 1 435 73 is_stmt 1 view -0
+ 697              		.cfi_startproc
+ 698              		@ args = 0, pretend = 0, frame = 152
+ 699              		@ frame_needed = 0, uses_anonymous_args = 0
+ 700              		.loc 1 435 73 is_stmt 0 view .LVU135
+ 701 0000 2DE9F041 		push	{r4, r5, r6, r7, r8, lr}
+ 702              	.LCFI16:
+ 703              		.cfi_def_cfa_offset 24
+ 704              		.cfi_offset 4, -24
+ 705              		.cfi_offset 5, -20
+ 706              		.cfi_offset 6, -16
+ 707              		.cfi_offset 7, -12
+ARM GAS  /tmp/ccZG0cTT.s 			page 22
 
 
- 1040              		.loc 1 418 17 is_stmt 1 view .LVU216
- 1041 004c BDF90630 		ldrsh	r3, [sp, #6]
- 1042 0050 BDF90420 		ldrsh	r2, [sp, #4]
- 1043 0054 BDF90210 		ldrsh	r1, [sp, #2]
- 1044 0058 BDF90000 		ldrsh	r0, [sp]
- 1045 005c FFF7FEFF 		bl	SendAttitudeToHost
- 1046              	.LVL122:
- 419:Core/Src/freertos.c ****             default:
- 1047              		.loc 1 419 17 view .LVU217
- 1048              	.LBE8:
- 424:Core/Src/freertos.c **** 
- 1049              		.loc 1 424 1 is_stmt 0 view .LVU218
- 1050 0060 E2E7     		b	.L48
- 1051              		.cfi_endproc
- 1052              	.LFE160:
- 1054              		.section	.text.StartSerialCommTask,"ax",%progbits
- 1055              		.align	1
- 1056              		.global	StartSerialCommTask
- 1057              		.syntax unified
- 1058              		.thumb
- 1059              		.thumb_func
- 1060              		.fpu fpv5-d16
- 1062              	StartSerialCommTask:
- 1063              	.LFB156:
- 347:Core/Src/freertos.c ****   /* USER CODE BEGIN StartSerialCommTask */
- 1064              		.loc 1 347 1 is_stmt 1 view -0
- 1065              		.cfi_startproc
- 1066              		@ args = 0, pretend = 0, frame = 272
- 1067              		@ frame_needed = 0, uses_anonymous_args = 0
- 1068              	.LVL123:
- 347:Core/Src/freertos.c ****   /* USER CODE BEGIN StartSerialCommTask */
- 1069              		.loc 1 347 1 is_stmt 0 view .LVU220
- 1070 0000 30B5     		push	{r4, r5, lr}
- 1071              	.LCFI25:
- 1072              		.cfi_def_cfa_offset 12
- 1073              		.cfi_offset 4, -12
- 1074              		.cfi_offset 5, -8
- 1075              		.cfi_offset 14, -4
- 1076 0002 CBB0     		sub	sp, sp, #300
- 1077              	.LCFI26:
- 1078              		.cfi_def_cfa_offset 312
- 1079 0004 02E0     		b	.L65
- 1080              	.LVL124:
- 1081              	.L67:
- 1082              	.LBB9:
- 367:Core/Src/freertos.c ****     }
- 1083              		.loc 1 367 7 is_stmt 1 view .LVU221
- 1084 0006 47A8     		add	r0, sp, #284
- 1085 0008 FFF7FEFF 		bl	UART_ProcessCommand
- 1086              	.LVL125:
- 1087              	.LBE9:
- 351:Core/Src/freertos.c ****   {
- 1088              		.loc 1 351 8 view .LVU222
- 1089              	.L65:
- 349:Core/Src/freertos.c ****   /* Infinite loop */
- 1090              		.loc 1 349 3 view .LVU223
- 351:Core/Src/freertos.c ****   {
-ARM GAS  /tmp/ccE24TNm.s 			page 30
+ 708              		.cfi_offset 8, -8
+ 709              		.cfi_offset 14, -4
+ 710 0004 AAB0     		sub	sp, sp, #168
+ 711              	.LCFI17:
+ 712              		.cfi_def_cfa_offset 192
+ 713 0006 0446     		mov	r4, r0
+ 714 0008 0D46     		mov	r5, r1
+ 715 000a 1646     		mov	r6, r2
+ 716 000c 1F46     		mov	r7, r3
+ 436:Core/Src/freertos.c ****     uint8_t txBuffer[18];  // 传输数据缓存，18字节
+ 717              		.loc 1 436 5 is_stmt 1 view .LVU136
+ 437:Core/Src/freertos.c ****     txBuffer[0] = 0xAA;  // 开头标志
+ 718              		.loc 1 437 5 view .LVU137
+ 719              		.loc 1 437 17 is_stmt 0 view .LVU138
+ 720 000e AA23     		movs	r3, #170
+ 721              	.LVL76:
+ 722              		.loc 1 437 17 view .LVU139
+ 723 0010 8DF89430 		strb	r3, [sp, #148]
+ 438:Core/Src/freertos.c ****     txBuffer[1] = 0x06;  // 数据类型（姿态数据）
+ 724              		.loc 1 438 5 is_stmt 1 view .LVU140
+ 725              		.loc 1 438 17 is_stmt 0 view .LVU141
+ 726 0014 0623     		movs	r3, #6
+ 727 0016 8DF89530 		strb	r3, [sp, #149]
+ 439:Core/Src/freertos.c ****     
+ 440:Core/Src/freertos.c ****     // 将四元数数据转换为字节
+ 441:Core/Src/freertos.c ****     memcpy(&txBuffer[2], &q0, sizeof(int16_t));
+ 728              		.loc 1 441 5 is_stmt 1 view .LVU142
+ 729 001a ADF89600 		strh	r0, [sp, #150]	@ movhi
+ 442:Core/Src/freertos.c ****     memcpy(&txBuffer[6], &q1, sizeof(int16_t));
+ 730              		.loc 1 442 5 view .LVU143
+ 731 001e ADF89A10 		strh	r1, [sp, #154]	@ movhi
+ 443:Core/Src/freertos.c ****     memcpy(&txBuffer[10], &q2, sizeof(int16_t));
+ 732              		.loc 1 443 5 view .LVU144
+ 733 0022 ADF89E20 		strh	r2, [sp, #158]	@ movhi
+ 444:Core/Src/freertos.c ****     memcpy(&txBuffer[14], &q3, sizeof(int16_t));
+ 734              		.loc 1 444 5 view .LVU145
+ 735 0026 ADF8A270 		strh	r7, [sp, #162]	@ movhi
+ 445:Core/Src/freertos.c ****     
+ 446:Core/Src/freertos.c ****     txBuffer[17] = 0x55;  // 结束标志
+ 736              		.loc 1 446 5 view .LVU146
+ 737              		.loc 1 446 18 is_stmt 0 view .LVU147
+ 738 002a 5523     		movs	r3, #85
+ 739 002c 8DF8A530 		strb	r3, [sp, #165]
+ 447:Core/Src/freertos.c ****     
+ 448:Core/Src/freertos.c ****     // 通过UART发送姿态数据
+ 449:Core/Src/freertos.c ****     HAL_UART_Transmit(&huart1, txBuffer, sizeof(txBuffer), HAL_MAX_DELAY);
+ 740              		.loc 1 449 5 is_stmt 1 view .LVU148
+ 741 0030 DFF83880 		ldr	r8, .L41+4
+ 742 0034 4FF0FF33 		mov	r3, #-1
+ 743 0038 1222     		movs	r2, #18
+ 744              	.LVL77:
+ 745              		.loc 1 449 5 is_stmt 0 view .LVU149
+ 746 003a 25A9     		add	r1, sp, #148
+ 747              	.LVL78:
+ 748              		.loc 1 449 5 view .LVU150
+ 749 003c 4046     		mov	r0, r8
+ 750              	.LVL79:
+ARM GAS  /tmp/ccZG0cTT.s 			page 23
 
 
- 1091              		.loc 1 351 3 view .LVU224
- 1092              	.LBB10:
- 354:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
- 1093              		.loc 1 354 5 view .LVU225
- 1094 000c 194C     		ldr	r4, .L68
- 1095 000e 0023     		movs	r3, #0
- 1096 0010 A21D     		adds	r2, r4, #6
- 1097 0012 04F10C01 		add	r1, r4, #12
- 1098 0016 2046     		mov	r0, r4
- 1099 0018 FFF7FEFF 		bl	MPU9250_GetData
- 1100              	.LVL126:
- 356:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 1101              		.loc 1 356 9 view .LVU226
- 356:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 1102              		.loc 1 356 40 is_stmt 0 view .LVU227
- 1103 001c B4F90230 		ldrsh	r3, [r4, #2]
- 1104              	.LVL127:
- 356:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
- 1105              		.loc 1 356 63 view .LVU228
- 1106 0020 B4F90420 		ldrsh	r2, [r4, #4]
- 1107              	.LVL128:
- 357:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 1108              		.loc 1 357 9 is_stmt 1 view .LVU229
- 357:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 1109              		.loc 1 357 17 is_stmt 0 view .LVU230
- 1110 0024 B4F90610 		ldrsh	r1, [r4, #6]
- 1111              	.LVL129:
- 357:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 1112              		.loc 1 357 40 view .LVU231
- 1113 0028 B4F90800 		ldrsh	r0, [r4, #8]
- 1114              	.LVL130:
- 357:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 1115              		.loc 1 357 63 view .LVU232
- 1116 002c B4F90A50 		ldrsh	r5, [r4, #10]
- 1117              	.LVL131:
- 358:Core/Src/freertos.c ****          // 打印四元数数据
- 1118              		.loc 1 358 9 is_stmt 1 view .LVU233
- 360:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
- 1119              		.loc 1 360 9 view .LVU234
- 361:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 1120              		.loc 1 361 9 view .LVU235
- 361:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 1121              		.loc 1 361 19 is_stmt 0 view .LVU236
- 1122 0030 0495     		str	r5, [sp, #16]
- 1123 0032 0390     		str	r0, [sp, #12]
- 1124 0034 0291     		str	r1, [sp, #8]
- 1125 0036 0192     		str	r2, [sp, #4]
- 1126 0038 0093     		str	r3, [sp]
- 1127 003a B4F90030 		ldrsh	r3, [r4]
- 1128              	.LVL132:
- 361:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 1129              		.loc 1 361 19 view .LVU237
- 1130 003e 0E4A     		ldr	r2, .L68+4
- 1131              	.LVL133:
- 361:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 1132              		.loc 1 361 19 view .LVU238
- 1133 0040 4FF48071 		mov	r1, #256
-ARM GAS  /tmp/ccE24TNm.s 			page 31
-
-
- 1134              	.LVL134:
- 361:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 1135              		.loc 1 361 19 view .LVU239
- 1136 0044 07A8     		add	r0, sp, #28
- 1137              	.LVL135:
- 361:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
- 1138              		.loc 1 361 19 view .LVU240
- 1139 0046 FFF7FEFF 		bl	snprintf
- 1140              	.LVL136:
- 362:Core/Src/freertos.c ****         osDelay(1);
- 1141              		.loc 1 362 9 is_stmt 1 view .LVU241
- 1142 004a 0C4C     		ldr	r4, .L68+8
- 1143 004c 4FF0FF33 		mov	r3, #-1
- 1144 0050 82B2     		uxth	r2, r0
- 1145 0052 07A9     		add	r1, sp, #28
- 1146 0054 2046     		mov	r0, r4
- 1147              	.LVL137:
- 362:Core/Src/freertos.c ****         osDelay(1);
- 1148              		.loc 1 362 9 is_stmt 0 view .LVU242
- 1149 0056 FFF7FEFF 		bl	HAL_UART_Transmit
- 1150              	.LVL138:
- 363:Core/Src/freertos.c **** 
- 1151              		.loc 1 363 9 is_stmt 1 view .LVU243
- 1152 005a 0120     		movs	r0, #1
- 1153 005c FFF7FEFF 		bl	osDelay
- 1154              	.LVL139:
- 366:Core/Src/freertos.c ****       UART_ProcessCommand(rxBuffer);  // 处理命令
- 1155              		.loc 1 366 5 view .LVU244
- 366:Core/Src/freertos.c ****       UART_ProcessCommand(rxBuffer);  // 处理命令
- 1156              		.loc 1 366 9 is_stmt 0 view .LVU245
- 1157 0060 4FF0FF33 		mov	r3, #-1
- 1158 0064 0A22     		movs	r2, #10
- 1159 0066 47A9     		add	r1, sp, #284
- 1160 0068 2046     		mov	r0, r4
- 1161 006a FFF7FEFF 		bl	HAL_UART_Receive
- 1162              	.LVL140:
- 366:Core/Src/freertos.c ****       UART_ProcessCommand(rxBuffer);  // 处理命令
- 1163              		.loc 1 366 8 view .LVU246
- 1164 006e 0028     		cmp	r0, #0
- 1165 0070 CCD1     		bne	.L65
- 1166 0072 C8E7     		b	.L67
- 1167              	.L69:
- 1168              		.align	2
- 1169              	.L68:
- 1170 0074 00000000 		.word	.LANCHOR0
- 1171 0078 00000000 		.word	.LC0
- 1172 007c 00000000 		.word	huart1
- 1173              	.LBE10:
- 1174              		.cfi_endproc
- 1175              	.LFE156:
- 1177              		.section	.text.SendAttitudeToPC,"ax",%progbits
- 1178              		.align	1
- 1179              		.global	SendAttitudeToPC
- 1180              		.syntax unified
- 1181              		.thumb
- 1182              		.thumb_func
- 1183              		.fpu fpv5-d16
-ARM GAS  /tmp/ccE24TNm.s 			page 32
-
-
- 1185              	SendAttitudeToPC:
- 1186              	.LVL141:
- 1187              	.LFB162:
- 448:Core/Src/freertos.c **** 
- 449:Core/Src/freertos.c **** 
+ 751              		.loc 1 449 5 view .LVU151
+ 752 003e FFF7FEFF 		bl	HAL_UART_Transmit
+ 753              	.LVL80:
  450:Core/Src/freertos.c **** 
- 451:Core/Src/freertos.c **** void SendAttitudeToPC(int16_t q0, int16_t q1, int16_t q2, int16_t q3) {
- 1188              		.loc 1 451 71 is_stmt 1 view -0
- 1189              		.cfi_startproc
- 1190              		@ args = 0, pretend = 0, frame = 56
- 1191              		@ frame_needed = 0, uses_anonymous_args = 0
- 1192              		.loc 1 451 71 is_stmt 0 view .LVU248
- 1193 0000 00B5     		push	{lr}
- 1194              	.LCFI27:
- 1195              		.cfi_def_cfa_offset 4
- 1196              		.cfi_offset 14, -4
- 1197 0002 93B0     		sub	sp, sp, #76
- 1198              	.LCFI28:
- 1199              		.cfi_def_cfa_offset 80
- 452:Core/Src/freertos.c ****   char txBuffer[50];  // 传输数据缓存
- 1200              		.loc 1 452 3 is_stmt 1 view .LVU249
- 453:Core/Src/freertos.c ****   int len = snprintf(txBuffer, sizeof(txBuffer), "%d,%d,%d,%d\n", q0, q1, q2, q3);
- 1201              		.loc 1 453 3 view .LVU250
- 1202              		.loc 1 453 13 is_stmt 0 view .LVU251
- 1203 0004 0293     		str	r3, [sp, #8]
- 1204 0006 0192     		str	r2, [sp, #4]
- 1205 0008 0091     		str	r1, [sp]
- 1206 000a 0346     		mov	r3, r0
- 1207              	.LVL142:
- 1208              		.loc 1 453 13 view .LVU252
- 1209 000c 074A     		ldr	r2, .L72
- 1210              	.LVL143:
- 1211              		.loc 1 453 13 view .LVU253
- 1212 000e 3221     		movs	r1, #50
- 1213              	.LVL144:
- 1214              		.loc 1 453 13 view .LVU254
- 1215 0010 05A8     		add	r0, sp, #20
- 1216              	.LVL145:
- 1217              		.loc 1 453 13 view .LVU255
- 1218 0012 FFF7FEFF 		bl	snprintf
- 1219              	.LVL146:
- 454:Core/Src/freertos.c **** 
- 455:Core/Src/freertos.c ****   // 通过UART发送姿态数据
- 456:Core/Src/freertos.c ****   HAL_UART_Transmit(&huart1, (uint8_t*)txBuffer, len, HAL_MAX_DELAY);
- 1220              		.loc 1 456 3 is_stmt 1 view .LVU256
- 1221 0016 4FF0FF33 		mov	r3, #-1
- 1222 001a 82B2     		uxth	r2, r0
- 1223 001c 05A9     		add	r1, sp, #20
- 1224 001e 0448     		ldr	r0, .L72+4
- 1225              	.LVL147:
- 1226              		.loc 1 456 3 is_stmt 0 view .LVU257
- 1227 0020 FFF7FEFF 		bl	HAL_UART_Transmit
- 1228              	.LVL148:
- 457:Core/Src/freertos.c **** }
- 1229              		.loc 1 457 1 view .LVU258
- 1230 0024 13B0     		add	sp, sp, #76
- 1231              	.LCFI29:
-ARM GAS  /tmp/ccE24TNm.s 			page 33
+ 451:Core/Src/freertos.c ****     // 打印四元数数据
+ 452:Core/Src/freertos.c ****     char printBuffer[128];
+ 754              		.loc 1 452 5 is_stmt 1 view .LVU152
+ 453:Core/Src/freertos.c ****     int len = snprintf(printBuffer, sizeof(printBuffer), "%d,%d,%d,%d\n", q0, q1, q2, q3);
+ 755              		.loc 1 453 5 view .LVU153
+ 756              		.loc 1 453 15 is_stmt 0 view .LVU154
+ 757 0042 0297     		str	r7, [sp, #8]
+ 758 0044 0196     		str	r6, [sp, #4]
+ 759 0046 0095     		str	r5, [sp]
+ 760 0048 2346     		mov	r3, r4
+ 761 004a 074A     		ldr	r2, .L41
+ 762 004c 8021     		movs	r1, #128
+ 763 004e 05A8     		add	r0, sp, #20
+ 764 0050 FFF7FEFF 		bl	snprintf
+ 765              	.LVL81:
+ 454:Core/Src/freertos.c ****     HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 766              		.loc 1 454 5 is_stmt 1 view .LVU155
+ 767 0054 4FF0FF33 		mov	r3, #-1
+ 768 0058 82B2     		uxth	r2, r0
+ 769 005a 05A9     		add	r1, sp, #20
+ 770 005c 4046     		mov	r0, r8
+ 771              	.LVL82:
+ 772              		.loc 1 454 5 is_stmt 0 view .LVU156
+ 773 005e FFF7FEFF 		bl	HAL_UART_Transmit
+ 774              	.LVL83:
+ 455:Core/Src/freertos.c **** }
+ 775              		.loc 1 455 1 view .LVU157
+ 776 0062 2AB0     		add	sp, sp, #168
+ 777              	.LCFI18:
+ 778              		.cfi_def_cfa_offset 24
+ 779              		@ sp needed
+ 780 0064 BDE8F081 		pop	{r4, r5, r6, r7, r8, pc}
+ 781              	.L42:
+ 782              		.align	2
+ 783              	.L41:
+ 784 0068 00000000 		.word	.LC4
+ 785 006c 00000000 		.word	huart1
+ 786              		.cfi_endproc
+ 787              	.LFE161:
+ 789              		.section	.text.StartAttitudeTask,"ax",%progbits
+ 790              		.align	1
+ 791              		.global	StartAttitudeTask
+ 792              		.syntax unified
+ 793              		.thumb
+ 794              		.thumb_func
+ 795              		.fpu fpv5-d16
+ 797              	StartAttitudeTask:
+ 798              	.LFB153:
+ 227:Core/Src/freertos.c ****   /* USER CODE BEGIN StartAttitudeTask */
+ 799              		.loc 1 227 1 is_stmt 1 view -0
+ 800              		.cfi_startproc
+ 801              		@ args = 0, pretend = 0, frame = 288
+ 802              		@ frame_needed = 0, uses_anonymous_args = 0
+ARM GAS  /tmp/ccZG0cTT.s 			page 24
 
 
- 1232              		.cfi_def_cfa_offset 4
- 1233              		@ sp needed
- 1234 0026 5DF804FB 		ldr	pc, [sp], #4
- 1235              	.L73:
- 1236 002a 00BF     		.align	2
- 1237              	.L72:
- 1238 002c 00000000 		.word	.LC4
- 1239 0030 00000000 		.word	huart1
- 1240              		.cfi_endproc
- 1241              	.LFE162:
- 1243              		.global	SerialCommTask_attributes
- 1244              		.section	.rodata.str1.4,"aMS",%progbits,1
- 1245              		.align	2
- 1246              	.LC5:
- 1247 0000 53657269 		.ascii	"SerialCommTask\000"
- 1247      616C436F 
- 1247      6D6D5461 
- 1247      736B00
- 1248              		.global	SerialCommTaskHandle
- 1249              		.global	GaitControlTask_attributes
- 1250 000f 00       		.align	2
- 1251              	.LC6:
- 1252 0010 47616974 		.ascii	"GaitControlTask\000"
- 1252      436F6E74 
- 1252      726F6C54 
- 1252      61736B00 
- 1253              		.global	GaitControlTaskHandle
- 1254              		.global	ServoControlTas_attributes
- 1255              		.align	2
- 1256              	.LC7:
- 1257 0020 53657276 		.ascii	"ServoControlTas\000"
- 1257      6F436F6E 
- 1257      74726F6C 
- 1257      54617300 
- 1258              		.global	ServoControlTasHandle
- 1259              		.global	AttitudeTask_attributes
- 1260              		.align	2
- 1261              	.LC8:
- 1262 0030 41747469 		.ascii	"AttitudeTask\000"
- 1262      74756465 
- 1262      5461736B 
- 1262      00
- 1263              		.global	AttitudeTaskHandle
- 1264              		.global	defaultTask_attributes
- 1265 003d 000000   		.align	2
- 1266              	.LC9:
- 1267 0040 64656661 		.ascii	"defaultTask\000"
- 1267      756C7454 
- 1267      61736B00 
- 1268              		.global	defaultTaskHandle
- 1269              		.global	TempData
- 1270              		.global	GyroData
- 1271              		.global	MagData
- 1272              		.global	AccData
- 1273              		.global	quatQueue
- 1274              		.global	imuData
- 1275              		.section	.bss.AccData,"aw",%nobits
-ARM GAS  /tmp/ccE24TNm.s 			page 34
+ 803              	.LVL84:
+ 227:Core/Src/freertos.c ****   /* USER CODE BEGIN StartAttitudeTask */
+ 804              		.loc 1 227 1 is_stmt 0 view .LVU159
+ 805 0000 30B5     		push	{r4, r5, lr}
+ 806              	.LCFI19:
+ 807              		.cfi_def_cfa_offset 12
+ 808              		.cfi_offset 4, -12
+ 809              		.cfi_offset 5, -8
+ 810              		.cfi_offset 14, -4
+ 811 0002 CFB0     		sub	sp, sp, #316
+ 812              	.LCFI20:
+ 813              		.cfi_def_cfa_offset 328
+ 814              	.LVL85:
+ 815              	.L44:
+ 230:Core/Src/freertos.c ****   /* Infinite loop */
+ 816              		.loc 1 230 3 is_stmt 1 discriminator 1 view .LVU160
+ 232:Core/Src/freertos.c ****   {
+ 817              		.loc 1 232 3 discriminator 1 view .LVU161
+ 818              	.LBB6:
+ 235:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
+ 819              		.loc 1 235 9 discriminator 1 view .LVU162
+ 820 0004 0023     		movs	r3, #0
+ 821 0006 0DF59372 		add	r2, sp, #294
+ 822 000a 4BA9     		add	r1, sp, #300
+ 823 000c 48A8     		add	r0, sp, #288
+ 824 000e FFF7FEFF 		bl	MPU9250_GetData
+ 825              	.LVL86:
+ 237:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 826              		.loc 1 237 9 discriminator 1 view .LVU163
+ 237:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 827              		.loc 1 237 40 is_stmt 0 discriminator 1 view .LVU164
+ 828 0012 BDF92231 		ldrsh	r3, [sp, #290]
+ 829              	.LVL87:
+ 237:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 830              		.loc 1 237 63 discriminator 1 view .LVU165
+ 831 0016 BDF92421 		ldrsh	r2, [sp, #292]
+ 832              	.LVL88:
+ 238:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 833              		.loc 1 238 9 is_stmt 1 discriminator 1 view .LVU166
+ 238:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 834              		.loc 1 238 17 is_stmt 0 discriminator 1 view .LVU167
+ 835 001a BDF92611 		ldrsh	r1, [sp, #294]
+ 836              	.LVL89:
+ 238:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 837              		.loc 1 238 40 discriminator 1 view .LVU168
+ 838 001e BDF92801 		ldrsh	r0, [sp, #296]
+ 839              	.LVL90:
+ 238:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 840              		.loc 1 238 63 discriminator 1 view .LVU169
+ 841 0022 BDF92A41 		ldrsh	r4, [sp, #298]
+ 842              	.LVL91:
+ 239:Core/Src/freertos.c ****          // 打印四元数数据
+ 843              		.loc 1 239 9 is_stmt 1 discriminator 1 view .LVU170
+ 241:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
+ 844              		.loc 1 241 9 discriminator 1 view .LVU171
+ 242:Core/Src/freertos.c ****         //taskENTER_CRITICAL(); // 进入临界区
+ 845              		.loc 1 242 9 discriminator 1 view .LVU172
+ARM GAS  /tmp/ccZG0cTT.s 			page 25
 
 
- 1276              		.align	2
- 1279              	AccData:
- 1280 0000 00000000 		.space	6
- 1280      0000
- 1281              		.section	.bss.AttitudeTaskHandle,"aw",%nobits
- 1282              		.align	2
- 1283              		.set	.LANCHOR5,. + 0
- 1286              	AttitudeTaskHandle:
- 1287 0000 00000000 		.space	4
- 1288              		.section	.bss.GaitControlTaskHandle,"aw",%nobits
- 1289              		.align	2
- 1290              		.set	.LANCHOR9,. + 0
- 1293              	GaitControlTaskHandle:
- 1294 0000 00000000 		.space	4
- 1295              		.section	.bss.GyroData,"aw",%nobits
- 1296              		.align	2
- 1299              	GyroData:
- 1300 0000 00000000 		.space	6
- 1300      0000
- 1301              		.section	.bss.MagData,"aw",%nobits
- 1302              		.align	2
- 1305              	MagData:
- 1306 0000 00000000 		.space	6
- 1306      0000
- 1307              		.section	.bss.SerialCommTaskHandle,"aw",%nobits
- 1308              		.align	2
- 1309              		.set	.LANCHOR11,. + 0
- 1312              	SerialCommTaskHandle:
- 1313 0000 00000000 		.space	4
- 1314              		.section	.bss.ServoControlTasHandle,"aw",%nobits
- 1315              		.align	2
- 1316              		.set	.LANCHOR7,. + 0
- 1319              	ServoControlTasHandle:
- 1320 0000 00000000 		.space	4
- 1321              		.section	.bss.TempData,"aw",%nobits
- 1322              		.align	2
- 1325              	TempData:
- 1326 0000 00000000 		.space	4
- 1327              		.section	.bss.defaultTaskHandle,"aw",%nobits
- 1328              		.align	2
- 1329              		.set	.LANCHOR3,. + 0
- 1332              	defaultTaskHandle:
- 1333 0000 00000000 		.space	4
- 1334              		.section	.bss.imuData,"aw",%nobits
- 1335              		.align	2
- 1336              		.set	.LANCHOR0,. + 0
- 1339              	imuData:
- 1340 0000 00000000 		.space	24
- 1340      00000000 
- 1340      00000000 
- 1340      00000000 
- 1340      00000000 
- 1341              		.section	.bss.quatQueue,"aw",%nobits
- 1342              		.align	2
- 1343              		.set	.LANCHOR1,. + 0
- 1346              	quatQueue:
- 1347 0000 00000000 		.space	4
-ARM GAS  /tmp/ccE24TNm.s 			page 35
+ 242:Core/Src/freertos.c ****         //taskENTER_CRITICAL(); // 进入临界区
+ 846              		.loc 1 242 19 is_stmt 0 discriminator 1 view .LVU173
+ 847 0026 0494     		str	r4, [sp, #16]
+ 848 0028 0390     		str	r0, [sp, #12]
+ 849 002a 0291     		str	r1, [sp, #8]
+ 850 002c 0192     		str	r2, [sp, #4]
+ 851 002e 0093     		str	r3, [sp]
+ 852 0030 BDF92031 		ldrsh	r3, [sp, #288]
+ 853              	.LVL92:
+ 242:Core/Src/freertos.c ****         //taskENTER_CRITICAL(); // 进入临界区
+ 854              		.loc 1 242 19 discriminator 1 view .LVU174
+ 855 0034 154A     		ldr	r2, .L46
+ 856              	.LVL93:
+ 242:Core/Src/freertos.c ****         //taskENTER_CRITICAL(); // 进入临界区
+ 857              		.loc 1 242 19 discriminator 1 view .LVU175
+ 858 0036 4FF48071 		mov	r1, #256
+ 859              	.LVL94:
+ 242:Core/Src/freertos.c ****         //taskENTER_CRITICAL(); // 进入临界区
+ 860              		.loc 1 242 19 discriminator 1 view .LVU176
+ 861 003a 08A8     		add	r0, sp, #32
+ 862              	.LVL95:
+ 242:Core/Src/freertos.c ****         //taskENTER_CRITICAL(); // 进入临界区
+ 863              		.loc 1 242 19 discriminator 1 view .LVU177
+ 864 003c FFF7FEFF 		bl	snprintf
+ 865              	.LVL96:
+ 244:Core/Src/freertos.c ****         HAL_UART_Transmit_IT(&huart1, (uint8_t*)printBuffer, len);
+ 866              		.loc 1 244 9 is_stmt 1 discriminator 1 view .LVU178
+ 867 0040 84B2     		uxth	r4, r0
+ 868              	.LVL97:
+ 244:Core/Src/freertos.c ****         HAL_UART_Transmit_IT(&huart1, (uint8_t*)printBuffer, len);
+ 869              		.loc 1 244 9 is_stmt 0 discriminator 1 view .LVU179
+ 870 0042 134D     		ldr	r5, .L46+4
+ 871 0044 2246     		mov	r2, r4
+ 872 0046 08A9     		add	r1, sp, #32
+ 873 0048 2846     		mov	r0, r5
+ 874              	.LVL98:
+ 244:Core/Src/freertos.c ****         HAL_UART_Transmit_IT(&huart1, (uint8_t*)printBuffer, len);
+ 875              		.loc 1 244 9 discriminator 1 view .LVU180
+ 876 004a FFF7FEFF 		bl	HAL_UART_Transmit_DMA
+ 877              	.LVL99:
+ 245:Core/Src/freertos.c ****         //taskEXIT_CRITICAL(); // 退出临界区   
+ 878              		.loc 1 245 9 is_stmt 1 discriminator 1 view .LVU181
+ 879 004e 2246     		mov	r2, r4
+ 880 0050 08A9     		add	r1, sp, #32
+ 881 0052 2846     		mov	r0, r5
+ 882 0054 FFF7FEFF 		bl	HAL_UART_Transmit_IT
+ 883              	.LVL100:
+ 248:Core/Src/freertos.c ****         // 获取并处理姿态四元数
+ 884              		.loc 1 248 9 discriminator 1 view .LVU182
+ 885 0058 FFF7FEFF 		bl	AHRS_Update
+ 886              	.LVL101:
+ 250:Core/Src/freertos.c ****         SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态四元数给上位�
+ 887              		.loc 1 250 9 discriminator 1 view .LVU183
+ 250:Core/Src/freertos.c ****         SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态四元数给上位�
+ 888              		.loc 1 250 17 is_stmt 0 discriminator 1 view .LVU184
+ 889 005c 0024     		movs	r4, #0
+ 890 005e 0694     		str	r4, [sp, #24]
+ARM GAS  /tmp/ccZG0cTT.s 			page 26
 
 
- 1348              		.section	.rodata.AttitudeTask_attributes,"a"
- 1349              		.align	2
- 1350              		.set	.LANCHOR4,. + 0
- 1353              	AttitudeTask_attributes:
- 1354 0000 30000000 		.word	.LC8
- 1355 0004 00000000 		.space	16
- 1355      00000000 
- 1355      00000000 
- 1355      00000000 
- 1356 0014 00040000 		.word	1024
- 1357 0018 30000000 		.word	48
- 1358 001c 00000000 		.space	8
- 1358      00000000 
- 1359              		.section	.rodata.GaitControlTask_attributes,"a"
- 1360              		.align	2
- 1361              		.set	.LANCHOR8,. + 0
- 1364              	GaitControlTask_attributes:
- 1365 0000 10000000 		.word	.LC6
- 1366 0004 00000000 		.space	16
- 1366      00000000 
- 1366      00000000 
- 1366      00000000 
- 1367 0014 00040000 		.word	1024
- 1368 0018 31000000 		.word	49
- 1369 001c 00000000 		.space	8
- 1369      00000000 
- 1370              		.section	.rodata.SerialCommTask_attributes,"a"
- 1371              		.align	2
- 1372              		.set	.LANCHOR10,. + 0
- 1375              	SerialCommTask_attributes:
- 1376 0000 00000000 		.word	.LC5
- 1377 0004 00000000 		.space	16
- 1377      00000000 
- 1377      00000000 
- 1377      00000000 
- 1378 0014 00040000 		.word	1024
- 1379 0018 31000000 		.word	49
- 1380 001c 00000000 		.space	8
- 1380      00000000 
- 1381              		.section	.rodata.ServoControlTas_attributes,"a"
- 1382              		.align	2
- 1383              		.set	.LANCHOR6,. + 0
- 1386              	ServoControlTas_attributes:
- 1387 0000 20000000 		.word	.LC7
- 1388 0004 00000000 		.space	16
- 1388      00000000 
- 1388      00000000 
- 1388      00000000 
- 1389 0014 00040000 		.word	1024
- 1390 0018 31000000 		.word	49
- 1391 001c 00000000 		.space	8
- 1391      00000000 
- 1392              		.section	.rodata.defaultTask_attributes,"a"
- 1393              		.align	2
- 1394              		.set	.LANCHOR2,. + 0
- 1397              	defaultTask_attributes:
- 1398 0000 40000000 		.word	.LC9
-ARM GAS  /tmp/ccE24TNm.s 			page 36
+ 891 0060 0794     		str	r4, [sp, #28]
+ 251:Core/Src/freertos.c ****         AHRS_GetQuaternion(quat);
+ 892              		.loc 1 251 9 is_stmt 1 discriminator 1 view .LVU185
+ 893 0062 2346     		mov	r3, r4
+ 894 0064 2246     		mov	r2, r4
+ 895 0066 2146     		mov	r1, r4
+ 896 0068 2046     		mov	r0, r4
+ 897 006a FFF7FEFF 		bl	SendAttitudeToHost
+ 898              	.LVL102:
+ 252:Core/Src/freertos.c ****         
+ 899              		.loc 1 252 9 discriminator 1 view .LVU186
+ 900 006e 06A8     		add	r0, sp, #24
+ 901 0070 FFF7FEFF 		bl	AHRS_GetQuaternion
+ 902              	.LVL103:
+ 256:Core/Src/freertos.c ****         vTaskDelay(pdMS_TO_TICKS(10)); 
+ 903              		.loc 1 256 9 discriminator 1 view .LVU187
+ 904 0074 2346     		mov	r3, r4
+ 905 0076 4FF0FF32 		mov	r2, #-1
+ 906 007a 06A9     		add	r1, sp, #24
+ 907 007c 0548     		ldr	r0, .L46+8
+ 908 007e 0068     		ldr	r0, [r0]
+ 909 0080 FFF7FEFF 		bl	xQueueGenericSend
+ 910              	.LVL104:
+ 257:Core/Src/freertos.c ****   }
+ 911              		.loc 1 257 9 discriminator 1 view .LVU188
+ 912 0084 0A20     		movs	r0, #10
+ 913 0086 FFF7FEFF 		bl	vTaskDelay
+ 914              	.LVL105:
+ 915              	.LBE6:
+ 232:Core/Src/freertos.c ****   {
+ 916              		.loc 1 232 8 discriminator 1 view .LVU189
+ 917 008a BBE7     		b	.L44
+ 918              	.L47:
+ 919              		.align	2
+ 920              	.L46:
+ 921 008c 00000000 		.word	.LC0
+ 922 0090 00000000 		.word	huart1
+ 923 0094 00000000 		.word	.LANCHOR1
+ 924              		.cfi_endproc
+ 925              	.LFE153:
+ 927              		.section	.text.UART_ProcessCommand,"ax",%progbits
+ 928              		.align	1
+ 929              		.global	UART_ProcessCommand
+ 930              		.syntax unified
+ 931              		.thumb
+ 932              		.thumb_func
+ 933              		.fpu fpv5-d16
+ 935              	UART_ProcessCommand:
+ 936              	.LVL106:
+ 937              	.LFB160:
+ 403:Core/Src/freertos.c ****     if (buffer[0] == 0xAA && buffer[2] == 0x55) {  // 判断头和尾标志
+ 938              		.loc 1 403 43 view -0
+ 939              		.cfi_startproc
+ 940              		@ args = 0, pretend = 0, frame = 8
+ 941              		@ frame_needed = 0, uses_anonymous_args = 0
+ 404:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
+ 942              		.loc 1 404 5 view .LVU191
+ARM GAS  /tmp/ccZG0cTT.s 			page 27
 
 
- 1399 0004 00000000 		.space	16
- 1399      00000000 
- 1399      00000000 
- 1399      00000000 
- 1400 0014 00020000 		.word	512
- 1401 0018 18000000 		.word	24
- 1402 001c 00000000 		.space	8
- 1402      00000000 
- 1403              		.text
- 1404              	.Letext0:
- 1405              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
- 1406              		.file 3 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
- 1407              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h743xx.h"
- 1408              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
- 1409              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
- 1410              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h"
- 1411              		.file 8 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h"
- 1412              		.file 9 "Middlewares/Third_Party/FreeRTOS/Source/include/queue.h"
- 1413              		.file 10 "Core/Inc/MPU9250.h"
- 1414              		.file 11 "Core/Inc/robocontrol.h"
- 1415              		.file 12 "/usr/include/newlib/stdio.h"
- 1416              		.file 13 "Core/Inc/AHRS.h"
- 1417              		.file 14 "Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
- 1418              		.file 15 "Core/Inc/servo_control.h"
-ARM GAS  /tmp/ccE24TNm.s 			page 37
+ 404:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
+ 943              		.loc 1 404 15 is_stmt 0 view .LVU192
+ 944 0000 0378     		ldrb	r3, [r0]	@ zero_extendqisi2
+ 404:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
+ 945              		.loc 1 404 8 view .LVU193
+ 946 0002 AA2B     		cmp	r3, #170
+ 947 0004 00D0     		beq	.L62
+ 948              	.L59:
+ 949 0006 7047     		bx	lr
+ 950              	.L62:
+ 404:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
+ 951              		.loc 1 404 36 discriminator 1 view .LVU194
+ 952 0008 8378     		ldrb	r3, [r0, #2]	@ zero_extendqisi2
+ 404:Core/Src/freertos.c ****         uint8_t command = buffer[1];  // 提取指令类型
+ 953              		.loc 1 404 27 discriminator 1 view .LVU195
+ 954 000a 552B     		cmp	r3, #85
+ 955 000c FBD1     		bne	.L59
+ 403:Core/Src/freertos.c ****     if (buffer[0] == 0xAA && buffer[2] == 0x55) {  // 判断头和尾标志
+ 956              		.loc 1 403 43 view .LVU196
+ 957 000e 00B5     		push	{lr}
+ 958              	.LCFI21:
+ 959              		.cfi_def_cfa_offset 4
+ 960              		.cfi_offset 14, -4
+ 961 0010 83B0     		sub	sp, sp, #12
+ 962              	.LCFI22:
+ 963              		.cfi_def_cfa_offset 16
+ 964              	.LBB7:
+ 405:Core/Src/freertos.c ****         int16_t quat[4];
+ 965              		.loc 1 405 9 is_stmt 1 view .LVU197
+ 405:Core/Src/freertos.c ****         int16_t quat[4];
+ 966              		.loc 1 405 17 is_stmt 0 view .LVU198
+ 967 0012 4378     		ldrb	r3, [r0, #1]	@ zero_extendqisi2
+ 968              	.LVL107:
+ 406:Core/Src/freertos.c ****         switch (command) {
+ 969              		.loc 1 406 9 is_stmt 1 view .LVU199
+ 407:Core/Src/freertos.c ****             case 0x01:  // 前进
+ 970              		.loc 1 407 9 view .LVU200
+ 971 0014 013B     		subs	r3, r3, #1
+ 972              	.LVL108:
+ 407:Core/Src/freertos.c ****             case 0x01:  // 前进
+ 973              		.loc 1 407 9 is_stmt 0 view .LVU201
+ 974 0016 052B     		cmp	r3, #5
+ 975 0018 06D8     		bhi	.L48
+ 976 001a DFE803F0 		tbb	[pc, r3]
+ 977              	.L52:
+ 978 001e 03       		.byte	(.L57-.L52)/2
+ 979 001f 08       		.byte	(.L56-.L52)/2
+ 980 0020 0B       		.byte	(.L55-.L52)/2
+ 981 0021 0E       		.byte	(.L54-.L52)/2
+ 982 0022 11       		.byte	(.L53-.L52)/2
+ 983 0023 14       		.byte	(.L51-.L52)/2
+ 984              		.p2align 1
+ 985              	.L57:
+ 409:Core/Src/freertos.c ****                 break;
+ 986              		.loc 1 409 17 is_stmt 1 view .LVU202
+ 987 0024 FFF7FEFF 		bl	Move_Forward
+ 988              	.LVL109:
+ARM GAS  /tmp/ccZG0cTT.s 			page 28
+
+
+ 410:Core/Src/freertos.c ****             case 0x02:  // 后退
+ 989              		.loc 1 410 17 view .LVU203
+ 990              	.L48:
+ 991              	.LBE7:
+ 432:Core/Src/freertos.c **** 
+ 992              		.loc 1 432 1 is_stmt 0 view .LVU204
+ 993 0028 03B0     		add	sp, sp, #12
+ 994              	.LCFI23:
+ 995              		.cfi_remember_state
+ 996              		.cfi_def_cfa_offset 4
+ 997              		@ sp needed
+ 998 002a 5DF804FB 		ldr	pc, [sp], #4
+ 999              	.LVL110:
+ 1000              	.L56:
+ 1001              	.LCFI24:
+ 1002              		.cfi_restore_state
+ 1003              	.LBB8:
+ 412:Core/Src/freertos.c ****                 break;
+ 1004              		.loc 1 412 17 is_stmt 1 view .LVU205
+ 1005 002e FFF7FEFF 		bl	Move_Backward
+ 1006              	.LVL111:
+ 413:Core/Src/freertos.c ****             case 0x03:  // 左转
+ 1007              		.loc 1 413 17 view .LVU206
+ 1008 0032 F9E7     		b	.L48
+ 1009              	.LVL112:
+ 1010              	.L55:
+ 415:Core/Src/freertos.c ****                 break;
+ 1011              		.loc 1 415 17 view .LVU207
+ 1012 0034 FFF7FEFF 		bl	Turn_Left
+ 1013              	.LVL113:
+ 416:Core/Src/freertos.c ****             case 0x04:  // 右转
+ 1014              		.loc 1 416 17 view .LVU208
+ 1015 0038 F6E7     		b	.L48
+ 1016              	.LVL114:
+ 1017              	.L54:
+ 418:Core/Src/freertos.c ****                 break;
+ 1018              		.loc 1 418 17 view .LVU209
+ 1019 003a FFF7FEFF 		bl	Turn_Right
+ 1020              	.LVL115:
+ 419:Core/Src/freertos.c ****             case 0x05:  // 停止
+ 1021              		.loc 1 419 17 view .LVU210
+ 1022 003e F3E7     		b	.L48
+ 1023              	.LVL116:
+ 1024              	.L53:
+ 421:Core/Src/freertos.c ****                 break;
+ 1025              		.loc 1 421 17 view .LVU211
+ 1026 0040 FFF7FEFF 		bl	Stop
+ 1027              	.LVL117:
+ 422:Core/Src/freertos.c ****             case 0x06:  // 请求姿态数据
+ 1028              		.loc 1 422 17 view .LVU212
+ 1029 0044 F0E7     		b	.L48
+ 1030              	.LVL118:
+ 1031              	.L51:
+ 425:Core/Src/freertos.c ****                 SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态数据给�
+ 1032              		.loc 1 425 17 view .LVU213
+ 1033 0046 6846     		mov	r0, sp
+ 1034              	.LVL119:
+ARM GAS  /tmp/ccZG0cTT.s 			page 29
+
+
+ 425:Core/Src/freertos.c ****                 SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态数据给�
+ 1035              		.loc 1 425 17 is_stmt 0 view .LVU214
+ 1036 0048 FFF7FEFF 		bl	AHRS_GetQuaternion
+ 1037              	.LVL120:
+ 426:Core/Src/freertos.c ****                 break;
+ 1038              		.loc 1 426 17 is_stmt 1 view .LVU215
+ 1039 004c BDF90630 		ldrsh	r3, [sp, #6]
+ 1040 0050 BDF90420 		ldrsh	r2, [sp, #4]
+ 1041 0054 BDF90210 		ldrsh	r1, [sp, #2]
+ 1042 0058 BDF90000 		ldrsh	r0, [sp]
+ 1043 005c FFF7FEFF 		bl	SendAttitudeToHost
+ 1044              	.LVL121:
+ 427:Core/Src/freertos.c ****             default:
+ 1045              		.loc 1 427 17 view .LVU216
+ 1046              	.LBE8:
+ 432:Core/Src/freertos.c **** 
+ 1047              		.loc 1 432 1 is_stmt 0 view .LVU217
+ 1048 0060 E2E7     		b	.L48
+ 1049              		.cfi_endproc
+ 1050              	.LFE160:
+ 1052              		.section	.text.StartSerialCommTask,"ax",%progbits
+ 1053              		.align	1
+ 1054              		.global	StartSerialCommTask
+ 1055              		.syntax unified
+ 1056              		.thumb
+ 1057              		.thumb_func
+ 1058              		.fpu fpv5-d16
+ 1060              	StartSerialCommTask:
+ 1061              	.LFB156:
+ 355:Core/Src/freertos.c ****   /* USER CODE BEGIN StartSerialCommTask */
+ 1062              		.loc 1 355 1 is_stmt 1 view -0
+ 1063              		.cfi_startproc
+ 1064              		@ args = 0, pretend = 0, frame = 272
+ 1065              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1066              	.LVL122:
+ 355:Core/Src/freertos.c ****   /* USER CODE BEGIN StartSerialCommTask */
+ 1067              		.loc 1 355 1 is_stmt 0 view .LVU219
+ 1068 0000 30B5     		push	{r4, r5, lr}
+ 1069              	.LCFI25:
+ 1070              		.cfi_def_cfa_offset 12
+ 1071              		.cfi_offset 4, -12
+ 1072              		.cfi_offset 5, -8
+ 1073              		.cfi_offset 14, -4
+ 1074 0002 CBB0     		sub	sp, sp, #300
+ 1075              	.LCFI26:
+ 1076              		.cfi_def_cfa_offset 312
+ 1077 0004 02E0     		b	.L65
+ 1078              	.LVL123:
+ 1079              	.L67:
+ 1080              	.LBB9:
+ 375:Core/Src/freertos.c ****     }
+ 1081              		.loc 1 375 7 is_stmt 1 view .LVU220
+ 1082 0006 47A8     		add	r0, sp, #284
+ 1083 0008 FFF7FEFF 		bl	UART_ProcessCommand
+ 1084              	.LVL124:
+ 1085              	.LBE9:
+ 359:Core/Src/freertos.c ****   {
+ARM GAS  /tmp/ccZG0cTT.s 			page 30
+
+
+ 1086              		.loc 1 359 8 view .LVU221
+ 1087              	.L65:
+ 357:Core/Src/freertos.c ****   /* Infinite loop */
+ 1088              		.loc 1 357 3 view .LVU222
+ 359:Core/Src/freertos.c ****   {
+ 1089              		.loc 1 359 3 view .LVU223
+ 1090              	.LBB10:
+ 362:Core/Src/freertos.c ****         // 获取加速度、陀螺仪和磁力计原始数据
+ 1091              		.loc 1 362 5 view .LVU224
+ 1092 000c 194C     		ldr	r4, .L68
+ 1093 000e 0023     		movs	r3, #0
+ 1094 0010 A21D     		adds	r2, r4, #6
+ 1095 0012 04F10C01 		add	r1, r4, #12
+ 1096 0016 2046     		mov	r0, r4
+ 1097 0018 FFF7FEFF 		bl	MPU9250_GetData
+ 1098              	.LVL125:
+ 364:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 1099              		.loc 1 364 9 view .LVU225
+ 364:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 1100              		.loc 1 364 40 is_stmt 0 view .LVU226
+ 1101 001c B4F90230 		ldrsh	r3, [r4, #2]
+ 1102              	.LVL126:
+ 364:Core/Src/freertos.c ****         int16_t gx = imuData.gyro[0] , gy = imuData.gyro[1] , gz = imuData.gyro[2] ;
+ 1103              		.loc 1 364 63 view .LVU227
+ 1104 0020 B4F90420 		ldrsh	r2, [r4, #4]
+ 1105              	.LVL127:
+ 365:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 1106              		.loc 1 365 9 is_stmt 1 view .LVU228
+ 365:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 1107              		.loc 1 365 17 is_stmt 0 view .LVU229
+ 1108 0024 B4F90610 		ldrsh	r1, [r4, #6]
+ 1109              	.LVL128:
+ 365:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 1110              		.loc 1 365 40 view .LVU230
+ 1111 0028 B4F90800 		ldrsh	r0, [r4, #8]
+ 1112              	.LVL129:
+ 365:Core/Src/freertos.c ****         int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
+ 1113              		.loc 1 365 63 view .LVU231
+ 1114 002c B4F90A50 		ldrsh	r5, [r4, #10]
+ 1115              	.LVL130:
+ 366:Core/Src/freertos.c ****          // 打印四元数数据
+ 1116              		.loc 1 366 9 is_stmt 1 view .LVU232
+ 368:Core/Src/freertos.c ****         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, 
+ 1117              		.loc 1 368 9 view .LVU233
+ 369:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 1118              		.loc 1 369 9 view .LVU234
+ 369:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 1119              		.loc 1 369 19 is_stmt 0 view .LVU235
+ 1120 0030 0495     		str	r5, [sp, #16]
+ 1121 0032 0390     		str	r0, [sp, #12]
+ 1122 0034 0291     		str	r1, [sp, #8]
+ 1123 0036 0192     		str	r2, [sp, #4]
+ 1124 0038 0093     		str	r3, [sp]
+ 1125 003a B4F90030 		ldrsh	r3, [r4]
+ 1126              	.LVL131:
+ 369:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 1127              		.loc 1 369 19 view .LVU236
+ARM GAS  /tmp/ccZG0cTT.s 			page 31
+
+
+ 1128 003e 0E4A     		ldr	r2, .L68+4
+ 1129              	.LVL132:
+ 369:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 1130              		.loc 1 369 19 view .LVU237
+ 1131 0040 4FF48071 		mov	r1, #256
+ 1132              	.LVL133:
+ 369:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 1133              		.loc 1 369 19 view .LVU238
+ 1134 0044 07A8     		add	r0, sp, #28
+ 1135              	.LVL134:
+ 369:Core/Src/freertos.c ****         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+ 1136              		.loc 1 369 19 view .LVU239
+ 1137 0046 FFF7FEFF 		bl	snprintf
+ 1138              	.LVL135:
+ 370:Core/Src/freertos.c ****         osDelay(1);
+ 1139              		.loc 1 370 9 is_stmt 1 view .LVU240
+ 1140 004a 0C4C     		ldr	r4, .L68+8
+ 1141 004c 4FF0FF33 		mov	r3, #-1
+ 1142 0050 82B2     		uxth	r2, r0
+ 1143 0052 07A9     		add	r1, sp, #28
+ 1144 0054 2046     		mov	r0, r4
+ 1145              	.LVL136:
+ 370:Core/Src/freertos.c ****         osDelay(1);
+ 1146              		.loc 1 370 9 is_stmt 0 view .LVU241
+ 1147 0056 FFF7FEFF 		bl	HAL_UART_Transmit
+ 1148              	.LVL137:
+ 371:Core/Src/freertos.c **** 
+ 1149              		.loc 1 371 9 is_stmt 1 view .LVU242
+ 1150 005a 0120     		movs	r0, #1
+ 1151 005c FFF7FEFF 		bl	osDelay
+ 1152              	.LVL138:
+ 374:Core/Src/freertos.c ****       UART_ProcessCommand(rxBuffer);  // 处理命令
+ 1153              		.loc 1 374 5 view .LVU243
+ 374:Core/Src/freertos.c ****       UART_ProcessCommand(rxBuffer);  // 处理命令
+ 1154              		.loc 1 374 9 is_stmt 0 view .LVU244
+ 1155 0060 4FF0FF33 		mov	r3, #-1
+ 1156 0064 0A22     		movs	r2, #10
+ 1157 0066 47A9     		add	r1, sp, #284
+ 1158 0068 2046     		mov	r0, r4
+ 1159 006a FFF7FEFF 		bl	HAL_UART_Receive
+ 1160              	.LVL139:
+ 374:Core/Src/freertos.c ****       UART_ProcessCommand(rxBuffer);  // 处理命令
+ 1161              		.loc 1 374 8 view .LVU245
+ 1162 006e 0028     		cmp	r0, #0
+ 1163 0070 CCD1     		bne	.L65
+ 1164 0072 C8E7     		b	.L67
+ 1165              	.L69:
+ 1166              		.align	2
+ 1167              	.L68:
+ 1168 0074 00000000 		.word	.LANCHOR0
+ 1169 0078 00000000 		.word	.LC0
+ 1170 007c 00000000 		.word	huart1
+ 1171              	.LBE10:
+ 1172              		.cfi_endproc
+ 1173              	.LFE156:
+ 1175              		.section	.text.SendAttitudeToPC,"ax",%progbits
+ 1176              		.align	1
+ARM GAS  /tmp/ccZG0cTT.s 			page 32
+
+
+ 1177              		.global	SendAttitudeToPC
+ 1178              		.syntax unified
+ 1179              		.thumb
+ 1180              		.thumb_func
+ 1181              		.fpu fpv5-d16
+ 1183              	SendAttitudeToPC:
+ 1184              	.LVL140:
+ 1185              	.LFB162:
+ 456:Core/Src/freertos.c **** 
+ 457:Core/Src/freertos.c **** 
+ 458:Core/Src/freertos.c **** 
+ 459:Core/Src/freertos.c **** void SendAttitudeToPC(int16_t q0, int16_t q1, int16_t q2, int16_t q3) {
+ 1186              		.loc 1 459 71 is_stmt 1 view -0
+ 1187              		.cfi_startproc
+ 1188              		@ args = 0, pretend = 0, frame = 56
+ 1189              		@ frame_needed = 0, uses_anonymous_args = 0
+ 1190              		.loc 1 459 71 is_stmt 0 view .LVU247
+ 1191 0000 00B5     		push	{lr}
+ 1192              	.LCFI27:
+ 1193              		.cfi_def_cfa_offset 4
+ 1194              		.cfi_offset 14, -4
+ 1195 0002 93B0     		sub	sp, sp, #76
+ 1196              	.LCFI28:
+ 1197              		.cfi_def_cfa_offset 80
+ 460:Core/Src/freertos.c ****   char txBuffer[50];  // 传输数据缓存
+ 1198              		.loc 1 460 3 is_stmt 1 view .LVU248
+ 461:Core/Src/freertos.c ****   int len = snprintf(txBuffer, sizeof(txBuffer), "%d,%d,%d,%d\n", q0, q1, q2, q3);
+ 1199              		.loc 1 461 3 view .LVU249
+ 1200              		.loc 1 461 13 is_stmt 0 view .LVU250
+ 1201 0004 0293     		str	r3, [sp, #8]
+ 1202 0006 0192     		str	r2, [sp, #4]
+ 1203 0008 0091     		str	r1, [sp]
+ 1204 000a 0346     		mov	r3, r0
+ 1205              	.LVL141:
+ 1206              		.loc 1 461 13 view .LVU251
+ 1207 000c 074A     		ldr	r2, .L72
+ 1208              	.LVL142:
+ 1209              		.loc 1 461 13 view .LVU252
+ 1210 000e 3221     		movs	r1, #50
+ 1211              	.LVL143:
+ 1212              		.loc 1 461 13 view .LVU253
+ 1213 0010 05A8     		add	r0, sp, #20
+ 1214              	.LVL144:
+ 1215              		.loc 1 461 13 view .LVU254
+ 1216 0012 FFF7FEFF 		bl	snprintf
+ 1217              	.LVL145:
+ 462:Core/Src/freertos.c **** 
+ 463:Core/Src/freertos.c ****   // 通过UART发送姿态数据
+ 464:Core/Src/freertos.c ****   HAL_UART_Transmit(&huart1, (uint8_t*)txBuffer, len, HAL_MAX_DELAY);
+ 1218              		.loc 1 464 3 is_stmt 1 view .LVU255
+ 1219 0016 4FF0FF33 		mov	r3, #-1
+ 1220 001a 82B2     		uxth	r2, r0
+ 1221 001c 05A9     		add	r1, sp, #20
+ 1222 001e 0448     		ldr	r0, .L72+4
+ 1223              	.LVL146:
+ 1224              		.loc 1 464 3 is_stmt 0 view .LVU256
+ 1225 0020 FFF7FEFF 		bl	HAL_UART_Transmit
+ARM GAS  /tmp/ccZG0cTT.s 			page 33
+
+
+ 1226              	.LVL147:
+ 465:Core/Src/freertos.c **** }
+ 1227              		.loc 1 465 1 view .LVU257
+ 1228 0024 13B0     		add	sp, sp, #76
+ 1229              	.LCFI29:
+ 1230              		.cfi_def_cfa_offset 4
+ 1231              		@ sp needed
+ 1232 0026 5DF804FB 		ldr	pc, [sp], #4
+ 1233              	.L73:
+ 1234 002a 00BF     		.align	2
+ 1235              	.L72:
+ 1236 002c 00000000 		.word	.LC4
+ 1237 0030 00000000 		.word	huart1
+ 1238              		.cfi_endproc
+ 1239              	.LFE162:
+ 1241              		.global	SerialCommTask_attributes
+ 1242              		.section	.rodata.str1.4,"aMS",%progbits,1
+ 1243              		.align	2
+ 1244              	.LC5:
+ 1245 0000 53657269 		.ascii	"SerialCommTask\000"
+ 1245      616C436F 
+ 1245      6D6D5461 
+ 1245      736B00
+ 1246              		.global	SerialCommTaskHandle
+ 1247              		.global	GaitControlTask_attributes
+ 1248 000f 00       		.align	2
+ 1249              	.LC6:
+ 1250 0010 47616974 		.ascii	"GaitControlTask\000"
+ 1250      436F6E74 
+ 1250      726F6C54 
+ 1250      61736B00 
+ 1251              		.global	GaitControlTaskHandle
+ 1252              		.global	ServoControlTas_attributes
+ 1253              		.align	2
+ 1254              	.LC7:
+ 1255 0020 53657276 		.ascii	"ServoControlTas\000"
+ 1255      6F436F6E 
+ 1255      74726F6C 
+ 1255      54617300 
+ 1256              		.global	ServoControlTasHandle
+ 1257              		.global	AttitudeTask_attributes
+ 1258              		.align	2
+ 1259              	.LC8:
+ 1260 0030 41747469 		.ascii	"AttitudeTask\000"
+ 1260      74756465 
+ 1260      5461736B 
+ 1260      00
+ 1261              		.global	AttitudeTaskHandle
+ 1262              		.global	defaultTask_attributes
+ 1263 003d 000000   		.align	2
+ 1264              	.LC9:
+ 1265 0040 64656661 		.ascii	"defaultTask\000"
+ 1265      756C7454 
+ 1265      61736B00 
+ 1266              		.global	defaultTaskHandle
+ 1267              		.global	TempData
+ 1268              		.global	GyroData
+ARM GAS  /tmp/ccZG0cTT.s 			page 34
+
+
+ 1269              		.global	MagData
+ 1270              		.global	AccData
+ 1271              		.global	quatQueue
+ 1272              		.global	imuData
+ 1273              		.section	.bss.AccData,"aw",%nobits
+ 1274              		.align	2
+ 1277              	AccData:
+ 1278 0000 00000000 		.space	6
+ 1278      0000
+ 1279              		.section	.bss.AttitudeTaskHandle,"aw",%nobits
+ 1280              		.align	2
+ 1281              		.set	.LANCHOR5,. + 0
+ 1284              	AttitudeTaskHandle:
+ 1285 0000 00000000 		.space	4
+ 1286              		.section	.bss.GaitControlTaskHandle,"aw",%nobits
+ 1287              		.align	2
+ 1288              		.set	.LANCHOR9,. + 0
+ 1291              	GaitControlTaskHandle:
+ 1292 0000 00000000 		.space	4
+ 1293              		.section	.bss.GyroData,"aw",%nobits
+ 1294              		.align	2
+ 1297              	GyroData:
+ 1298 0000 00000000 		.space	6
+ 1298      0000
+ 1299              		.section	.bss.MagData,"aw",%nobits
+ 1300              		.align	2
+ 1303              	MagData:
+ 1304 0000 00000000 		.space	6
+ 1304      0000
+ 1305              		.section	.bss.SerialCommTaskHandle,"aw",%nobits
+ 1306              		.align	2
+ 1307              		.set	.LANCHOR11,. + 0
+ 1310              	SerialCommTaskHandle:
+ 1311 0000 00000000 		.space	4
+ 1312              		.section	.bss.ServoControlTasHandle,"aw",%nobits
+ 1313              		.align	2
+ 1314              		.set	.LANCHOR7,. + 0
+ 1317              	ServoControlTasHandle:
+ 1318 0000 00000000 		.space	4
+ 1319              		.section	.bss.TempData,"aw",%nobits
+ 1320              		.align	2
+ 1323              	TempData:
+ 1324 0000 00000000 		.space	4
+ 1325              		.section	.bss.defaultTaskHandle,"aw",%nobits
+ 1326              		.align	2
+ 1327              		.set	.LANCHOR3,. + 0
+ 1330              	defaultTaskHandle:
+ 1331 0000 00000000 		.space	4
+ 1332              		.section	.bss.imuData,"aw",%nobits
+ 1333              		.align	2
+ 1334              		.set	.LANCHOR0,. + 0
+ 1337              	imuData:
+ 1338 0000 00000000 		.space	24
+ 1338      00000000 
+ 1338      00000000 
+ 1338      00000000 
+ 1338      00000000 
+ARM GAS  /tmp/ccZG0cTT.s 			page 35
+
+
+ 1339              		.section	.bss.quatQueue,"aw",%nobits
+ 1340              		.align	2
+ 1341              		.set	.LANCHOR1,. + 0
+ 1344              	quatQueue:
+ 1345 0000 00000000 		.space	4
+ 1346              		.section	.rodata.AttitudeTask_attributes,"a"
+ 1347              		.align	2
+ 1348              		.set	.LANCHOR4,. + 0
+ 1351              	AttitudeTask_attributes:
+ 1352 0000 30000000 		.word	.LC8
+ 1353 0004 00000000 		.space	16
+ 1353      00000000 
+ 1353      00000000 
+ 1353      00000000 
+ 1354 0014 00040000 		.word	1024
+ 1355 0018 33000000 		.word	51
+ 1356 001c 00000000 		.space	8
+ 1356      00000000 
+ 1357              		.section	.rodata.GaitControlTask_attributes,"a"
+ 1358              		.align	2
+ 1359              		.set	.LANCHOR8,. + 0
+ 1362              	GaitControlTask_attributes:
+ 1363 0000 10000000 		.word	.LC6
+ 1364 0004 00000000 		.space	16
+ 1364      00000000 
+ 1364      00000000 
+ 1364      00000000 
+ 1365 0014 00040000 		.word	1024
+ 1366 0018 31000000 		.word	49
+ 1367 001c 00000000 		.space	8
+ 1367      00000000 
+ 1368              		.section	.rodata.SerialCommTask_attributes,"a"
+ 1369              		.align	2
+ 1370              		.set	.LANCHOR10,. + 0
+ 1373              	SerialCommTask_attributes:
+ 1374 0000 00000000 		.word	.LC5
+ 1375 0004 00000000 		.space	16
+ 1375      00000000 
+ 1375      00000000 
+ 1375      00000000 
+ 1376 0014 00040000 		.word	1024
+ 1377 0018 31000000 		.word	49
+ 1378 001c 00000000 		.space	8
+ 1378      00000000 
+ 1379              		.section	.rodata.ServoControlTas_attributes,"a"
+ 1380              		.align	2
+ 1381              		.set	.LANCHOR6,. + 0
+ 1384              	ServoControlTas_attributes:
+ 1385 0000 20000000 		.word	.LC7
+ 1386 0004 00000000 		.space	16
+ 1386      00000000 
+ 1386      00000000 
+ 1386      00000000 
+ 1387 0014 00040000 		.word	1024
+ 1388 0018 31000000 		.word	49
+ 1389 001c 00000000 		.space	8
+ 1389      00000000 
+ARM GAS  /tmp/ccZG0cTT.s 			page 36
+
+
+ 1390              		.section	.rodata.defaultTask_attributes,"a"
+ 1391              		.align	2
+ 1392              		.set	.LANCHOR2,. + 0
+ 1395              	defaultTask_attributes:
+ 1396 0000 40000000 		.word	.LC9
+ 1397 0004 00000000 		.space	16
+ 1397      00000000 
+ 1397      00000000 
+ 1397      00000000 
+ 1398 0014 00020000 		.word	512
+ 1399 0018 18000000 		.word	24
+ 1400 001c 00000000 		.space	8
+ 1400      00000000 
+ 1401              		.text
+ 1402              	.Letext0:
+ 1403              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 1404              		.file 3 "Middlewares/Third_Party/FreeRTOS/Source/portable/GCC/ARM_CM4F/portmacro.h"
+ 1405              		.file 4 "Drivers/CMSIS/Device/ST/STM32H7xx/Include/stm32h743xx.h"
+ 1406              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_def.h"
+ 1407              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
+ 1408              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h"
+ 1409              		.file 8 "Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h"
+ 1410              		.file 9 "Middlewares/Third_Party/FreeRTOS/Source/include/queue.h"
+ 1411              		.file 10 "Core/Inc/servo_control.h"
+ 1412              		.file 11 "Core/Inc/MPU9250.h"
+ 1413              		.file 12 "Core/Inc/robocontrol.h"
+ 1414              		.file 13 "/usr/include/newlib/stdio.h"
+ 1415              		.file 14 "Core/Inc/AHRS.h"
+ 1416              		.file 15 "Middlewares/Third_Party/FreeRTOS/Source/include/task.h"
+ARM GAS  /tmp/ccZG0cTT.s 			page 37
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 freertos.c
-     /tmp/ccE24TNm.s:17     .rodata.StartDefaultTask.str1.4:0000000000000000 $d
-     /tmp/ccE24TNm.s:21     .text.StartDefaultTask:0000000000000000 $t
-     /tmp/ccE24TNm.s:29     .text.StartDefaultTask:0000000000000000 StartDefaultTask
-     /tmp/ccE24TNm.s:118    .text.StartDefaultTask:0000000000000058 $d
-     /tmp/ccE24TNm.s:125    .text.StartServoControlTask:0000000000000000 $t
-     /tmp/ccE24TNm.s:132    .text.StartServoControlTask:0000000000000000 StartServoControlTask
-     /tmp/ccE24TNm.s:220    .text.StartServoControlTask:0000000000000058 $d
-     /tmp/ccE24TNm.s:227    .text.StartGaitControlTask:0000000000000000 $t
-     /tmp/ccE24TNm.s:234    .text.StartGaitControlTask:0000000000000000 StartGaitControlTask
-     /tmp/ccE24TNm.s:340    .text.StartGaitControlTask:0000000000000074 $d
-     /tmp/ccE24TNm.s:345    .text.StartGaitControlTask:0000000000000088 $t
-     /tmp/ccE24TNm.s:373    .text.StartGaitControlTask:00000000000000a0 $d
-     /tmp/ccE24TNm.s:382    .text.MX_FREERTOS_Init:0000000000000000 $t
-     /tmp/ccE24TNm.s:389    .text.MX_FREERTOS_Init:0000000000000000 MX_FREERTOS_Init
-     /tmp/ccE24TNm.s:471    .text.MX_FREERTOS_Init:0000000000000060 $d
-     /tmp/ccE24TNm.s:807    .text.StartAttitudeTask:0000000000000000 StartAttitudeTask
-     /tmp/ccE24TNm.s:1062   .text.StartSerialCommTask:0000000000000000 StartSerialCommTask
-     /tmp/ccE24TNm.s:491    .rodata.print_accel_data.str1.4:0000000000000000 $d
-     /tmp/ccE24TNm.s:495    .text.print_accel_data:0000000000000000 $t
-     /tmp/ccE24TNm.s:502    .text.print_accel_data:0000000000000000 print_accel_data
-     /tmp/ccE24TNm.s:552    .text.print_accel_data:0000000000000034 $d
-     /tmp/ccE24TNm.s:558    .rodata.print_mag_data.str1.4:0000000000000000 $d
-     /tmp/ccE24TNm.s:562    .text.print_mag_data:0000000000000000 $t
-     /tmp/ccE24TNm.s:569    .text.print_mag_data:0000000000000000 print_mag_data
-     /tmp/ccE24TNm.s:619    .text.print_mag_data:0000000000000034 $d
-     /tmp/ccE24TNm.s:625    .rodata.print_gyro_data.str1.4:0000000000000000 $d
-     /tmp/ccE24TNm.s:629    .text.print_gyro_data:0000000000000000 $t
-     /tmp/ccE24TNm.s:636    .text.print_gyro_data:0000000000000000 print_gyro_data
-     /tmp/ccE24TNm.s:686    .text.print_gyro_data:0000000000000034 $d
-     /tmp/ccE24TNm.s:692    .rodata.SendAttitudeToHost.str1.4:0000000000000000 $d
-     /tmp/ccE24TNm.s:696    .text.SendAttitudeToHost:0000000000000000 $t
-     /tmp/ccE24TNm.s:703    .text.SendAttitudeToHost:0000000000000000 SendAttitudeToHost
-     /tmp/ccE24TNm.s:794    .text.SendAttitudeToHost:0000000000000068 $d
-     /tmp/ccE24TNm.s:800    .text.StartAttitudeTask:0000000000000000 $t
-     /tmp/ccE24TNm.s:923    .text.StartAttitudeTask:0000000000000084 $d
-     /tmp/ccE24TNm.s:930    .text.UART_ProcessCommand:0000000000000000 $t
-     /tmp/ccE24TNm.s:937    .text.UART_ProcessCommand:0000000000000000 UART_ProcessCommand
-     /tmp/ccE24TNm.s:980    .text.UART_ProcessCommand:000000000000001e $d
-     /tmp/ccE24TNm.s:986    .text.UART_ProcessCommand:0000000000000024 $t
-     /tmp/ccE24TNm.s:1055   .text.StartSerialCommTask:0000000000000000 $t
-     /tmp/ccE24TNm.s:1170   .text.StartSerialCommTask:0000000000000074 $d
-     /tmp/ccE24TNm.s:1178   .text.SendAttitudeToPC:0000000000000000 $t
-     /tmp/ccE24TNm.s:1185   .text.SendAttitudeToPC:0000000000000000 SendAttitudeToPC
-     /tmp/ccE24TNm.s:1238   .text.SendAttitudeToPC:000000000000002c $d
-     /tmp/ccE24TNm.s:1375   .rodata.SerialCommTask_attributes:0000000000000000 SerialCommTask_attributes
-     /tmp/ccE24TNm.s:1245   .rodata.str1.4:0000000000000000 $d
-     /tmp/ccE24TNm.s:1312   .bss.SerialCommTaskHandle:0000000000000000 SerialCommTaskHandle
-     /tmp/ccE24TNm.s:1364   .rodata.GaitControlTask_attributes:0000000000000000 GaitControlTask_attributes
-     /tmp/ccE24TNm.s:1293   .bss.GaitControlTaskHandle:0000000000000000 GaitControlTaskHandle
-     /tmp/ccE24TNm.s:1386   .rodata.ServoControlTas_attributes:0000000000000000 ServoControlTas_attributes
-     /tmp/ccE24TNm.s:1319   .bss.ServoControlTasHandle:0000000000000000 ServoControlTasHandle
-     /tmp/ccE24TNm.s:1353   .rodata.AttitudeTask_attributes:0000000000000000 AttitudeTask_attributes
-     /tmp/ccE24TNm.s:1286   .bss.AttitudeTaskHandle:0000000000000000 AttitudeTaskHandle
-     /tmp/ccE24TNm.s:1397   .rodata.defaultTask_attributes:0000000000000000 defaultTask_attributes
-     /tmp/ccE24TNm.s:1332   .bss.defaultTaskHandle:0000000000000000 defaultTaskHandle
-ARM GAS  /tmp/ccE24TNm.s 			page 38
+     /tmp/ccZG0cTT.s:17     .rodata.StartDefaultTask.str1.4:0000000000000000 $d
+     /tmp/ccZG0cTT.s:21     .text.StartDefaultTask:0000000000000000 $t
+     /tmp/ccZG0cTT.s:29     .text.StartDefaultTask:0000000000000000 StartDefaultTask
+     /tmp/ccZG0cTT.s:109    .text.StartDefaultTask:000000000000004c $d
+     /tmp/ccZG0cTT.s:115    .text.StartServoControlTask:0000000000000000 $t
+     /tmp/ccZG0cTT.s:122    .text.StartServoControlTask:0000000000000000 StartServoControlTask
+     /tmp/ccZG0cTT.s:221    .text.StartServoControlTask:0000000000000074 $d
+     /tmp/ccZG0cTT.s:227    .text.StartGaitControlTask:0000000000000000 $t
+     /tmp/ccZG0cTT.s:234    .text.StartGaitControlTask:0000000000000000 StartGaitControlTask
+     /tmp/ccZG0cTT.s:331    .text.StartGaitControlTask:0000000000000064 $d
+     /tmp/ccZG0cTT.s:336    .text.StartGaitControlTask:0000000000000078 $t
+     /tmp/ccZG0cTT.s:364    .text.StartGaitControlTask:0000000000000090 $d
+     /tmp/ccZG0cTT.s:372    .text.MX_FREERTOS_Init:0000000000000000 $t
+     /tmp/ccZG0cTT.s:379    .text.MX_FREERTOS_Init:0000000000000000 MX_FREERTOS_Init
+     /tmp/ccZG0cTT.s:461    .text.MX_FREERTOS_Init:0000000000000060 $d
+     /tmp/ccZG0cTT.s:797    .text.StartAttitudeTask:0000000000000000 StartAttitudeTask
+     /tmp/ccZG0cTT.s:1060   .text.StartSerialCommTask:0000000000000000 StartSerialCommTask
+     /tmp/ccZG0cTT.s:481    .rodata.print_accel_data.str1.4:0000000000000000 $d
+     /tmp/ccZG0cTT.s:485    .text.print_accel_data:0000000000000000 $t
+     /tmp/ccZG0cTT.s:492    .text.print_accel_data:0000000000000000 print_accel_data
+     /tmp/ccZG0cTT.s:542    .text.print_accel_data:0000000000000034 $d
+     /tmp/ccZG0cTT.s:548    .rodata.print_mag_data.str1.4:0000000000000000 $d
+     /tmp/ccZG0cTT.s:552    .text.print_mag_data:0000000000000000 $t
+     /tmp/ccZG0cTT.s:559    .text.print_mag_data:0000000000000000 print_mag_data
+     /tmp/ccZG0cTT.s:609    .text.print_mag_data:0000000000000034 $d
+     /tmp/ccZG0cTT.s:615    .rodata.print_gyro_data.str1.4:0000000000000000 $d
+     /tmp/ccZG0cTT.s:619    .text.print_gyro_data:0000000000000000 $t
+     /tmp/ccZG0cTT.s:626    .text.print_gyro_data:0000000000000000 print_gyro_data
+     /tmp/ccZG0cTT.s:676    .text.print_gyro_data:0000000000000034 $d
+     /tmp/ccZG0cTT.s:682    .rodata.SendAttitudeToHost.str1.4:0000000000000000 $d
+     /tmp/ccZG0cTT.s:686    .text.SendAttitudeToHost:0000000000000000 $t
+     /tmp/ccZG0cTT.s:693    .text.SendAttitudeToHost:0000000000000000 SendAttitudeToHost
+     /tmp/ccZG0cTT.s:784    .text.SendAttitudeToHost:0000000000000068 $d
+     /tmp/ccZG0cTT.s:790    .text.StartAttitudeTask:0000000000000000 $t
+     /tmp/ccZG0cTT.s:921    .text.StartAttitudeTask:000000000000008c $d
+     /tmp/ccZG0cTT.s:928    .text.UART_ProcessCommand:0000000000000000 $t
+     /tmp/ccZG0cTT.s:935    .text.UART_ProcessCommand:0000000000000000 UART_ProcessCommand
+     /tmp/ccZG0cTT.s:978    .text.UART_ProcessCommand:000000000000001e $d
+     /tmp/ccZG0cTT.s:984    .text.UART_ProcessCommand:0000000000000024 $t
+     /tmp/ccZG0cTT.s:1053   .text.StartSerialCommTask:0000000000000000 $t
+     /tmp/ccZG0cTT.s:1168   .text.StartSerialCommTask:0000000000000074 $d
+     /tmp/ccZG0cTT.s:1176   .text.SendAttitudeToPC:0000000000000000 $t
+     /tmp/ccZG0cTT.s:1183   .text.SendAttitudeToPC:0000000000000000 SendAttitudeToPC
+     /tmp/ccZG0cTT.s:1236   .text.SendAttitudeToPC:000000000000002c $d
+     /tmp/ccZG0cTT.s:1373   .rodata.SerialCommTask_attributes:0000000000000000 SerialCommTask_attributes
+     /tmp/ccZG0cTT.s:1243   .rodata.str1.4:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1310   .bss.SerialCommTaskHandle:0000000000000000 SerialCommTaskHandle
+     /tmp/ccZG0cTT.s:1362   .rodata.GaitControlTask_attributes:0000000000000000 GaitControlTask_attributes
+     /tmp/ccZG0cTT.s:1291   .bss.GaitControlTaskHandle:0000000000000000 GaitControlTaskHandle
+     /tmp/ccZG0cTT.s:1384   .rodata.ServoControlTas_attributes:0000000000000000 ServoControlTas_attributes
+     /tmp/ccZG0cTT.s:1317   .bss.ServoControlTasHandle:0000000000000000 ServoControlTasHandle
+     /tmp/ccZG0cTT.s:1351   .rodata.AttitudeTask_attributes:0000000000000000 AttitudeTask_attributes
+     /tmp/ccZG0cTT.s:1284   .bss.AttitudeTaskHandle:0000000000000000 AttitudeTaskHandle
+     /tmp/ccZG0cTT.s:1395   .rodata.defaultTask_attributes:0000000000000000 defaultTask_attributes
+     /tmp/ccZG0cTT.s:1330   .bss.defaultTaskHandle:0000000000000000 defaultTaskHandle
+ARM GAS  /tmp/ccZG0cTT.s 			page 38
 
 
-     /tmp/ccE24TNm.s:1325   .bss.TempData:0000000000000000 TempData
-     /tmp/ccE24TNm.s:1299   .bss.GyroData:0000000000000000 GyroData
-     /tmp/ccE24TNm.s:1305   .bss.MagData:0000000000000000 MagData
-     /tmp/ccE24TNm.s:1279   .bss.AccData:0000000000000000 AccData
-     /tmp/ccE24TNm.s:1346   .bss.quatQueue:0000000000000000 quatQueue
-     /tmp/ccE24TNm.s:1339   .bss.imuData:0000000000000000 imuData
-     /tmp/ccE24TNm.s:1276   .bss.AccData:0000000000000000 $d
-     /tmp/ccE24TNm.s:1282   .bss.AttitudeTaskHandle:0000000000000000 $d
-     /tmp/ccE24TNm.s:1289   .bss.GaitControlTaskHandle:0000000000000000 $d
-     /tmp/ccE24TNm.s:1296   .bss.GyroData:0000000000000000 $d
-     /tmp/ccE24TNm.s:1302   .bss.MagData:0000000000000000 $d
-     /tmp/ccE24TNm.s:1308   .bss.SerialCommTaskHandle:0000000000000000 $d
-     /tmp/ccE24TNm.s:1315   .bss.ServoControlTasHandle:0000000000000000 $d
-     /tmp/ccE24TNm.s:1322   .bss.TempData:0000000000000000 $d
-     /tmp/ccE24TNm.s:1328   .bss.defaultTaskHandle:0000000000000000 $d
-     /tmp/ccE24TNm.s:1335   .bss.imuData:0000000000000000 $d
-     /tmp/ccE24TNm.s:1342   .bss.quatQueue:0000000000000000 $d
-     /tmp/ccE24TNm.s:1349   .rodata.AttitudeTask_attributes:0000000000000000 $d
-     /tmp/ccE24TNm.s:1360   .rodata.GaitControlTask_attributes:0000000000000000 $d
-     /tmp/ccE24TNm.s:1371   .rodata.SerialCommTask_attributes:0000000000000000 $d
-     /tmp/ccE24TNm.s:1382   .rodata.ServoControlTas_attributes:0000000000000000 $d
-     /tmp/ccE24TNm.s:1393   .rodata.defaultTask_attributes:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1323   .bss.TempData:0000000000000000 TempData
+     /tmp/ccZG0cTT.s:1297   .bss.GyroData:0000000000000000 GyroData
+     /tmp/ccZG0cTT.s:1303   .bss.MagData:0000000000000000 MagData
+     /tmp/ccZG0cTT.s:1277   .bss.AccData:0000000000000000 AccData
+     /tmp/ccZG0cTT.s:1344   .bss.quatQueue:0000000000000000 quatQueue
+     /tmp/ccZG0cTT.s:1337   .bss.imuData:0000000000000000 imuData
+     /tmp/ccZG0cTT.s:1274   .bss.AccData:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1280   .bss.AttitudeTaskHandle:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1287   .bss.GaitControlTaskHandle:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1294   .bss.GyroData:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1300   .bss.MagData:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1306   .bss.SerialCommTaskHandle:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1313   .bss.ServoControlTasHandle:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1320   .bss.TempData:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1326   .bss.defaultTaskHandle:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1333   .bss.imuData:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1340   .bss.quatQueue:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1347   .rodata.AttitudeTask_attributes:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1358   .rodata.GaitControlTask_attributes:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1369   .rodata.SerialCommTask_attributes:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1380   .rodata.ServoControlTas_attributes:0000000000000000 $d
+     /tmp/ccZG0cTT.s:1391   .rodata.defaultTask_attributes:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 MPU9250_GetData
 snprintf
-HAL_UART_Transmit
 osDelay
-huart1
+Set_Servo_Angle
 Gait_Forward
 vTaskDelay
 Gait_Backward
@@ -2228,6 +2232,10 @@ Servo_Init
 AHRS_Init
 xQueueGenericCreate
 osThreadNew
+HAL_UART_Transmit
+huart1
+HAL_UART_Transmit_DMA
+HAL_UART_Transmit_IT
 AHRS_Update
 AHRS_GetQuaternion
 xQueueGenericSend
