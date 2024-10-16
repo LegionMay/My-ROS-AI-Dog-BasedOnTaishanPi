@@ -1,4 +1,4 @@
-ARM GAS  /tmp/cctfyu8u.s 			page 1
+ARM GAS  /tmp/ccwVx3D8.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -16,15 +16,15 @@ ARM GAS  /tmp/cctfyu8u.s 			page 1
   13              		.text
   14              	.Ltext0:
   15              		.cfi_sections	.debug_frame
-  16              		.section	.text.compare_int16,"ax",%progbits
+  16              		.section	.text.compare_float,"ax",%progbits
   17              		.align	1
-  18              		.global	compare_int16
+  18              		.global	compare_float
   19              		.arch armv7e-m
   20              		.syntax unified
   21              		.thumb
   22              		.thumb_func
   23              		.fpu fpv5-d16
-  25              	compare_int16:
+  25              	compare_float:
   26              	.LVL0:
   27              	.LFB148:
   28              		.file 1 "Core/Src/AHRS.c"
@@ -35,1360 +35,1404 @@ ARM GAS  /tmp/cctfyu8u.s 			page 1
    5:Core/Src/AHRS.c **** #include <stdint.h>
    6:Core/Src/AHRS.c **** #include <stdlib.h>
    7:Core/Src/AHRS.c **** 
-   8:Core/Src/AHRS.c **** int16_t q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;
-   9:Core/Src/AHRS.c **** int16_t w1 = 0.0f, w2 = 0.0f, w3 = 0.0f;
+   8:Core/Src/AHRS.c **** float q0 = 1.0f, q1 = 0.0f, q2 = 0.0f, q3 = 0.0f;
+   9:Core/Src/AHRS.c **** float w1 = 0.0f, w2 = 0.0f, w3 = 0.0f;
   10:Core/Src/AHRS.c **** static uint32_t lastUpdate = 0, now = 0;
   11:Core/Src/AHRS.c **** 
-  12:Core/Src/AHRS.c **** int16_t invSqrt(int16_t x) { return 1.0f / sqrtf(x); }
+  12:Core/Src/AHRS.c **** float invSqrt(float x) { return 1.0f / sqrtf(x); }
   13:Core/Src/AHRS.c **** 
-  14:Core/Src/AHRS.c **** void AHRS_Init() { MPU9250_Init(); }
-  15:Core/Src/AHRS.c **** 
-  16:Core/Src/AHRS.c **** void AHRS_GetQuaternion(int16_t* quat) {
-  17:Core/Src/AHRS.c ****     quat[0] = q0;
-  18:Core/Src/AHRS.c ****     quat[1] = q1;
-  19:Core/Src/AHRS.c ****     quat[2] = q2;
-  20:Core/Src/AHRS.c ****     quat[3] = q3;
-  21:Core/Src/AHRS.c **** }
-  22:Core/Src/AHRS.c **** 
-  23:Core/Src/AHRS.c **** void AHRS_Update() {
-  24:Core/Src/AHRS.c ****     IMUData imuData;
-  25:Core/Src/AHRS.c ****     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);
-  26:Core/Src/AHRS.c **** 
-  27:Core/Src/AHRS.c ****     // 获取加速度、陀螺仪和磁力计原始数据
-  28:Core/Src/AHRS.c ****     int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
-  30:Core/Src/AHRS.c ****     int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
-ARM GAS  /tmp/cctfyu8u.s 			page 2
+  14:Core/Src/AHRS.c **** void AHRS_Init() {
+  15:Core/Src/AHRS.c ****     MPU9250_Init();
+  16:Core/Src/AHRS.c ****     MPU9250_SetAccelRange(ACCEL_RANGE_4G);    // 设置加速度计量程为 4G
+  17:Core/Src/AHRS.c ****     MPU9250_SetGyroRange(GYRO_RANGE_500DPS);  // 设置陀螺仪量程为 500DPS
+  18:Core/Src/AHRS.c ****     MPU9250_SetDLPFBandwidth(DLPF_BANDWIDTH_92HZ); // 设置低通滤波带宽为 92Hz
+  19:Core/Src/AHRS.c ****     MPU9250_SetSampleRateDivider(LP_ACCEL_ODR_125HZ); // 设置采样率为 125Hz
+  20:Core/Src/AHRS.c **** }
+  21:Core/Src/AHRS.c **** 
+  22:Core/Src/AHRS.c **** void AHRS_GetQuaternion(float* quat) {
+  23:Core/Src/AHRS.c ****     quat[0] = q0;
+  24:Core/Src/AHRS.c ****     quat[1] = q1;
+  25:Core/Src/AHRS.c ****     quat[2] = q2;
+  26:Core/Src/AHRS.c ****     quat[3] = q3;
+  27:Core/Src/AHRS.c **** }
+  28:Core/Src/AHRS.c **** 
+  29:Core/Src/AHRS.c **** void AHRS_Update() {
+  30:Core/Src/AHRS.c ****     IMUData imuData;
+ARM GAS  /tmp/ccwVx3D8.s 			page 2
 
 
-  31:Core/Src/AHRS.c **** 
-  32:Core/Src/AHRS.c ****     // 时间更新
-  33:Core/Src/AHRS.c ****     now = HAL_GetTick();
-  34:Core/Src/AHRS.c ****     float deltaTime = (now - lastUpdate) / 1000.0f;
-  35:Core/Src/AHRS.c ****     lastUpdate = now;
-  36:Core/Src/AHRS.c **** 
-  37:Core/Src/AHRS.c ****     // 数据预处理：加速度和磁力计的中值滤波
-  38:Core/Src/AHRS.c ****     ax = MedianFilter(ax);
-  39:Core/Src/AHRS.c ****     ay = MedianFilter(ay);
-  40:Core/Src/AHRS.c ****     az = MedianFilter(az);
-  41:Core/Src/AHRS.c ****     mx = MedianFilter(mx);
-  42:Core/Src/AHRS.c ****     my = MedianFilter(my);
-  43:Core/Src/AHRS.c ****     mz = MedianFilter(mz);
-  44:Core/Src/AHRS.c **** 
-  45:Core/Src/AHRS.c ****     // 归一化加速度计数据
-  46:Core/Src/AHRS.c ****     int16_t norm = invSqrt(ax * ax + ay * ay + az * az);
-  47:Core/Src/AHRS.c ****     ax *= norm;
-  48:Core/Src/AHRS.c ****     ay *= norm;
-  49:Core/Src/AHRS.c ****     az *= norm;
-  50:Core/Src/AHRS.c **** 
-  51:Core/Src/AHRS.c ****     // 归一化磁力计数据
-  52:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
-  53:Core/Src/AHRS.c ****     mx *= norm;
-  54:Core/Src/AHRS.c ****     my *= norm;
-  55:Core/Src/AHRS.c ****     mz *= norm;
+  31:Core/Src/AHRS.c ****     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);
+  32:Core/Src/AHRS.c **** 
+  33:Core/Src/AHRS.c ****     // 获取加速度、陀螺仪和磁力计原始数据
+  34:Core/Src/AHRS.c ****     float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
+  35:Core/Src/AHRS.c ****     float ay = imuData.accel[1] * 4.0f * 9.81f / 32768.0f;
+  36:Core/Src/AHRS.c ****     float az = imuData.accel[2] * 4.0f * 9.81f / 32768.0f;
+  37:Core/Src/AHRS.c ****     float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+  38:Core/Src/AHRS.c ****     float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+  39:Core/Src/AHRS.c ****     float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+  40:Core/Src/AHRS.c ****     float mx = imuData.mag[0] * 0.146f; // 将原始数据转换为 µT
+  41:Core/Src/AHRS.c ****     float my = imuData.mag[1] * 0.146f;
+  42:Core/Src/AHRS.c ****     float mz = imuData.mag[2] * 0.146f;
+  43:Core/Src/AHRS.c **** 
+  44:Core/Src/AHRS.c ****     // 时间更新
+  45:Core/Src/AHRS.c ****     now = HAL_GetTick();
+  46:Core/Src/AHRS.c ****     float deltaTime = (now - lastUpdate) / 1000.0f;
+  47:Core/Src/AHRS.c ****     lastUpdate = now;
+  48:Core/Src/AHRS.c **** 
+  49:Core/Src/AHRS.c ****     // 数据预处理：加速度和磁力计的中值滤波
+  50:Core/Src/AHRS.c ****     ax = MedianFilter(ax);
+  51:Core/Src/AHRS.c ****     ay = MedianFilter(ay);
+  52:Core/Src/AHRS.c ****     az = MedianFilter(az);
+  53:Core/Src/AHRS.c ****     mx = MedianFilter(mx);
+  54:Core/Src/AHRS.c ****     my = MedianFilter(my);
+  55:Core/Src/AHRS.c ****     mz = MedianFilter(mz);
   56:Core/Src/AHRS.c **** 
-  57:Core/Src/AHRS.c ****     // 陀螺仪数据减去偏差
-  58:Core/Src/AHRS.c ****     gx -= w1;
-  59:Core/Src/AHRS.c ****     gy -= w2;
-  60:Core/Src/AHRS.c ****     gz -= w3;
-  61:Core/Src/AHRS.c **** 
-  62:Core/Src/AHRS.c ****     // 四元数预测：一阶龙格库塔法
-  63:Core/Src/AHRS.c ****     int16_t halfT = deltaTime / 2.0f;
-  64:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
-  65:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
-  66:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
-  67:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+  57:Core/Src/AHRS.c ****     // 归一化加速度计数据
+  58:Core/Src/AHRS.c ****     float norm = invSqrt(ax * ax + ay * ay + az * az);
+  59:Core/Src/AHRS.c ****     ax *= norm;
+  60:Core/Src/AHRS.c ****     ay *= norm;
+  61:Core/Src/AHRS.c ****     az *= norm;
+  62:Core/Src/AHRS.c **** 
+  63:Core/Src/AHRS.c ****     // 归一化磁力计数据
+  64:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
+  65:Core/Src/AHRS.c ****     mx *= norm;
+  66:Core/Src/AHRS.c ****     my *= norm;
+  67:Core/Src/AHRS.c ****     mz *= norm;
   68:Core/Src/AHRS.c **** 
-  69:Core/Src/AHRS.c ****     // 归一化四元数
-  70:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
-  71:Core/Src/AHRS.c ****     q0 *= norm;
-  72:Core/Src/AHRS.c ****     q1 *= norm;
-  73:Core/Src/AHRS.c ****     q2 *= norm;
-  74:Core/Src/AHRS.c ****     q3 *= norm;
-  75:Core/Src/AHRS.c **** 
-  76:Core/Src/AHRS.c ****     // 互补滤波：使用加速度计修正陀螺仪
-  77:Core/Src/AHRS.c ****     const float alpha = 0.98f;  // 滤波系数
-  78:Core/Src/AHRS.c ****     int16_t pitch = asinf(2 * (q0 * q2 - q3 * q1));
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
-  80:Core/Src/AHRS.c ****     
-  81:Core/Src/AHRS.c ****     int16_t pitchAccel = atan2f(ay, az);
-  82:Core/Src/AHRS.c ****     int16_t rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
-  83:Core/Src/AHRS.c **** 
-  84:Core/Src/AHRS.c ****     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
-  85:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
-  86:Core/Src/AHRS.c **** 
-  87:Core/Src/AHRS.c ****     // 重新计算四元数（根据修正的 pitch 和 roll）
-ARM GAS  /tmp/cctfyu8u.s 			page 3
+  69:Core/Src/AHRS.c ****     // 陀螺仪数据减去偏差
+  70:Core/Src/AHRS.c ****     gx -= w1;
+  71:Core/Src/AHRS.c ****     gy -= w2;
+  72:Core/Src/AHRS.c ****     gz -= w3;
+  73:Core/Src/AHRS.c **** 
+  74:Core/Src/AHRS.c ****     // 四元数预测：一阶龙格库塔法
+  75:Core/Src/AHRS.c ****     float halfT = deltaTime / 2.0f;
+  76:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+  77:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
+  78:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
+  79:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+  80:Core/Src/AHRS.c **** 
+  81:Core/Src/AHRS.c ****     // 归一化四元数
+  82:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+  83:Core/Src/AHRS.c ****     q0 *= norm;
+  84:Core/Src/AHRS.c ****     q1 *= norm;
+  85:Core/Src/AHRS.c ****     q2 *= norm;
+  86:Core/Src/AHRS.c ****     q3 *= norm;
+  87:Core/Src/AHRS.c **** 
+ARM GAS  /tmp/ccwVx3D8.s 			page 3
 
 
-  88:Core/Src/AHRS.c ****     int16_t sinHalfRoll = sinf(roll / 2.0f);
-  89:Core/Src/AHRS.c ****     int16_t cosHalfRoll = cosf(roll / 2.0f);
-  90:Core/Src/AHRS.c ****     int16_t sinHalfPitch = sinf(pitch / 2.0f);
-  91:Core/Src/AHRS.c ****     int16_t cosHalfPitch = cosf(pitch / 2.0f);
-  92:Core/Src/AHRS.c **** 
-  93:Core/Src/AHRS.c ****     q0 = cosHalfRoll * cosHalfPitch;
-  94:Core/Src/AHRS.c ****     q1 = sinHalfRoll * cosHalfPitch;
-  95:Core/Src/AHRS.c ****     q2 = cosHalfRoll * sinHalfPitch;
-  96:Core/Src/AHRS.c ****     q3 = sinHalfRoll * sinHalfPitch;
-  97:Core/Src/AHRS.c **** }
+  88:Core/Src/AHRS.c ****     // 互补滤波：使用加速度计修正陀螺仪
+  89:Core/Src/AHRS.c ****     const float alpha = 0.98f;  // 滤波系数
+  90:Core/Src/AHRS.c ****     float pitch = asinf(2 * (q0 * q2 - q3 * q1));
+  91:Core/Src/AHRS.c ****     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+  92:Core/Src/AHRS.c ****     
+  93:Core/Src/AHRS.c ****     float pitchAccel = atan2f(ay, az);
+  94:Core/Src/AHRS.c ****     float rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
+  95:Core/Src/AHRS.c **** 
+  96:Core/Src/AHRS.c ****     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
+  97:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
   98:Core/Src/AHRS.c **** 
-  99:Core/Src/AHRS.c **** int compare_int16(const void* a, const void* b) {
-  29              		.loc 1 99 49 view -0
+  99:Core/Src/AHRS.c ****     // 重新计算四元数（根据修正的 pitch 和 roll）
+ 100:Core/Src/AHRS.c ****     float sinHalfRoll = sinf(roll / 2.0f);
+ 101:Core/Src/AHRS.c ****     float cosHalfRoll = cosf(roll / 2.0f);
+ 102:Core/Src/AHRS.c ****     float sinHalfPitch = sinf(pitch / 2.0f);
+ 103:Core/Src/AHRS.c ****     float cosHalfPitch = cosf(pitch / 2.0f);
+ 104:Core/Src/AHRS.c **** 
+ 105:Core/Src/AHRS.c ****     q0 = cosHalfRoll * cosHalfPitch;
+ 106:Core/Src/AHRS.c ****     q1 = sinHalfRoll * cosHalfPitch;
+ 107:Core/Src/AHRS.c ****     q2 = cosHalfRoll * sinHalfPitch;
+ 108:Core/Src/AHRS.c ****     q3 = sinHalfRoll * sinHalfPitch;
+ 109:Core/Src/AHRS.c **** }
+ 110:Core/Src/AHRS.c **** 
+ 111:Core/Src/AHRS.c **** int compare_float(const void* a, const void* b) {
+  29              		.loc 1 111 49 view -0
   30              		.cfi_startproc
   31              		@ args = 0, pretend = 0, frame = 0
   32              		@ frame_needed = 0, uses_anonymous_args = 0
   33              		@ link register save eliminated.
- 100:Core/Src/AHRS.c ****     int16_t ia = *(const int16_t*)a;
-  34              		.loc 1 100 5 view .LVU1
-  35              		.loc 1 100 13 is_stmt 0 view .LVU2
-  36 0000 B0F90020 		ldrsh	r2, [r0]
+ 112:Core/Src/AHRS.c ****     float fa = *(const float*)a;
+  34              		.loc 1 112 5 view .LVU1
+  35              		.loc 1 112 11 is_stmt 0 view .LVU2
+  36 0000 90ED007A 		vldr.32	s14, [r0]
   37              	.LVL1:
- 101:Core/Src/AHRS.c ****     int16_t ib = *(const int16_t*)b;
-  38              		.loc 1 101 5 is_stmt 1 view .LVU3
-  39              		.loc 1 101 13 is_stmt 0 view .LVU4
-  40 0004 B1F90030 		ldrsh	r3, [r1]
+ 113:Core/Src/AHRS.c ****     float fb = *(const float*)b;
+  38              		.loc 1 113 5 is_stmt 1 view .LVU3
+  39              		.loc 1 113 11 is_stmt 0 view .LVU4
+  40 0004 D1ED007A 		vldr.32	s15, [r1]
   41              	.LVL2:
- 102:Core/Src/AHRS.c ****     return (ia > ib) - (ia < ib);  // 如果ia > ib返回正数，如果ia < ib返回负数，若�
-  42              		.loc 1 102 5 is_stmt 1 view .LVU5
-  43              		.loc 1 102 16 is_stmt 0 view .LVU6
-  44 0008 9A42     		cmp	r2, r3
-  45 000a CCBF     		ite	gt
-  46 000c 0120     		movgt	r0, #1
-  47              	.LVL3:
-  48              		.loc 1 102 16 view .LVU7
-  49 000e 0020     		movle	r0, #0
-  50              		.loc 1 102 28 view .LVU8
-  51 0010 B4BF     		ite	lt
-  52 0012 0123     		movlt	r3, #1
-  53              	.LVL4:
-  54              		.loc 1 102 28 view .LVU9
-  55 0014 0023     		movge	r3, #0
- 103:Core/Src/AHRS.c **** }
-  56              		.loc 1 103 1 view .LVU10
-  57 0016 C01A     		subs	r0, r0, r3
-  58 0018 7047     		bx	lr
-  59              		.cfi_endproc
-  60              	.LFE148:
-  62              		.section	.text.invSqrt,"ax",%progbits
-  63              		.align	1
-  64              		.global	invSqrt
-  65              		.syntax unified
-  66              		.thumb
-  67              		.thumb_func
-  68              		.fpu fpv5-d16
-  70              	invSqrt:
-  71              	.LVL5:
-ARM GAS  /tmp/cctfyu8u.s 			page 4
+ 114:Core/Src/AHRS.c ****     return (fa > fb) - (fa < fb);  // 如果fa > fb返回正数，如果fa < fb返回负数，若�
+  42              		.loc 1 114 5 is_stmt 1 view .LVU5
+  43              		.loc 1 114 16 is_stmt 0 view .LVU6
+  44 0008 B4EEE77A 		vcmpe.f32	s14, s15
+  45 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
+  46 0010 CCBF     		ite	gt
+  47 0012 0120     		movgt	r0, #1
+  48              	.LVL3:
+  49              		.loc 1 114 16 view .LVU7
+  50 0014 0020     		movle	r0, #0
+  51              		.loc 1 114 28 view .LVU8
+  52 0016 4CBF     		ite	mi
+  53 0018 0123     		movmi	r3, #1
+  54 001a 0023     		movpl	r3, #0
+ 115:Core/Src/AHRS.c **** }
+  55              		.loc 1 115 1 view .LVU9
+  56 001c C01A     		subs	r0, r0, r3
+  57 001e 7047     		bx	lr
+ARM GAS  /tmp/ccwVx3D8.s 			page 4
 
 
-  72              	.LFB144:
+  58              		.cfi_endproc
+  59              	.LFE148:
+  61              		.section	.text.invSqrt,"ax",%progbits
+  62              		.align	1
+  63              		.global	invSqrt
+  64              		.syntax unified
+  65              		.thumb
+  66              		.thumb_func
+  67              		.fpu fpv5-d16
+  69              	invSqrt:
+  70              	.LVL4:
+  71              	.LFB144:
   12:Core/Src/AHRS.c **** 
-  73              		.loc 1 12 28 is_stmt 1 view -0
-  74              		.cfi_startproc
-  75              		@ args = 0, pretend = 0, frame = 0
-  76              		@ frame_needed = 0, uses_anonymous_args = 0
+  72              		.loc 1 12 24 is_stmt 1 view -0
+  73              		.cfi_startproc
+  74              		@ args = 0, pretend = 0, frame = 0
+  75              		@ frame_needed = 0, uses_anonymous_args = 0
   12:Core/Src/AHRS.c **** 
-  77              		.loc 1 12 28 is_stmt 0 view .LVU12
-  78 0000 08B5     		push	{r3, lr}
-  79              	.LCFI0:
-  80              		.cfi_def_cfa_offset 8
-  81              		.cfi_offset 3, -8
-  82              		.cfi_offset 14, -4
-  83 0002 00EE100A 		vmov	s0, r0	@ int
+  76              		.loc 1 12 24 is_stmt 0 view .LVU11
+  77 0000 08B5     		push	{r3, lr}
+  78              	.LCFI0:
+  79              		.cfi_def_cfa_offset 8
+  80              		.cfi_offset 3, -8
+  81              		.cfi_offset 14, -4
   12:Core/Src/AHRS.c **** 
-  84              		.loc 1 12 30 is_stmt 1 view .LVU13
+  82              		.loc 1 12 26 is_stmt 1 view .LVU12
   12:Core/Src/AHRS.c **** 
-  85              		.loc 1 12 44 is_stmt 0 view .LVU14
-  86 0006 B8EEC00A 		vcvt.f32.s32	s0, s0
-  87 000a FFF7FEFF 		bl	sqrtf
-  88              	.LVL6:
+  83              		.loc 1 12 40 is_stmt 0 view .LVU13
+  84 0002 FFF7FEFF 		bl	sqrtf
+  85              	.LVL5:
   12:Core/Src/AHRS.c **** 
-  89              		.loc 1 12 42 view .LVU15
-  90 000e B7EE007A 		vmov.f32	s14, #1.0e+0
-  91 0012 C7EE007A 		vdiv.f32	s15, s14, s0
-  92 0016 FDEEE77A 		vcvt.s32.f32	s15, s15
-  12:Core/Src/AHRS.c **** 
-  93              		.loc 1 12 54 view .LVU16
-  94 001a 17EE903A 		vmov	r3, s15	@ int
-  95 001e 18B2     		sxth	r0, r3
-  96 0020 08BD     		pop	{r3, pc}
-  97              		.cfi_endproc
-  98              	.LFE144:
- 100              		.section	.text.AHRS_Init,"ax",%progbits
- 101              		.align	1
- 102              		.global	AHRS_Init
- 103              		.syntax unified
- 104              		.thumb
- 105              		.thumb_func
- 106              		.fpu fpv5-d16
- 108              	AHRS_Init:
- 109              	.LFB145:
-  14:Core/Src/AHRS.c **** 
- 110              		.loc 1 14 18 is_stmt 1 view -0
- 111              		.cfi_startproc
- 112              		@ args = 0, pretend = 0, frame = 0
- 113              		@ frame_needed = 0, uses_anonymous_args = 0
- 114 0000 08B5     		push	{r3, lr}
- 115              	.LCFI1:
- 116              		.cfi_def_cfa_offset 8
- 117              		.cfi_offset 3, -8
- 118              		.cfi_offset 14, -4
-  14:Core/Src/AHRS.c **** 
- 119              		.loc 1 14 20 view .LVU18
- 120 0002 FFF7FEFF 		bl	MPU9250_Init
- 121              	.LVL7:
-  14:Core/Src/AHRS.c **** 
-ARM GAS  /tmp/cctfyu8u.s 			page 5
+  86              		.loc 1 12 50 view .LVU14
+  87 0006 F7EE007A 		vmov.f32	s15, #1.0e+0
+  88 000a 87EE800A 		vdiv.f32	s0, s15, s0
+  89 000e 08BD     		pop	{r3, pc}
+  90              		.cfi_endproc
+  91              	.LFE144:
+  93              		.section	.text.AHRS_Init,"ax",%progbits
+  94              		.align	1
+  95              		.global	AHRS_Init
+  96              		.syntax unified
+  97              		.thumb
+  98              		.thumb_func
+  99              		.fpu fpv5-d16
+ 101              	AHRS_Init:
+ 102              	.LFB145:
+  14:Core/Src/AHRS.c ****     MPU9250_Init();
+ 103              		.loc 1 14 18 is_stmt 1 view -0
+ 104              		.cfi_startproc
+ 105              		@ args = 0, pretend = 0, frame = 0
+ 106              		@ frame_needed = 0, uses_anonymous_args = 0
+ 107 0000 08B5     		push	{r3, lr}
+ 108              	.LCFI1:
+ 109              		.cfi_def_cfa_offset 8
+ 110              		.cfi_offset 3, -8
+ 111              		.cfi_offset 14, -4
+  15:Core/Src/AHRS.c ****     MPU9250_SetAccelRange(ACCEL_RANGE_4G);    // 设置加速度计量程为 4G
+ARM GAS  /tmp/ccwVx3D8.s 			page 5
 
 
- 122              		.loc 1 14 36 is_stmt 0 view .LVU19
- 123 0006 08BD     		pop	{r3, pc}
- 124              		.cfi_endproc
- 125              	.LFE145:
- 127              		.section	.text.AHRS_GetQuaternion,"ax",%progbits
- 128              		.align	1
- 129              		.global	AHRS_GetQuaternion
- 130              		.syntax unified
- 131              		.thumb
- 132              		.thumb_func
- 133              		.fpu fpv5-d16
- 135              	AHRS_GetQuaternion:
- 136              	.LVL8:
- 137              	.LFB146:
-  16:Core/Src/AHRS.c ****     quat[0] = q0;
- 138              		.loc 1 16 40 is_stmt 1 view -0
- 139              		.cfi_startproc
- 140              		@ args = 0, pretend = 0, frame = 0
- 141              		@ frame_needed = 0, uses_anonymous_args = 0
- 142              		@ link register save eliminated.
-  17:Core/Src/AHRS.c ****     quat[1] = q1;
- 143              		.loc 1 17 5 view .LVU21
-  17:Core/Src/AHRS.c ****     quat[1] = q1;
- 144              		.loc 1 17 13 is_stmt 0 view .LVU22
- 145 0000 064B     		ldr	r3, .L7
- 146 0002 B3F90030 		ldrsh	r3, [r3]
- 147 0006 0380     		strh	r3, [r0]	@ movhi
-  18:Core/Src/AHRS.c ****     quat[2] = q2;
- 148              		.loc 1 18 5 is_stmt 1 view .LVU23
-  18:Core/Src/AHRS.c ****     quat[2] = q2;
- 149              		.loc 1 18 13 is_stmt 0 view .LVU24
- 150 0008 054B     		ldr	r3, .L7+4
- 151 000a 1B88     		ldrh	r3, [r3]
- 152 000c 4380     		strh	r3, [r0, #2]	@ movhi
-  19:Core/Src/AHRS.c ****     quat[3] = q3;
- 153              		.loc 1 19 5 is_stmt 1 view .LVU25
-  19:Core/Src/AHRS.c ****     quat[3] = q3;
- 154              		.loc 1 19 13 is_stmt 0 view .LVU26
- 155 000e 054B     		ldr	r3, .L7+8
- 156 0010 1B88     		ldrh	r3, [r3]
- 157 0012 8380     		strh	r3, [r0, #4]	@ movhi
-  20:Core/Src/AHRS.c **** }
- 158              		.loc 1 20 5 is_stmt 1 view .LVU27
-  20:Core/Src/AHRS.c **** }
- 159              		.loc 1 20 13 is_stmt 0 view .LVU28
- 160 0014 044B     		ldr	r3, .L7+12
- 161 0016 1B88     		ldrh	r3, [r3]
- 162 0018 C380     		strh	r3, [r0, #6]	@ movhi
-  21:Core/Src/AHRS.c **** 
- 163              		.loc 1 21 1 view .LVU29
- 164 001a 7047     		bx	lr
- 165              	.L8:
- 166              		.align	2
- 167              	.L7:
- 168 001c 00000000 		.word	.LANCHOR0
- 169 0020 00000000 		.word	.LANCHOR1
- 170 0024 00000000 		.word	.LANCHOR2
-ARM GAS  /tmp/cctfyu8u.s 			page 6
+ 112              		.loc 1 15 5 view .LVU16
+ 113 0002 FFF7FEFF 		bl	MPU9250_Init
+ 114              	.LVL6:
+  16:Core/Src/AHRS.c ****     MPU9250_SetGyroRange(GYRO_RANGE_500DPS);  // 设置陀螺仪量程为 500DPS
+ 115              		.loc 1 16 5 view .LVU17
+ 116 0006 0120     		movs	r0, #1
+ 117 0008 FFF7FEFF 		bl	MPU9250_SetAccelRange
+ 118              	.LVL7:
+  17:Core/Src/AHRS.c ****     MPU9250_SetDLPFBandwidth(DLPF_BANDWIDTH_92HZ); // 设置低通滤波带宽为 92Hz
+ 119              		.loc 1 17 5 view .LVU18
+ 120 000c 0120     		movs	r0, #1
+ 121 000e FFF7FEFF 		bl	MPU9250_SetGyroRange
+ 122              	.LVL8:
+  18:Core/Src/AHRS.c ****     MPU9250_SetSampleRateDivider(LP_ACCEL_ODR_125HZ); // 设置采样率为 125Hz
+ 123              		.loc 1 18 5 view .LVU19
+ 124 0012 0120     		movs	r0, #1
+ 125 0014 FFF7FEFF 		bl	MPU9250_SetDLPFBandwidth
+ 126              	.LVL9:
+  19:Core/Src/AHRS.c **** }
+ 127              		.loc 1 19 5 view .LVU20
+ 128 0018 0920     		movs	r0, #9
+ 129 001a FFF7FEFF 		bl	MPU9250_SetSampleRateDivider
+ 130              	.LVL10:
+  20:Core/Src/AHRS.c **** 
+ 131              		.loc 1 20 1 is_stmt 0 view .LVU21
+ 132 001e 08BD     		pop	{r3, pc}
+ 133              		.cfi_endproc
+ 134              	.LFE145:
+ 136              		.section	.text.AHRS_GetQuaternion,"ax",%progbits
+ 137              		.align	1
+ 138              		.global	AHRS_GetQuaternion
+ 139              		.syntax unified
+ 140              		.thumb
+ 141              		.thumb_func
+ 142              		.fpu fpv5-d16
+ 144              	AHRS_GetQuaternion:
+ 145              	.LVL11:
+ 146              	.LFB146:
+  22:Core/Src/AHRS.c ****     quat[0] = q0;
+ 147              		.loc 1 22 38 is_stmt 1 view -0
+ 148              		.cfi_startproc
+ 149              		@ args = 0, pretend = 0, frame = 0
+ 150              		@ frame_needed = 0, uses_anonymous_args = 0
+ 151              		@ link register save eliminated.
+  23:Core/Src/AHRS.c ****     quat[1] = q1;
+ 152              		.loc 1 23 5 view .LVU23
+  23:Core/Src/AHRS.c ****     quat[1] = q1;
+ 153              		.loc 1 23 13 is_stmt 0 view .LVU24
+ 154 0000 064B     		ldr	r3, .L7
+ 155 0002 1B68     		ldr	r3, [r3]	@ float
+ 156 0004 0360     		str	r3, [r0]	@ float
+  24:Core/Src/AHRS.c ****     quat[2] = q2;
+ 157              		.loc 1 24 5 is_stmt 1 view .LVU25
+  24:Core/Src/AHRS.c ****     quat[2] = q2;
+ 158              		.loc 1 24 13 is_stmt 0 view .LVU26
+ 159 0006 064B     		ldr	r3, .L7+4
+ 160 0008 1B68     		ldr	r3, [r3]	@ float
+ARM GAS  /tmp/ccwVx3D8.s 			page 6
 
 
- 171 0028 00000000 		.word	.LANCHOR3
- 172              		.cfi_endproc
- 173              	.LFE146:
- 175              		.section	.text.MedianFilter,"ax",%progbits
- 176              		.align	1
- 177              		.global	MedianFilter
- 178              		.syntax unified
- 179              		.thumb
- 180              		.thumb_func
- 181              		.fpu fpv5-d16
- 183              	MedianFilter:
- 184              	.LVL9:
- 185              	.LFB149:
- 104:Core/Src/AHRS.c **** 
- 105:Core/Src/AHRS.c **** int16_t MedianFilter(int16_t input) {
- 186              		.loc 1 105 37 is_stmt 1 view -0
- 187              		.cfi_startproc
- 188              		@ args = 0, pretend = 0, frame = 8
- 189              		@ frame_needed = 0, uses_anonymous_args = 0
- 190              		.loc 1 105 37 is_stmt 0 view .LVU31
- 191 0000 10B5     		push	{r4, lr}
- 192              	.LCFI2:
- 193              		.cfi_def_cfa_offset 8
- 194              		.cfi_offset 4, -8
- 195              		.cfi_offset 14, -4
- 196 0002 82B0     		sub	sp, sp, #8
- 197              	.LCFI3:
- 198              		.cfi_def_cfa_offset 16
- 106:Core/Src/AHRS.c ****     static int16_t buffer[3];  // 缓存3个数据
- 199              		.loc 1 106 5 is_stmt 1 view .LVU32
- 107:Core/Src/AHRS.c ****     static int index = 0;
- 200              		.loc 1 107 5 view .LVU33
- 108:Core/Src/AHRS.c **** 
- 109:Core/Src/AHRS.c ****     // 将输入的数据存入缓冲区
- 110:Core/Src/AHRS.c ****     buffer[index] = input;
- 201              		.loc 1 110 5 view .LVU34
- 202              		.loc 1 110 11 is_stmt 0 view .LVU35
- 203 0004 0E4C     		ldr	r4, .L11
- 204 0006 2268     		ldr	r2, [r4]
- 205              		.loc 1 110 19 view .LVU36
- 206 0008 0E49     		ldr	r1, .L11+4
- 207 000a 21F81200 		strh	r0, [r1, r2, lsl #1]	@ movhi
- 111:Core/Src/AHRS.c ****     index = (index + 1) % 3;  // 循环更新index
- 208              		.loc 1 111 5 is_stmt 1 view .LVU37
- 209              		.loc 1 111 20 is_stmt 0 view .LVU38
- 210 000e 0132     		adds	r2, r2, #1
- 211              		.loc 1 111 25 view .LVU39
- 212 0010 0D4B     		ldr	r3, .L11+8
- 213 0012 83FB0203 		smull	r0, r3, r3, r2
- 214              	.LVL10:
- 215              		.loc 1 111 25 view .LVU40
- 216 0016 A3EBE273 		sub	r3, r3, r2, asr #31
- 217 001a 03EB4303 		add	r3, r3, r3, lsl #1
- 218 001e D31A     		subs	r3, r2, r3
- 219              		.loc 1 111 11 view .LVU41
- 220 0020 2360     		str	r3, [r4]
- 221              	.LVL11:
-ARM GAS  /tmp/cctfyu8u.s 			page 7
+ 161 000a 4360     		str	r3, [r0, #4]	@ float
+  25:Core/Src/AHRS.c ****     quat[3] = q3;
+ 162              		.loc 1 25 5 is_stmt 1 view .LVU27
+  25:Core/Src/AHRS.c ****     quat[3] = q3;
+ 163              		.loc 1 25 13 is_stmt 0 view .LVU28
+ 164 000c 054B     		ldr	r3, .L7+8
+ 165 000e 1B68     		ldr	r3, [r3]	@ float
+ 166 0010 8360     		str	r3, [r0, #8]	@ float
+  26:Core/Src/AHRS.c **** }
+ 167              		.loc 1 26 5 is_stmt 1 view .LVU29
+  26:Core/Src/AHRS.c **** }
+ 168              		.loc 1 26 13 is_stmt 0 view .LVU30
+ 169 0012 054B     		ldr	r3, .L7+12
+ 170 0014 1B68     		ldr	r3, [r3]	@ float
+ 171 0016 C360     		str	r3, [r0, #12]	@ float
+  27:Core/Src/AHRS.c **** 
+ 172              		.loc 1 27 1 view .LVU31
+ 173 0018 7047     		bx	lr
+ 174              	.L8:
+ 175 001a 00BF     		.align	2
+ 176              	.L7:
+ 177 001c 00000000 		.word	.LANCHOR0
+ 178 0020 00000000 		.word	.LANCHOR1
+ 179 0024 00000000 		.word	.LANCHOR2
+ 180 0028 00000000 		.word	.LANCHOR3
+ 181              		.cfi_endproc
+ 182              	.LFE146:
+ 184              		.section	.text.MedianFilter,"ax",%progbits
+ 185              		.align	1
+ 186              		.global	MedianFilter
+ 187              		.syntax unified
+ 188              		.thumb
+ 189              		.thumb_func
+ 190              		.fpu fpv5-d16
+ 192              	MedianFilter:
+ 193              	.LVL12:
+ 194              	.LFB149:
+ 116:Core/Src/AHRS.c **** 
+ 117:Core/Src/AHRS.c **** float MedianFilter(float input) {
+ 195              		.loc 1 117 33 is_stmt 1 view -0
+ 196              		.cfi_startproc
+ 197              		@ args = 0, pretend = 0, frame = 16
+ 198              		@ frame_needed = 0, uses_anonymous_args = 0
+ 199              		.loc 1 117 33 is_stmt 0 view .LVU33
+ 200 0000 00B5     		push	{lr}
+ 201              	.LCFI2:
+ 202              		.cfi_def_cfa_offset 4
+ 203              		.cfi_offset 14, -4
+ 204 0002 85B0     		sub	sp, sp, #20
+ 205              	.LCFI3:
+ 206              		.cfi_def_cfa_offset 24
+ 118:Core/Src/AHRS.c ****     static float buffer[3];  // 缓存3个数据
+ 207              		.loc 1 118 5 is_stmt 1 view .LVU34
+ 119:Core/Src/AHRS.c ****     static int index = 0;
+ 208              		.loc 1 119 5 view .LVU35
+ 120:Core/Src/AHRS.c **** 
+ 121:Core/Src/AHRS.c ****     // 将输入的数据存入缓冲区
+ARM GAS  /tmp/ccwVx3D8.s 			page 7
 
 
- 112:Core/Src/AHRS.c **** 
- 113:Core/Src/AHRS.c ****     // 排序并返回中间值
- 114:Core/Src/AHRS.c ****     int16_t sorted[3];
- 222              		.loc 1 114 5 is_stmt 1 view .LVU42
- 115:Core/Src/AHRS.c ****     memcpy(sorted, buffer, sizeof(buffer));  // 拷贝数据
- 223              		.loc 1 115 5 view .LVU43
- 224 0022 03C9     		ldm	r1, {r0, r1}
- 225              	.LVL12:
- 226              		.loc 1 115 5 is_stmt 0 view .LVU44
- 227 0024 0090     		str	r0, [sp]
- 228 0026 ADF80410 		strh	r1, [sp, #4]	@ movhi
- 116:Core/Src/AHRS.c ****     qsort(sorted, 3, sizeof(int16_t), compare_int16);  // 排序
- 229              		.loc 1 116 5 is_stmt 1 view .LVU45
- 230 002a 084B     		ldr	r3, .L11+12
- 231 002c 0222     		movs	r2, #2
- 232              	.LVL13:
- 233              		.loc 1 116 5 is_stmt 0 view .LVU46
- 234 002e 0321     		movs	r1, #3
- 235 0030 6846     		mov	r0, sp
- 236 0032 FFF7FEFF 		bl	qsort
- 237              	.LVL14:
- 117:Core/Src/AHRS.c ****     return sorted[1];  // 返回中间值
- 238              		.loc 1 117 5 is_stmt 1 view .LVU47
- 118:Core/Src/AHRS.c **** }...
- 239              		.loc 1 118 1 is_stmt 0 view .LVU48
- 240 0036 BDF90200 		ldrsh	r0, [sp, #2]
- 241 003a 02B0     		add	sp, sp, #8
- 242              	.LCFI4:
- 243              		.cfi_def_cfa_offset 8
- 244              		@ sp needed
- 245 003c 10BD     		pop	{r4, pc}
- 246              	.L12:
- 247 003e 00BF     		.align	2
- 248              	.L11:
- 249 0040 00000000 		.word	.LANCHOR4
- 250 0044 00000000 		.word	.LANCHOR5
- 251 0048 56555555 		.word	1431655766
- 252 004c 00000000 		.word	compare_int16
- 253              		.cfi_endproc
- 254              	.LFE149:
- 256              		.section	.text.AHRS_Update,"ax",%progbits
- 257              		.align	1
- 258              		.global	AHRS_Update
- 259              		.syntax unified
- 260              		.thumb
- 261              		.thumb_func
- 262              		.fpu fpv5-d16
- 264              	AHRS_Update:
- 265              	.LFB147:
-  23:Core/Src/AHRS.c **** void AHRS_Update() {
- 266              		.loc 1 23 20 is_stmt 1 view -0
- 267              		.cfi_startproc
- 268              		@ args = 0, pretend = 0, frame = 40
- 269              		@ frame_needed = 0, uses_anonymous_args = 0
- 270 0000 2DE9F04F 		push	{r4, r5, r6, r7, r8, r9, r10, fp, lr}
- 271              	.LCFI5:
- 272              		.cfi_def_cfa_offset 36
-ARM GAS  /tmp/cctfyu8u.s 			page 8
+ 122:Core/Src/AHRS.c ****     buffer[index] = input;
+ 209              		.loc 1 122 5 view .LVU36
+ 210              		.loc 1 122 11 is_stmt 0 view .LVU37
+ 211 0004 1048     		ldr	r0, .L11
+ 212 0006 0268     		ldr	r2, [r0]
+ 213              		.loc 1 122 19 view .LVU38
+ 214 0008 1049     		ldr	r1, .L11+4
+ 215 000a 01EB8203 		add	r3, r1, r2, lsl #2
+ 216 000e 83ED000A 		vstr.32	s0, [r3]
+ 123:Core/Src/AHRS.c ****     index = (index + 1) % 3;  // 循环更新index
+ 217              		.loc 1 123 5 is_stmt 1 view .LVU39
+ 218              		.loc 1 123 20 is_stmt 0 view .LVU40
+ 219 0012 0132     		adds	r2, r2, #1
+ 220              		.loc 1 123 25 view .LVU41
+ 221 0014 0E4B     		ldr	r3, .L11+8
+ 222 0016 83FB02C3 		smull	ip, r3, r3, r2
+ 223 001a A3EBE273 		sub	r3, r3, r2, asr #31
+ 224 001e 03EB4303 		add	r3, r3, r3, lsl #1
+ 225 0022 D31A     		subs	r3, r2, r3
+ 226              		.loc 1 123 11 view .LVU42
+ 227 0024 0360     		str	r3, [r0]
+ 124:Core/Src/AHRS.c **** 
+ 125:Core/Src/AHRS.c ****     // 排序并返回中间值
+ 126:Core/Src/AHRS.c ****     float sorted[3];
+ 228              		.loc 1 126 5 is_stmt 1 view .LVU43
+ 127:Core/Src/AHRS.c ****     memcpy(sorted, buffer, sizeof(buffer));  // 拷贝数据
+ 229              		.loc 1 127 5 view .LVU44
+ 230 0026 0DF1040C 		add	ip, sp, #4
+ 231 002a 07C9     		ldm	r1, {r0, r1, r2}
+ 232 002c 8CE80700 		stm	ip, {r0, r1, r2}
+ 128:Core/Src/AHRS.c ****     qsort(sorted, 3, sizeof(float), compare_float);  // 排序
+ 233              		.loc 1 128 5 view .LVU45
+ 234 0030 084B     		ldr	r3, .L11+12
+ 235 0032 0422     		movs	r2, #4
+ 236 0034 0321     		movs	r1, #3
+ 237 0036 6046     		mov	r0, ip
+ 238 0038 FFF7FEFF 		bl	qsort
+ 239              	.LVL13:
+ 129:Core/Src/AHRS.c ****     return sorted[1];  // 返回中间值
+ 240              		.loc 1 129 5 view .LVU46
+ 130:Core/Src/AHRS.c **** }...
+ 241              		.loc 1 130 1 is_stmt 0 view .LVU47
+ 242 003c 9DED020A 		vldr.32	s0, [sp, #8]
+ 243 0040 05B0     		add	sp, sp, #20
+ 244              	.LCFI4:
+ 245              		.cfi_def_cfa_offset 4
+ 246              		@ sp needed
+ 247 0042 5DF804FB 		ldr	pc, [sp], #4
+ 248              	.L12:
+ 249 0046 00BF     		.align	2
+ 250              	.L11:
+ 251 0048 00000000 		.word	.LANCHOR4
+ 252 004c 00000000 		.word	.LANCHOR5
+ 253 0050 56555555 		.word	1431655766
+ 254 0054 00000000 		.word	compare_float
+ 255              		.cfi_endproc
+ 256              	.LFE149:
+ARM GAS  /tmp/ccwVx3D8.s 			page 8
 
 
- 273              		.cfi_offset 4, -36
- 274              		.cfi_offset 5, -32
- 275              		.cfi_offset 6, -28
- 276              		.cfi_offset 7, -24
- 277              		.cfi_offset 8, -20
- 278              		.cfi_offset 9, -16
- 279              		.cfi_offset 10, -12
- 280              		.cfi_offset 11, -8
- 281              		.cfi_offset 14, -4
- 282 0004 2DED048B 		vpush.64	{d8, d9}
- 283              	.LCFI6:
- 284              		.cfi_def_cfa_offset 52
- 285              		.cfi_offset 80, -52
- 286              		.cfi_offset 81, -48
- 287              		.cfi_offset 82, -44
- 288              		.cfi_offset 83, -40
- 289 0008 8BB0     		sub	sp, sp, #44
- 290              	.LCFI7:
- 291              		.cfi_def_cfa_offset 96
-  24:Core/Src/AHRS.c ****     IMUData imuData;
- 292              		.loc 1 24 5 view .LVU50
-  25:Core/Src/AHRS.c ****     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);
- 293              		.loc 1 25 5 view .LVU51
- 294 000a 0023     		movs	r3, #0
- 295 000c 0DF11602 		add	r2, sp, #22
- 296 0010 07A9     		add	r1, sp, #28
- 297 0012 04A8     		add	r0, sp, #16
- 298 0014 FFF7FEFF 		bl	MPU9250_GetData
- 299              	.LVL15:
-  28:Core/Src/AHRS.c ****     int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
- 300              		.loc 1 28 5 view .LVU52
-  28:Core/Src/AHRS.c ****     int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
- 301              		.loc 1 28 13 is_stmt 0 view .LVU53
- 302 0018 BDF91050 		ldrsh	r5, [sp, #16]
- 303              	.LVL16:
-  28:Core/Src/AHRS.c ****     int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
- 304              		.loc 1 28 36 view .LVU54
- 305 001c BDF91280 		ldrsh	r8, [sp, #18]
- 306              	.LVL17:
-  28:Core/Src/AHRS.c ****     int16_t ax = imuData.accel[0], ay = imuData.accel[1], az = imuData.accel[2];
- 307              		.loc 1 28 59 view .LVU55
- 308 0020 BDF91470 		ldrsh	r7, [sp, #20]
- 309              	.LVL18:
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 310              		.loc 1 29 5 is_stmt 1 view .LVU56
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 311              		.loc 1 29 30 is_stmt 0 view .LVU57
- 312 0024 BDF91630 		ldrsh	r3, [sp, #22]
- 313 0028 06EE103A 		vmov	s12, r3	@ int
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 314              		.loc 1 29 34 view .LVU58
- 315 002c B8EEC66B 		vcvt.f64.s32	d6, s12
- 316 0030 9FEDE54B 		vldr.64	d4, .L15
- 317 0034 26EE046B 		vmul.f64	d6, d6, d4
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 318              		.loc 1 29 41 view .LVU59
- 319 0038 9FEDE55B 		vldr.64	d5, .L15+8
-ARM GAS  /tmp/cctfyu8u.s 			page 9
+ 258              		.section	.text.AHRS_Update,"ax",%progbits
+ 259              		.align	1
+ 260              		.global	AHRS_Update
+ 261              		.syntax unified
+ 262              		.thumb
+ 263              		.thumb_func
+ 264              		.fpu fpv5-d16
+ 266              	AHRS_Update:
+ 267              	.LFB147:
+  29:Core/Src/AHRS.c **** void AHRS_Update() {
+ 268              		.loc 1 29 20 is_stmt 1 view -0
+ 269              		.cfi_startproc
+ 270              		@ args = 0, pretend = 0, frame = 24
+ 271              		@ frame_needed = 0, uses_anonymous_args = 0
+ 272 0000 F0B5     		push	{r4, r5, r6, r7, lr}
+ 273              	.LCFI5:
+ 274              		.cfi_def_cfa_offset 20
+ 275              		.cfi_offset 4, -20
+ 276              		.cfi_offset 5, -16
+ 277              		.cfi_offset 6, -12
+ 278              		.cfi_offset 7, -8
+ 279              		.cfi_offset 14, -4
+ 280 0002 2DED0A8B 		vpush.64	{d8, d9, d10, d11, d12}
+ 281              	.LCFI6:
+ 282              		.cfi_def_cfa_offset 60
+ 283              		.cfi_offset 80, -60
+ 284              		.cfi_offset 81, -56
+ 285              		.cfi_offset 82, -52
+ 286              		.cfi_offset 83, -48
+ 287              		.cfi_offset 84, -44
+ 288              		.cfi_offset 85, -40
+ 289              		.cfi_offset 86, -36
+ 290              		.cfi_offset 87, -32
+ 291              		.cfi_offset 88, -28
+ 292              		.cfi_offset 89, -24
+ 293 0006 87B0     		sub	sp, sp, #28
+ 294              	.LCFI7:
+ 295              		.cfi_def_cfa_offset 88
+  30:Core/Src/AHRS.c ****     IMUData imuData;
+ 296              		.loc 1 30 5 view .LVU49
+  31:Core/Src/AHRS.c ****     MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);
+ 297              		.loc 1 31 5 view .LVU50
+ 298 0008 0023     		movs	r3, #0
+ 299 000a 0DF10602 		add	r2, sp, #6
+ 300 000e 03A9     		add	r1, sp, #12
+ 301 0010 6846     		mov	r0, sp
+ 302 0012 FFF7FEFF 		bl	MPU9250_GetData
+ 303              	.LVL14:
+  34:Core/Src/AHRS.c ****     float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
+ 304              		.loc 1 34 5 view .LVU51
+  34:Core/Src/AHRS.c ****     float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
+ 305              		.loc 1 34 29 is_stmt 0 view .LVU52
+ 306 0016 BDF90030 		ldrsh	r3, [sp]
+ 307 001a 09EE903A 		vmov	s19, r3	@ int
+  34:Core/Src/AHRS.c ****     float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
+ 308              		.loc 1 34 33 view .LVU53
+ 309 001e F8EEE99A 		vcvt.f32.s32	s19, s19
+ARM GAS  /tmp/ccwVx3D8.s 			page 9
 
 
- 320 003c 86EE057B 		vdiv.f64	d7, d6, d5
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 321              		.loc 1 29 13 view .LVU60
- 322 0040 BDEEC77B 		vcvt.s32.f64	s14, d7
- 323 0044 17EE103A 		vmov	r3, s14	@ int
- 324 0048 1CB2     		sxth	r4, r3
- 325              	.LVL19:
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 326              		.loc 1 29 68 view .LVU61
- 327 004a BDF91830 		ldrsh	r3, [sp, #24]
- 328 004e 06EE103A 		vmov	s12, r3	@ int
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 329              		.loc 1 29 72 view .LVU62
- 330 0052 B8EEC66B 		vcvt.f64.s32	d6, s12
- 331 0056 26EE046B 		vmul.f64	d6, d6, d4
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 332              		.loc 1 29 79 view .LVU63
- 333 005a 86EE057B 		vdiv.f64	d7, d6, d5
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 334              		.loc 1 29 51 view .LVU64
- 335 005e BDEEC77B 		vcvt.s32.f64	s14, d7
- 336 0062 17EE103A 		vmov	r3, s14	@ int
- 337 0066 1BB2     		sxth	r3, r3
- 338 0068 0293     		str	r3, [sp, #8]
- 339              	.LVL20:
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 340              		.loc 1 29 106 view .LVU65
- 341 006a BDF91A20 		ldrsh	r2, [sp, #26]
- 342 006e 07EE102A 		vmov	s14, r2	@ int
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 343              		.loc 1 29 110 view .LVU66
- 344 0072 B8EEC77B 		vcvt.f64.s32	d7, s14
- 345 0076 27EE047B 		vmul.f64	d7, d7, d4
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 346              		.loc 1 29 117 view .LVU67
- 347 007a 87EE056B 		vdiv.f64	d6, d7, d5
-  29:Core/Src/AHRS.c ****     int16_t gx = imuData.gyro[0] * M_PI / 180.0f, gy = imuData.gyro[1] * M_PI / 180.0f, gz = imuDat
- 348              		.loc 1 29 89 view .LVU68
- 349 007e BDEEC66B 		vcvt.s32.f64	s12, d6
- 350 0082 16EE102A 		vmov	r2, s12	@ int
- 351 0086 12B2     		sxth	r2, r2
- 352 0088 0392     		str	r2, [sp, #12]
- 353              	.LVL21:
-  30:Core/Src/AHRS.c ****     int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 354              		.loc 1 30 5 is_stmt 1 view .LVU69
-  30:Core/Src/AHRS.c ****     int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 355              		.loc 1 30 13 is_stmt 0 view .LVU70
- 356 008a BDF91C60 		ldrsh	r6, [sp, #28]
- 357              	.LVL22:
-  30:Core/Src/AHRS.c ****     int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 358              		.loc 1 30 34 view .LVU71
- 359 008e BDF91EA0 		ldrsh	r10, [sp, #30]
- 360              	.LVL23:
-  30:Core/Src/AHRS.c ****     int16_t mx = imuData.mag[0], my = imuData.mag[1], mz = imuData.mag[2];
- 361              		.loc 1 30 55 view .LVU72
- 362 0092 BDF92090 		ldrsh	r9, [sp, #32]
- 363              	.LVL24:
-ARM GAS  /tmp/cctfyu8u.s 			page 10
+ 310 0022 F1EE006A 		vmov.f32	s13, #4.0e+0
+ 311 0026 69EEA69A 		vmul.f32	s19, s19, s13
+  34:Core/Src/AHRS.c ****     float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
+ 312              		.loc 1 34 40 view .LVU54
+ 313 002a 9FEDED7A 		vldr.32	s14, .L15+16
+ 314 002e 69EE879A 		vmul.f32	s19, s19, s14
+  34:Core/Src/AHRS.c ****     float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
+ 315              		.loc 1 34 11 view .LVU55
+ 316 0032 DFEDEC7A 		vldr.32	s15, .L15+20
+ 317 0036 69EEA79A 		vmul.f32	s19, s19, s15
+ 318              	.LVL15:
+  35:Core/Src/AHRS.c ****     float ay = imuData.accel[1] * 4.0f * 9.81f / 32768.0f;
+ 319              		.loc 1 35 5 is_stmt 1 view .LVU56
+  35:Core/Src/AHRS.c ****     float ay = imuData.accel[1] * 4.0f * 9.81f / 32768.0f;
+ 320              		.loc 1 35 29 is_stmt 0 view .LVU57
+ 321 003a BDF90230 		ldrsh	r3, [sp, #2]
+ 322 003e 08EE103A 		vmov	s16, r3	@ int
+  35:Core/Src/AHRS.c ****     float ay = imuData.accel[1] * 4.0f * 9.81f / 32768.0f;
+ 323              		.loc 1 35 33 view .LVU58
+ 324 0042 B8EEC88A 		vcvt.f32.s32	s16, s16
+ 325 0046 28EE268A 		vmul.f32	s16, s16, s13
+  35:Core/Src/AHRS.c ****     float ay = imuData.accel[1] * 4.0f * 9.81f / 32768.0f;
+ 326              		.loc 1 35 40 view .LVU59
+ 327 004a 28EE078A 		vmul.f32	s16, s16, s14
+  35:Core/Src/AHRS.c ****     float ay = imuData.accel[1] * 4.0f * 9.81f / 32768.0f;
+ 328              		.loc 1 35 11 view .LVU60
+ 329 004e 28EE278A 		vmul.f32	s16, s16, s15
+ 330              	.LVL16:
+  36:Core/Src/AHRS.c ****     float az = imuData.accel[2] * 4.0f * 9.81f / 32768.0f;
+ 331              		.loc 1 36 5 is_stmt 1 view .LVU61
+  36:Core/Src/AHRS.c ****     float az = imuData.accel[2] * 4.0f * 9.81f / 32768.0f;
+ 332              		.loc 1 36 29 is_stmt 0 view .LVU62
+ 333 0052 BDF90430 		ldrsh	r3, [sp, #4]
+ 334 0056 08EE903A 		vmov	s17, r3	@ int
+  36:Core/Src/AHRS.c ****     float az = imuData.accel[2] * 4.0f * 9.81f / 32768.0f;
+ 335              		.loc 1 36 33 view .LVU63
+ 336 005a F8EEE88A 		vcvt.f32.s32	s17, s17
+ 337 005e 68EEA68A 		vmul.f32	s17, s17, s13
+  36:Core/Src/AHRS.c ****     float az = imuData.accel[2] * 4.0f * 9.81f / 32768.0f;
+ 338              		.loc 1 36 40 view .LVU64
+ 339 0062 68EE878A 		vmul.f32	s17, s17, s14
+  36:Core/Src/AHRS.c ****     float az = imuData.accel[2] * 4.0f * 9.81f / 32768.0f;
+ 340              		.loc 1 36 11 view .LVU65
+ 341 0066 68EEA78A 		vmul.f32	s17, s17, s15
+ 342              	.LVL17:
+  37:Core/Src/AHRS.c ****     float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+ 343              		.loc 1 37 5 is_stmt 1 view .LVU66
+  37:Core/Src/AHRS.c ****     float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+ 344              		.loc 1 37 28 is_stmt 0 view .LVU67
+ 345 006a BDF90630 		ldrsh	r3, [sp, #6]
+ 346 006e 05EE103A 		vmov	s10, r3	@ int
+  37:Core/Src/AHRS.c ****     float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+ 347              		.loc 1 37 32 view .LVU68
+ 348 0072 B8EEC55A 		vcvt.f32.s32	s10, s10
+ 349 0076 DFEDDC6A 		vldr.32	s13, .L15+24
+ 350 007a 25EE265A 		vmul.f32	s10, s10, s13
+  37:Core/Src/AHRS.c ****     float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+ARM GAS  /tmp/ccwVx3D8.s 			page 10
 
 
-  33:Core/Src/AHRS.c ****     now = HAL_GetTick();
- 364              		.loc 1 33 5 is_stmt 1 view .LVU73
-  33:Core/Src/AHRS.c ****     now = HAL_GetTick();
- 365              		.loc 1 33 11 is_stmt 0 view .LVU74
- 366 0096 FFF7FEFF 		bl	HAL_GetTick
- 367              	.LVL25:
-  33:Core/Src/AHRS.c ****     now = HAL_GetTick();
- 368              		.loc 1 33 9 view .LVU75
- 369 009a CF4B     		ldr	r3, .L15+16
- 370 009c 1860     		str	r0, [r3]
-  34:Core/Src/AHRS.c ****     float deltaTime = (now - lastUpdate) / 1000.0f;
- 371              		.loc 1 34 5 is_stmt 1 view .LVU76
-  34:Core/Src/AHRS.c ****     float deltaTime = (now - lastUpdate) / 1000.0f;
- 372              		.loc 1 34 28 is_stmt 0 view .LVU77
- 373 009e CF4A     		ldr	r2, .L15+20
- 374 00a0 1368     		ldr	r3, [r2]
- 375 00a2 C31A     		subs	r3, r0, r3
-  34:Core/Src/AHRS.c ****     float deltaTime = (now - lastUpdate) / 1000.0f;
- 376              		.loc 1 34 42 view .LVU78
- 377 00a4 07EE903A 		vmov	s15, r3	@ int
- 378 00a8 F8EE677A 		vcvt.f32.u32	s15, s15
-  34:Core/Src/AHRS.c ****     float deltaTime = (now - lastUpdate) / 1000.0f;
- 379              		.loc 1 34 11 view .LVU79
- 380 00ac 9FEDCC7A 		vldr.32	s14, .L15+24
- 381 00b0 87EE878A 		vdiv.f32	s16, s15, s14
- 382              	.LVL26:
-  35:Core/Src/AHRS.c ****     lastUpdate = now;
- 383              		.loc 1 35 5 is_stmt 1 view .LVU80
-  35:Core/Src/AHRS.c ****     lastUpdate = now;
- 384              		.loc 1 35 16 is_stmt 0 view .LVU81
- 385 00b4 1060     		str	r0, [r2]
-  38:Core/Src/AHRS.c ****     ax = MedianFilter(ax);
- 386              		.loc 1 38 5 is_stmt 1 view .LVU82
-  38:Core/Src/AHRS.c ****     ax = MedianFilter(ax);
- 387              		.loc 1 38 10 is_stmt 0 view .LVU83
- 388 00b6 2846     		mov	r0, r5
- 389 00b8 FFF7FEFF 		bl	MedianFilter
- 390              	.LVL27:
- 391 00bc 0546     		mov	r5, r0
- 392              	.LVL28:
-  39:Core/Src/AHRS.c ****     ay = MedianFilter(ay);
- 393              		.loc 1 39 5 is_stmt 1 view .LVU84
-  39:Core/Src/AHRS.c ****     ay = MedianFilter(ay);
- 394              		.loc 1 39 10 is_stmt 0 view .LVU85
- 395 00be 4046     		mov	r0, r8
- 396 00c0 FFF7FEFF 		bl	MedianFilter
- 397              	.LVL29:
- 398 00c4 8046     		mov	r8, r0
- 399              	.LVL30:
-  40:Core/Src/AHRS.c ****     az = MedianFilter(az);
- 400              		.loc 1 40 5 is_stmt 1 view .LVU86
-  40:Core/Src/AHRS.c ****     az = MedianFilter(az);
- 401              		.loc 1 40 10 is_stmt 0 view .LVU87
- 402 00c6 3846     		mov	r0, r7
- 403 00c8 FFF7FEFF 		bl	MedianFilter
- 404              	.LVL31:
- 405 00cc 0746     		mov	r7, r0
-ARM GAS  /tmp/cctfyu8u.s 			page 11
+ 351              		.loc 1 37 41 view .LVU69
+ 352 007e 25EE275A 		vmul.f32	s10, s10, s15
+ 353 0082 B7EEC55A 		vcvt.f64.f32	d5, s10
+  37:Core/Src/AHRS.c ****     float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+ 354              		.loc 1 37 52 view .LVU70
+ 355 0086 9FEDD23B 		vldr.64	d3, .L15
+ 356 008a 25EE035B 		vmul.f64	d5, d5, d3
+  37:Core/Src/AHRS.c ****     float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+ 357              		.loc 1 37 59 view .LVU71
+ 358 008e 9FEDD24B 		vldr.64	d4, .L15+8
+ 359 0092 85EE042B 		vdiv.f64	d2, d5, d4
+  37:Core/Src/AHRS.c ****     float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+ 360              		.loc 1 37 11 view .LVU72
+ 361 0096 B7EEC29B 		vcvt.f32.f64	s18, d2
+ 362              	.LVL18:
+  38:Core/Src/AHRS.c ****     float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 363              		.loc 1 38 5 is_stmt 1 view .LVU73
+  38:Core/Src/AHRS.c ****     float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 364              		.loc 1 38 28 is_stmt 0 view .LVU74
+ 365 009a BDF90830 		ldrsh	r3, [sp, #8]
+ 366 009e 05EE103A 		vmov	s10, r3	@ int
+  38:Core/Src/AHRS.c ****     float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 367              		.loc 1 38 32 view .LVU75
+ 368 00a2 B8EEC55A 		vcvt.f32.s32	s10, s10
+ 369 00a6 25EE265A 		vmul.f32	s10, s10, s13
+  38:Core/Src/AHRS.c ****     float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 370              		.loc 1 38 41 view .LVU76
+ 371 00aa 25EE275A 		vmul.f32	s10, s10, s15
+ 372 00ae B7EEC55A 		vcvt.f64.f32	d5, s10
+  38:Core/Src/AHRS.c ****     float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 373              		.loc 1 38 52 view .LVU77
+ 374 00b2 25EE035B 		vmul.f64	d5, d5, d3
+  38:Core/Src/AHRS.c ****     float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 375              		.loc 1 38 59 view .LVU78
+ 376 00b6 85EE04AB 		vdiv.f64	d10, d5, d4
+  38:Core/Src/AHRS.c ****     float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 377              		.loc 1 38 11 view .LVU79
+ 378 00ba B7EECAAB 		vcvt.f32.f64	s20, d10
+ 379              	.LVL19:
+  39:Core/Src/AHRS.c ****     float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 380              		.loc 1 39 5 is_stmt 1 view .LVU80
+  39:Core/Src/AHRS.c ****     float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 381              		.loc 1 39 28 is_stmt 0 view .LVU81
+ 382 00be BDF90A30 		ldrsh	r3, [sp, #10]
+ 383 00c2 06EE103A 		vmov	s12, r3	@ int
+  39:Core/Src/AHRS.c ****     float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 384              		.loc 1 39 32 view .LVU82
+ 385 00c6 B8EEC66A 		vcvt.f32.s32	s12, s12
+ 386 00ca 26EE266A 		vmul.f32	s12, s12, s13
+  39:Core/Src/AHRS.c ****     float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 387              		.loc 1 39 41 view .LVU83
+ 388 00ce 26EE276A 		vmul.f32	s12, s12, s15
+ 389 00d2 B7EEC66A 		vcvt.f64.f32	d6, s12
+  39:Core/Src/AHRS.c ****     float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 390              		.loc 1 39 52 view .LVU84
+ 391 00d6 26EE036B 		vmul.f64	d6, d6, d3
+  39:Core/Src/AHRS.c ****     float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+ARM GAS  /tmp/ccwVx3D8.s 			page 11
 
 
- 406              	.LVL32:
-  41:Core/Src/AHRS.c ****     mx = MedianFilter(mx);
- 407              		.loc 1 41 5 is_stmt 1 view .LVU88
-  41:Core/Src/AHRS.c ****     mx = MedianFilter(mx);
- 408              		.loc 1 41 10 is_stmt 0 view .LVU89
- 409 00ce 3046     		mov	r0, r6
- 410 00d0 FFF7FEFF 		bl	MedianFilter
- 411              	.LVL33:
- 412 00d4 0646     		mov	r6, r0
- 413              	.LVL34:
-  42:Core/Src/AHRS.c ****     my = MedianFilter(my);
- 414              		.loc 1 42 5 is_stmt 1 view .LVU90
-  42:Core/Src/AHRS.c ****     my = MedianFilter(my);
- 415              		.loc 1 42 10 is_stmt 0 view .LVU91
- 416 00d6 5046     		mov	r0, r10
- 417 00d8 FFF7FEFF 		bl	MedianFilter
- 418              	.LVL35:
- 419 00dc 8246     		mov	r10, r0
- 420              	.LVL36:
-  43:Core/Src/AHRS.c ****     mz = MedianFilter(mz);
- 421              		.loc 1 43 5 is_stmt 1 view .LVU92
-  43:Core/Src/AHRS.c ****     mz = MedianFilter(mz);
- 422              		.loc 1 43 10 is_stmt 0 view .LVU93
- 423 00de 4846     		mov	r0, r9
- 424 00e0 FFF7FEFF 		bl	MedianFilter
- 425              	.LVL37:
- 426 00e4 8146     		mov	r9, r0
- 427              	.LVL38:
-  46:Core/Src/AHRS.c ****     int16_t norm = invSqrt(ax * ax + ay * ay + az * az);
- 428              		.loc 1 46 5 is_stmt 1 view .LVU94
-  46:Core/Src/AHRS.c ****     int16_t norm = invSqrt(ax * ax + ay * ay + az * az);
- 429              		.loc 1 46 31 is_stmt 0 view .LVU95
- 430 00e6 1FFA85FB 		uxth	fp, r5
- 431 00ea 15FB05F0 		smulbb	r0, r5, r5
-  46:Core/Src/AHRS.c ****     int16_t norm = invSqrt(ax * ax + ay * ay + az * az);
- 432              		.loc 1 46 41 view .LVU96
- 433 00ee 1FFA88F5 		uxth	r5, r8
- 434              	.LVL39:
-  46:Core/Src/AHRS.c ****     int16_t norm = invSqrt(ax * ax + ay * ay + az * az);
- 435              		.loc 1 46 41 view .LVU97
- 436 00f2 18FB08F8 		smulbb	r8, r8, r8
- 437              	.LVL40:
-  46:Core/Src/AHRS.c ****     int16_t norm = invSqrt(ax * ax + ay * ay + az * az);
- 438              		.loc 1 46 41 view .LVU98
- 439 00f6 1FFA88F8 		uxth	r8, r8
-  46:Core/Src/AHRS.c ****     int16_t norm = invSqrt(ax * ax + ay * ay + az * az);
- 440              		.loc 1 46 36 view .LVU99
- 441 00fa 18FA80F0 		uxtah	r0, r8, r0
-  46:Core/Src/AHRS.c ****     int16_t norm = invSqrt(ax * ax + ay * ay + az * az);
- 442              		.loc 1 46 51 view .LVU100
- 443 00fe 1FFA87F8 		uxth	r8, r7
- 444 0102 17FB07F7 		smulbb	r7, r7, r7
- 445              	.LVL41:
-  46:Core/Src/AHRS.c ****     int16_t norm = invSqrt(ax * ax + ay * ay + az * az);
- 446              		.loc 1 46 51 view .LVU101
- 447 0106 BFB2     		uxth	r7, r7
-  46:Core/Src/AHRS.c ****     int16_t norm = invSqrt(ax * ax + ay * ay + az * az);
-ARM GAS  /tmp/cctfyu8u.s 			page 12
+ 392              		.loc 1 39 59 view .LVU85
+ 393 00da 86EE04CB 		vdiv.f64	d12, d6, d4
+  39:Core/Src/AHRS.c ****     float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+ 394              		.loc 1 39 11 view .LVU86
+ 395 00de B7EECCCB 		vcvt.f32.f64	s24, d12
+ 396              	.LVL20:
+  40:Core/Src/AHRS.c ****     float mx = imuData.mag[0] * 0.146f; // 将原始数据转换为 µT
+ 397              		.loc 1 40 5 is_stmt 1 view .LVU87
+  40:Core/Src/AHRS.c ****     float mx = imuData.mag[0] * 0.146f; // 将原始数据转换为 µT
+ 398              		.loc 1 40 27 is_stmt 0 view .LVU88
+ 399 00e2 BDF90C30 		ldrsh	r3, [sp, #12]
+ 400 00e6 0AEE903A 		vmov	s21, r3	@ int
+  40:Core/Src/AHRS.c ****     float mx = imuData.mag[0] * 0.146f; // 将原始数据转换为 µT
+ 401              		.loc 1 40 31 view .LVU89
+ 402 00ea F8EEEAAA 		vcvt.f32.s32	s21, s21
+  40:Core/Src/AHRS.c ****     float mx = imuData.mag[0] * 0.146f; // 将原始数据转换为 µT
+ 403              		.loc 1 40 11 view .LVU90
+ 404 00ee DFEDBF7A 		vldr.32	s15, .L15+28
+ 405 00f2 6AEEA7AA 		vmul.f32	s21, s21, s15
+ 406              	.LVL21:
+  41:Core/Src/AHRS.c ****     float my = imuData.mag[1] * 0.146f;
+ 407              		.loc 1 41 5 is_stmt 1 view .LVU91
+  41:Core/Src/AHRS.c ****     float my = imuData.mag[1] * 0.146f;
+ 408              		.loc 1 41 27 is_stmt 0 view .LVU92
+ 409 00f6 BDF90E30 		ldrsh	r3, [sp, #14]
+ 410 00fa 0CEE903A 		vmov	s25, r3	@ int
+  41:Core/Src/AHRS.c ****     float my = imuData.mag[1] * 0.146f;
+ 411              		.loc 1 41 31 view .LVU93
+ 412 00fe F8EEECCA 		vcvt.f32.s32	s25, s25
+  41:Core/Src/AHRS.c ****     float my = imuData.mag[1] * 0.146f;
+ 413              		.loc 1 41 11 view .LVU94
+ 414 0102 6CEEA7CA 		vmul.f32	s25, s25, s15
+ 415              	.LVL22:
+  42:Core/Src/AHRS.c ****     float mz = imuData.mag[2] * 0.146f;
+ 416              		.loc 1 42 5 is_stmt 1 view .LVU95
+  42:Core/Src/AHRS.c ****     float mz = imuData.mag[2] * 0.146f;
+ 417              		.loc 1 42 27 is_stmt 0 view .LVU96
+ 418 0106 BDF91030 		ldrsh	r3, [sp, #16]
+ 419 010a 0BEE903A 		vmov	s23, r3	@ int
+  42:Core/Src/AHRS.c ****     float mz = imuData.mag[2] * 0.146f;
+ 420              		.loc 1 42 31 view .LVU97
+ 421 010e F8EEEBBA 		vcvt.f32.s32	s23, s23
+  42:Core/Src/AHRS.c ****     float mz = imuData.mag[2] * 0.146f;
+ 422              		.loc 1 42 11 view .LVU98
+ 423 0112 6BEEA7BA 		vmul.f32	s23, s23, s15
+ 424              	.LVL23:
+  45:Core/Src/AHRS.c ****     now = HAL_GetTick();
+ 425              		.loc 1 45 5 is_stmt 1 view .LVU99
+  45:Core/Src/AHRS.c ****     now = HAL_GetTick();
+ 426              		.loc 1 45 11 is_stmt 0 view .LVU100
+ 427 0116 FFF7FEFF 		bl	HAL_GetTick
+ 428              	.LVL24:
+  45:Core/Src/AHRS.c ****     now = HAL_GetTick();
+ 429              		.loc 1 45 9 view .LVU101
+ 430 011a B54B     		ldr	r3, .L15+32
+ 431 011c 1860     		str	r0, [r3]
+  46:Core/Src/AHRS.c ****     float deltaTime = (now - lastUpdate) / 1000.0f;
+ARM GAS  /tmp/ccwVx3D8.s 			page 12
 
 
- 448              		.loc 1 46 46 view .LVU102
- 449 0108 17FA80F0 		uxtah	r0, r7, r0
-  46:Core/Src/AHRS.c ****     int16_t norm = invSqrt(ax * ax + ay * ay + az * az);
- 450              		.loc 1 46 20 view .LVU103
- 451 010c 00B2     		sxth	r0, r0
- 452 010e FFF7FEFF 		bl	invSqrt
- 453              	.LVL42:
-  47:Core/Src/AHRS.c ****     ax *= norm;
- 454              		.loc 1 47 5 is_stmt 1 view .LVU104
-  47:Core/Src/AHRS.c ****     ax *= norm;
- 455              		.loc 1 47 8 is_stmt 0 view .LVU105
- 456 0112 1BFB00FB 		smulbb	fp, fp, r0
- 457              	.LVL43:
-  47:Core/Src/AHRS.c ****     ax *= norm;
- 458              		.loc 1 47 8 view .LVU106
- 459 0116 0FFA8BF7 		sxth	r7, fp
- 460 011a 09EE107A 		vmov	s18, r7	@ int
- 461              	.LVL44:
-  48:Core/Src/AHRS.c ****     ay *= norm;
- 462              		.loc 1 48 5 is_stmt 1 view .LVU107
-  48:Core/Src/AHRS.c ****     ay *= norm;
- 463              		.loc 1 48 8 is_stmt 0 view .LVU108
- 464 011e 15FB00F5 		smulbb	r5, r5, r0
- 465              	.LVL45:
-  48:Core/Src/AHRS.c ****     ay *= norm;
- 466              		.loc 1 48 8 view .LVU109
- 467 0122 2BB2     		sxth	r3, r5
- 468 0124 0093     		str	r3, [sp]
- 469              	.LVL46:
-  49:Core/Src/AHRS.c ****     az *= norm;
- 470              		.loc 1 49 5 is_stmt 1 view .LVU110
-  49:Core/Src/AHRS.c ****     az *= norm;
- 471              		.loc 1 49 8 is_stmt 0 view .LVU111
- 472 0126 18FB00F8 		smulbb	r8, r8, r0
- 473              	.LVL47:
-  49:Core/Src/AHRS.c ****     az *= norm;
- 474              		.loc 1 49 8 view .LVU112
- 475 012a 0FFA88F2 		sxth	r2, r8
- 476 012e 0192     		str	r2, [sp, #4]
- 477              	.LVL48:
-  52:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
- 478              		.loc 1 52 5 is_stmt 1 view .LVU113
-  52:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
- 479              		.loc 1 52 23 is_stmt 0 view .LVU114
- 480 0130 16FB06F6 		smulbb	r6, r6, r6
- 481              	.LVL49:
-  52:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
- 482              		.loc 1 52 33 view .LVU115
- 483 0134 1AFB0AF0 		smulbb	r0, r10, r10
- 484              	.LVL50:
-  52:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
- 485              		.loc 1 52 33 view .LVU116
- 486 0138 80B2     		uxth	r0, r0
-  52:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
- 487              		.loc 1 52 28 view .LVU117
- 488 013a 10FA86F6 		uxtah	r6, r0, r6
-  52:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
-ARM GAS  /tmp/cctfyu8u.s 			page 13
+ 432              		.loc 1 46 5 is_stmt 1 view .LVU102
+  46:Core/Src/AHRS.c ****     float deltaTime = (now - lastUpdate) / 1000.0f;
+ 433              		.loc 1 46 28 is_stmt 0 view .LVU103
+ 434 011e B54A     		ldr	r2, .L15+36
+ 435 0120 1368     		ldr	r3, [r2]
+ 436 0122 C31A     		subs	r3, r0, r3
+  46:Core/Src/AHRS.c ****     float deltaTime = (now - lastUpdate) / 1000.0f;
+ 437              		.loc 1 46 42 view .LVU104
+ 438 0124 07EE903A 		vmov	s15, r3	@ int
+ 439 0128 F8EE677A 		vcvt.f32.u32	s15, s15
+  46:Core/Src/AHRS.c ****     float deltaTime = (now - lastUpdate) / 1000.0f;
+ 440              		.loc 1 46 11 view .LVU105
+ 441 012c 9FEDB27A 		vldr.32	s14, .L15+40
+ 442 0130 87EE87BA 		vdiv.f32	s22, s15, s14
+ 443              	.LVL25:
+  47:Core/Src/AHRS.c ****     lastUpdate = now;
+ 444              		.loc 1 47 5 is_stmt 1 view .LVU106
+  47:Core/Src/AHRS.c ****     lastUpdate = now;
+ 445              		.loc 1 47 16 is_stmt 0 view .LVU107
+ 446 0134 1060     		str	r0, [r2]
+  50:Core/Src/AHRS.c ****     ax = MedianFilter(ax);
+ 447              		.loc 1 50 5 is_stmt 1 view .LVU108
+  50:Core/Src/AHRS.c ****     ax = MedianFilter(ax);
+ 448              		.loc 1 50 10 is_stmt 0 view .LVU109
+ 449 0136 B0EE690A 		vmov.f32	s0, s19
+ 450 013a FFF7FEFF 		bl	MedianFilter
+ 451              	.LVL26:
+ 452 013e F0EE409A 		vmov.f32	s19, s0
+ 453              	.LVL27:
+  51:Core/Src/AHRS.c ****     ay = MedianFilter(ay);
+ 454              		.loc 1 51 5 is_stmt 1 view .LVU110
+  51:Core/Src/AHRS.c ****     ay = MedianFilter(ay);
+ 455              		.loc 1 51 10 is_stmt 0 view .LVU111
+ 456 0142 B0EE480A 		vmov.f32	s0, s16
+ 457              	.LVL28:
+  51:Core/Src/AHRS.c ****     ay = MedianFilter(ay);
+ 458              		.loc 1 51 10 view .LVU112
+ 459 0146 FFF7FEFF 		bl	MedianFilter
+ 460              	.LVL29:
+ 461 014a B0EE408A 		vmov.f32	s16, s0
+ 462              	.LVL30:
+  52:Core/Src/AHRS.c ****     az = MedianFilter(az);
+ 463              		.loc 1 52 5 is_stmt 1 view .LVU113
+  52:Core/Src/AHRS.c ****     az = MedianFilter(az);
+ 464              		.loc 1 52 10 is_stmt 0 view .LVU114
+ 465 014e B0EE680A 		vmov.f32	s0, s17
+ 466              	.LVL31:
+  52:Core/Src/AHRS.c ****     az = MedianFilter(az);
+ 467              		.loc 1 52 10 view .LVU115
+ 468 0152 FFF7FEFF 		bl	MedianFilter
+ 469              	.LVL32:
+ 470 0156 F0EE408A 		vmov.f32	s17, s0
+ 471              	.LVL33:
+  53:Core/Src/AHRS.c ****     mx = MedianFilter(mx);
+ 472              		.loc 1 53 5 is_stmt 1 view .LVU116
+  53:Core/Src/AHRS.c ****     mx = MedianFilter(mx);
+ 473              		.loc 1 53 10 is_stmt 0 view .LVU117
+ARM GAS  /tmp/ccwVx3D8.s 			page 13
 
 
- 489              		.loc 1 52 43 view .LVU118
- 490 013e 19FB09F0 		smulbb	r0, r9, r9
- 491 0142 80B2     		uxth	r0, r0
-  52:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
- 492              		.loc 1 52 38 view .LVU119
- 493 0144 10FA86F0 		uxtah	r0, r0, r6
-  52:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
- 494              		.loc 1 52 12 view .LVU120
- 495 0148 00B2     		sxth	r0, r0
- 496 014a FFF7FEFF 		bl	invSqrt
- 497              	.LVL51:
-  53:Core/Src/AHRS.c ****     mx *= norm;
- 498              		.loc 1 53 5 is_stmt 1 view .LVU121
-  54:Core/Src/AHRS.c ****     my *= norm;
- 499              		.loc 1 54 5 view .LVU122
-  55:Core/Src/AHRS.c ****     mz *= norm;
- 500              		.loc 1 55 5 view .LVU123
-  58:Core/Src/AHRS.c ****     gx -= w1;
- 501              		.loc 1 58 5 view .LVU124
-  58:Core/Src/AHRS.c ****     gx -= w1;
- 502              		.loc 1 58 8 is_stmt 0 view .LVU125
- 503 014e A54B     		ldr	r3, .L15+28
- 504 0150 B3F800C0 		ldrh	ip, [r3]
- 505 0154 A4EB0C04 		sub	r4, r4, ip
- 506              	.LVL52:
-  58:Core/Src/AHRS.c ****     gx -= w1;
- 507              		.loc 1 58 8 view .LVU126
- 508 0158 0FFA84FC 		sxth	ip, r4
- 509              	.LVL53:
-  59:Core/Src/AHRS.c ****     gy -= w2;
- 510              		.loc 1 59 5 is_stmt 1 view .LVU127
-  59:Core/Src/AHRS.c ****     gy -= w2;
- 511              		.loc 1 59 8 is_stmt 0 view .LVU128
- 512 015c A24B     		ldr	r3, .L15+32
- 513 015e 1B88     		ldrh	r3, [r3]
- 514 0160 0299     		ldr	r1, [sp, #8]
- 515 0162 CB1A     		subs	r3, r1, r3
- 516 0164 1BB2     		sxth	r3, r3
- 517              	.LVL54:
-  60:Core/Src/AHRS.c ****     gz -= w3;
- 518              		.loc 1 60 5 is_stmt 1 view .LVU129
-  60:Core/Src/AHRS.c ****     gz -= w3;
- 519              		.loc 1 60 8 is_stmt 0 view .LVU130
- 520 0166 A14A     		ldr	r2, .L15+36
- 521 0168 B2F800E0 		ldrh	lr, [r2]
- 522 016c 0399     		ldr	r1, [sp, #12]
- 523 016e A1EB0E0E 		sub	lr, r1, lr
- 524 0172 0FFA8EFE 		sxth	lr, lr
- 525              	.LVL55:
-  63:Core/Src/AHRS.c ****     int16_t halfT = deltaTime / 2.0f;
- 526              		.loc 1 63 5 is_stmt 1 view .LVU131
-  63:Core/Src/AHRS.c ****     int16_t halfT = deltaTime / 2.0f;
- 527              		.loc 1 63 31 is_stmt 0 view .LVU132
- 528 0176 F6EE008A 		vmov.f32	s17, #5.0e-1
- 529 017a 28EE288A 		vmul.f32	s16, s16, s17
- 530              	.LVL56:
-  63:Core/Src/AHRS.c ****     int16_t halfT = deltaTime / 2.0f;
-ARM GAS  /tmp/cctfyu8u.s 			page 14
+ 474 015a B0EE6A0A 		vmov.f32	s0, s21
+ 475              	.LVL34:
+  53:Core/Src/AHRS.c ****     mx = MedianFilter(mx);
+ 476              		.loc 1 53 10 view .LVU118
+ 477 015e FFF7FEFF 		bl	MedianFilter
+ 478              	.LVL35:
+ 479 0162 F0EE40AA 		vmov.f32	s21, s0
+ 480              	.LVL36:
+  54:Core/Src/AHRS.c ****     my = MedianFilter(my);
+ 481              		.loc 1 54 5 is_stmt 1 view .LVU119
+  54:Core/Src/AHRS.c ****     my = MedianFilter(my);
+ 482              		.loc 1 54 10 is_stmt 0 view .LVU120
+ 483 0166 B0EE6C0A 		vmov.f32	s0, s25
+ 484              	.LVL37:
+  54:Core/Src/AHRS.c ****     my = MedianFilter(my);
+ 485              		.loc 1 54 10 view .LVU121
+ 486 016a FFF7FEFF 		bl	MedianFilter
+ 487              	.LVL38:
+ 488 016e F0EE40CA 		vmov.f32	s25, s0
+ 489              	.LVL39:
+  55:Core/Src/AHRS.c ****     mz = MedianFilter(mz);
+ 490              		.loc 1 55 5 is_stmt 1 view .LVU122
+  55:Core/Src/AHRS.c ****     mz = MedianFilter(mz);
+ 491              		.loc 1 55 10 is_stmt 0 view .LVU123
+ 492 0172 B0EE6B0A 		vmov.f32	s0, s23
+ 493              	.LVL40:
+  55:Core/Src/AHRS.c ****     mz = MedianFilter(mz);
+ 494              		.loc 1 55 10 view .LVU124
+ 495 0176 FFF7FEFF 		bl	MedianFilter
+ 496              	.LVL41:
+ 497 017a F0EE40BA 		vmov.f32	s23, s0
+ 498              	.LVL42:
+  58:Core/Src/AHRS.c ****     float norm = invSqrt(ax * ax + ay * ay + az * az);
+ 499              		.loc 1 58 5 is_stmt 1 view .LVU125
+  58:Core/Src/AHRS.c ****     float norm = invSqrt(ax * ax + ay * ay + az * az);
+ 500              		.loc 1 58 29 is_stmt 0 view .LVU126
+ 501 017e 69EEA97A 		vmul.f32	s15, s19, s19
+  58:Core/Src/AHRS.c ****     float norm = invSqrt(ax * ax + ay * ay + az * az);
+ 502              		.loc 1 58 39 view .LVU127
+ 503 0182 28EE080A 		vmul.f32	s0, s16, s16
+ 504              	.LVL43:
+  58:Core/Src/AHRS.c ****     float norm = invSqrt(ax * ax + ay * ay + az * az);
+ 505              		.loc 1 58 34 view .LVU128
+ 506 0186 77EE807A 		vadd.f32	s15, s15, s0
+  58:Core/Src/AHRS.c ****     float norm = invSqrt(ax * ax + ay * ay + az * az);
+ 507              		.loc 1 58 49 view .LVU129
+ 508 018a 28EEA80A 		vmul.f32	s0, s17, s17
+  58:Core/Src/AHRS.c ****     float norm = invSqrt(ax * ax + ay * ay + az * az);
+ 509              		.loc 1 58 18 view .LVU130
+ 510 018e 37EE800A 		vadd.f32	s0, s15, s0
+ 511 0192 FFF7FEFF 		bl	invSqrt
+ 512              	.LVL44:
+  59:Core/Src/AHRS.c ****     ax *= norm;
+ 513              		.loc 1 59 5 is_stmt 1 view .LVU131
+  59:Core/Src/AHRS.c ****     ax *= norm;
+ 514              		.loc 1 59 8 is_stmt 0 view .LVU132
+ 515 0196 69EE809A 		vmul.f32	s19, s19, s0
+ARM GAS  /tmp/ccwVx3D8.s 			page 14
 
 
- 531              		.loc 1 63 13 view .LVU133
- 532 017e FDEEC87A 		vcvt.s32.f32	s15, s16
- 533 0182 17EE901A 		vmov	r1, s15	@ int
- 534              	.LVL57:
-  64:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
- 535              		.loc 1 64 5 is_stmt 1 view .LVU134
-  64:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
- 536              		.loc 1 64 12 is_stmt 0 view .LVU135
- 537 0186 9A4C     		ldr	r4, .L15+40
- 538 0188 B4F90020 		ldrsh	r2, [r4]
- 539 018c 5042     		rsbs	r0, r2, #0
-  64:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
- 540              		.loc 1 64 16 view .LVU136
- 541 018e 0CFB00F0 		mul	r0, ip, r0
-  64:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
- 542              		.loc 1 64 26 view .LVU137
- 543 0192 984F     		ldr	r7, .L15+44
- 544 0194 B7F900B0 		ldrsh	fp, [r7]
-  64:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
- 545              		.loc 1 64 21 view .LVU138
- 546 0198 03FB1B00 		mls	r0, r3, fp, r0
-  64:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
- 547              		.loc 1 64 36 view .LVU139
- 548 019c 964E     		ldr	r6, .L15+48
- 549 019e B6F90080 		ldrsh	r8, [r6]
-  64:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
- 550              		.loc 1 64 31 view .LVU140
- 551 01a2 0EFB1800 		mls	r0, lr, r8, r0
-  64:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
- 552              		.loc 1 64 8 view .LVU141
- 553 01a6 954D     		ldr	r5, .L15+52
- 554 01a8 B5F80090 		ldrh	r9, [r5]
- 555 01ac 10FB0190 		smlabb	r0, r0, r1, r9
- 556 01b0 0290     		str	r0, [sp, #8]
- 557 01b2 BDF90890 		ldrsh	r9, [sp, #8]
- 558 01b6 A5F80090 		strh	r9, [r5]	@ movhi
-  65:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
- 559              		.loc 1 65 5 is_stmt 1 view .LVU142
-  65:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
- 560              		.loc 1 65 25 is_stmt 0 view .LVU143
- 561 01ba 0EFB0BF0 		mul	r0, lr, fp
-  65:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
- 562              		.loc 1 65 20 view .LVU144
- 563 01be 09FB0C00 		mla	r0, r9, ip, r0
-  65:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
- 564              		.loc 1 65 30 view .LVU145
- 565 01c2 08FB1300 		mls	r0, r8, r3, r0
-  65:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
- 566              		.loc 1 65 8 view .LVU146
- 567 01c6 10FB0120 		smlabb	r0, r0, r1, r2
- 568 01ca 0FFA80FA 		sxth	r10, r0
- 569 01ce A4F800A0 		strh	r10, [r4]	@ movhi
-  66:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
- 570              		.loc 1 66 5 is_stmt 1 view .LVU147
-  66:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
- 571              		.loc 1 66 15 is_stmt 0 view .LVU148
- 572 01d2 09FB03F2 		mul	r2, r9, r3
-ARM GAS  /tmp/cctfyu8u.s 			page 15
+ 516              	.LVL45:
+  60:Core/Src/AHRS.c ****     ay *= norm;
+ 517              		.loc 1 60 5 is_stmt 1 view .LVU133
+  60:Core/Src/AHRS.c ****     ay *= norm;
+ 518              		.loc 1 60 8 is_stmt 0 view .LVU134
+ 519 019a 28EE008A 		vmul.f32	s16, s16, s0
+ 520              	.LVL46:
+  61:Core/Src/AHRS.c ****     az *= norm;
+ 521              		.loc 1 61 5 is_stmt 1 view .LVU135
+  61:Core/Src/AHRS.c ****     az *= norm;
+ 522              		.loc 1 61 8 is_stmt 0 view .LVU136
+ 523 019e 68EE808A 		vmul.f32	s17, s17, s0
+ 524              	.LVL47:
+  64:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
+ 525              		.loc 1 64 5 is_stmt 1 view .LVU137
+  64:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
+ 526              		.loc 1 64 23 is_stmt 0 view .LVU138
+ 527 01a2 6AEEAAAA 		vmul.f32	s21, s21, s21
+ 528              	.LVL48:
+  64:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
+ 529              		.loc 1 64 33 view .LVU139
+ 530 01a6 6CEEACCA 		vmul.f32	s25, s25, s25
+ 531              	.LVL49:
+  64:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
+ 532              		.loc 1 64 28 view .LVU140
+ 533 01aa 7AEEACAA 		vadd.f32	s21, s21, s25
+  64:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
+ 534              		.loc 1 64 43 view .LVU141
+ 535 01ae 6BEEABBA 		vmul.f32	s23, s23, s23
+ 536              	.LVL50:
+  64:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
+ 537              		.loc 1 64 12 view .LVU142
+ 538 01b2 3AEEAB0A 		vadd.f32	s0, s21, s23
+ 539              	.LVL51:
+  64:Core/Src/AHRS.c ****     norm = invSqrt(mx * mx + my * my + mz * mz);
+ 540              		.loc 1 64 12 view .LVU143
+ 541 01b6 FFF7FEFF 		bl	invSqrt
+ 542              	.LVL52:
+  65:Core/Src/AHRS.c ****     mx *= norm;
+ 543              		.loc 1 65 5 is_stmt 1 view .LVU144
+  66:Core/Src/AHRS.c ****     my *= norm;
+ 544              		.loc 1 66 5 view .LVU145
+  67:Core/Src/AHRS.c ****     mz *= norm;
+ 545              		.loc 1 67 5 view .LVU146
+  70:Core/Src/AHRS.c ****     gx -= w1;
+ 546              		.loc 1 70 5 view .LVU147
+  70:Core/Src/AHRS.c ****     gx -= w1;
+ 547              		.loc 1 70 8 is_stmt 0 view .LVU148
+ 548 01ba 904B     		ldr	r3, .L15+44
+ 549 01bc 93ED007A 		vldr.32	s14, [r3]
+ 550 01c0 39EE479A 		vsub.f32	s18, s18, s14
+ 551              	.LVL53:
+  71:Core/Src/AHRS.c ****     gy -= w2;
+ 552              		.loc 1 71 5 is_stmt 1 view .LVU149
+  71:Core/Src/AHRS.c ****     gy -= w2;
+ 553              		.loc 1 71 8 is_stmt 0 view .LVU150
+ 554 01c4 8E4B     		ldr	r3, .L15+48
+ARM GAS  /tmp/ccwVx3D8.s 			page 15
 
 
-  66:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
- 573              		.loc 1 66 20 view .LVU149
- 574 01d6 0AFB1E22 		mls	r2, r10, lr, r2
-  66:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
- 575              		.loc 1 66 30 view .LVU150
- 576 01da 08FB0C22 		mla	r2, r8, ip, r2
-  66:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
- 577              		.loc 1 66 8 view .LVU151
- 578 01de 12FB01B2 		smlabb	r2, r2, r1, fp
- 579 01e2 0FFA82FB 		sxth	fp, r2
- 580 01e6 A7F800B0 		strh	fp, [r7]	@ movhi
-  67:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
- 581              		.loc 1 67 5 is_stmt 1 view .LVU152
-  67:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
- 582              		.loc 1 67 25 is_stmt 0 view .LVU153
- 583 01ea 0AFB03F3 		mul	r3, r10, r3
- 584              	.LVL58:
-  67:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
- 585              		.loc 1 67 20 view .LVU154
- 586 01ee 09FB0E33 		mla	r3, r9, lr, r3
-  67:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
- 587              		.loc 1 67 30 view .LVU155
- 588 01f2 0CFB1B3C 		mls	ip, ip, fp, r3
- 589              	.LVL59:
-  67:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
- 590              		.loc 1 67 8 view .LVU156
- 591 01f6 1CFB0181 		smlabb	r1, ip, r1, r8
- 592              	.LVL60:
-  67:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
- 593              		.loc 1 67 8 view .LVU157
- 594 01fa 89B2     		uxth	r1, r1
- 595 01fc 3180     		strh	r1, [r6]	@ movhi
-  70:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
- 596              		.loc 1 70 5 is_stmt 1 view .LVU158
-  70:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
- 597              		.loc 1 70 23 is_stmt 0 view .LVU159
- 598 01fe 029B     		ldr	r3, [sp, #8]
- 599 0200 13FB03F3 		smulbb	r3, r3, r3
-  70:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
- 600              		.loc 1 70 33 view .LVU160
- 601 0204 10FB00F0 		smulbb	r0, r0, r0
- 602 0208 80B2     		uxth	r0, r0
-  70:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
- 603              		.loc 1 70 28 view .LVU161
- 604 020a 10FA83F0 		uxtah	r0, r0, r3
-  70:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
- 605              		.loc 1 70 53 view .LVU162
- 606 020e 11FB01F1 		smulbb	r1, r1, r1
-  70:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
- 607              		.loc 1 70 43 view .LVU163
- 608 0212 12FB02F2 		smulbb	r2, r2, r2
- 609 0216 92B2     		uxth	r2, r2
-  70:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
- 610              		.loc 1 70 48 view .LVU164
- 611 0218 12FA81F2 		uxtah	r2, r2, r1
- 612 021c 12FA80F0 		uxtah	r0, r2, r0
-  70:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
-ARM GAS  /tmp/cctfyu8u.s 			page 16
+ 555 01c6 93ED007A 		vldr.32	s14, [r3]
+ 556 01ca 3AEE47AA 		vsub.f32	s20, s20, s14
+ 557              	.LVL54:
+  72:Core/Src/AHRS.c ****     gz -= w3;
+ 558              		.loc 1 72 5 is_stmt 1 view .LVU151
+  72:Core/Src/AHRS.c ****     gz -= w3;
+ 559              		.loc 1 72 8 is_stmt 0 view .LVU152
+ 560 01ce 8D4B     		ldr	r3, .L15+52
+ 561 01d0 93ED007A 		vldr.32	s14, [r3]
+ 562 01d4 3CEE477A 		vsub.f32	s14, s24, s14
+ 563              	.LVL55:
+  75:Core/Src/AHRS.c ****     float halfT = deltaTime / 2.0f;
+ 564              		.loc 1 75 5 is_stmt 1 view .LVU153
+  75:Core/Src/AHRS.c ****     float halfT = deltaTime / 2.0f;
+ 565              		.loc 1 75 11 is_stmt 0 view .LVU154
+ 566 01d8 F6EE00AA 		vmov.f32	s21, #5.0e-1
+ 567 01dc 2BEE2ABA 		vmul.f32	s22, s22, s21
+ 568              	.LVL56:
+  76:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+ 569              		.loc 1 76 5 is_stmt 1 view .LVU155
+  76:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+ 570              		.loc 1 76 12 is_stmt 0 view .LVU156
+ 571 01e0 894E     		ldr	r6, .L15+56
+ 572 01e2 96ED006A 		vldr.32	s12, [r6]
+  76:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+ 573              		.loc 1 76 16 view .LVU157
+ 574 01e6 66EE497A 		vnmul.f32	s15, s12, s18
+  76:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+ 575              		.loc 1 76 26 view .LVU158
+ 576 01ea 884D     		ldr	r5, .L15+60
+ 577 01ec D5ED006A 		vldr.32	s13, [r5]
+ 578 01f0 66EE8A5A 		vmul.f32	s11, s13, s20
+  76:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+ 579              		.loc 1 76 21 view .LVU159
+ 580 01f4 77EEE57A 		vsub.f32	s15, s15, s11
+  76:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+ 581              		.loc 1 76 36 view .LVU160
+ 582 01f8 854C     		ldr	r4, .L15+64
+ 583 01fa 94ED000A 		vldr.32	s0, [r4]
+ 584 01fe 60EE075A 		vmul.f32	s11, s0, s14
+  76:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+ 585              		.loc 1 76 31 view .LVU161
+ 586 0202 77EEE57A 		vsub.f32	s15, s15, s11
+  76:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+ 587              		.loc 1 76 42 view .LVU162
+ 588 0206 67EE8B7A 		vmul.f32	s15, s15, s22
+  76:Core/Src/AHRS.c ****     q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+ 589              		.loc 1 76 8 view .LVU163
+ 590 020a 824F     		ldr	r7, .L15+68
+ 591 020c D7ED005A 		vldr.32	s11, [r7]
+ 592 0210 77EEA57A 		vadd.f32	s15, s15, s11
+ 593 0214 C7ED007A 		vstr.32	s15, [r7]
+  77:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
+ 594              		.loc 1 77 5 is_stmt 1 view .LVU164
+  77:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
+ 595              		.loc 1 77 15 is_stmt 0 view .LVU165
+ 596 0218 67EE895A 		vmul.f32	s11, s15, s18
+ARM GAS  /tmp/ccwVx3D8.s 			page 16
 
 
- 613              		.loc 1 70 12 view .LVU165
- 614 0220 00B2     		sxth	r0, r0
- 615 0222 FFF7FEFF 		bl	invSqrt
- 616              	.LVL61:
-  71:Core/Src/AHRS.c ****     q0 *= norm;
- 617              		.loc 1 71 5 is_stmt 1 view .LVU166
-  71:Core/Src/AHRS.c ****     q0 *= norm;
- 618              		.loc 1 71 8 is_stmt 0 view .LVU167
- 619 0226 B5F800C0 		ldrh	ip, [r5]
- 620 022a 1CFB00FC 		smulbb	ip, ip, r0
- 621 022e 0FFA8CFC 		sxth	ip, ip
- 622 0232 A5F800C0 		strh	ip, [r5]	@ movhi
-  72:Core/Src/AHRS.c ****     q1 *= norm;
- 623              		.loc 1 72 5 is_stmt 1 view .LVU168
-  72:Core/Src/AHRS.c ****     q1 *= norm;
- 624              		.loc 1 72 8 is_stmt 0 view .LVU169
- 625 0236 2188     		ldrh	r1, [r4]
- 626 0238 11FB00F1 		smulbb	r1, r1, r0
- 627 023c 09B2     		sxth	r1, r1
- 628 023e 2180     		strh	r1, [r4]	@ movhi
-  73:Core/Src/AHRS.c ****     q2 *= norm;
- 629              		.loc 1 73 5 is_stmt 1 view .LVU170
-  73:Core/Src/AHRS.c ****     q2 *= norm;
- 630              		.loc 1 73 8 is_stmt 0 view .LVU171
- 631 0240 3A88     		ldrh	r2, [r7]
- 632 0242 12FB00F2 		smulbb	r2, r2, r0
- 633 0246 12B2     		sxth	r2, r2
- 634 0248 3A80     		strh	r2, [r7]	@ movhi
-  74:Core/Src/AHRS.c ****     q3 *= norm;
- 635              		.loc 1 74 5 is_stmt 1 view .LVU172
-  74:Core/Src/AHRS.c ****     q3 *= norm;
- 636              		.loc 1 74 8 is_stmt 0 view .LVU173
- 637 024a 3388     		ldrh	r3, [r6]
- 638 024c 13FB00F3 		smulbb	r3, r3, r0
- 639 0250 1BB2     		sxth	r3, r3
- 640 0252 3380     		strh	r3, [r6]	@ movhi
-  77:Core/Src/AHRS.c ****     const float alpha = 0.98f;  // 滤波系数
- 641              		.loc 1 77 5 is_stmt 1 view .LVU174
- 642              	.LVL62:
-  78:Core/Src/AHRS.c ****     int16_t pitch = asinf(2 * (q0 * q2 - q3 * q1));
- 643              		.loc 1 78 5 view .LVU175
-  78:Core/Src/AHRS.c ****     int16_t pitch = asinf(2 * (q0 * q2 - q3 * q1));
- 644              		.loc 1 78 35 is_stmt 0 view .LVU176
- 645 0254 02FB0CF0 		mul	r0, r2, ip
- 646              	.LVL63:
-  78:Core/Src/AHRS.c ****     int16_t pitch = asinf(2 * (q0 * q2 - q3 * q1));
- 647              		.loc 1 78 40 view .LVU177
- 648 0258 01FB1300 		mls	r0, r1, r3, r0
-  78:Core/Src/AHRS.c ****     int16_t pitch = asinf(2 * (q0 * q2 - q3 * q1));
- 649              		.loc 1 78 29 view .LVU178
- 650 025c 4100     		lsls	r1, r0, #1
- 651 025e 00EE101A 		vmov	s0, r1	@ int
-  78:Core/Src/AHRS.c ****     int16_t pitch = asinf(2 * (q0 * q2 - q3 * q1));
- 652              		.loc 1 78 21 view .LVU179
- 653 0262 B8EEC00A 		vcvt.f32.s32	s0, s0
- 654 0266 FFF7FEFF 		bl	asinf
- 655              	.LVL64:
-ARM GAS  /tmp/cctfyu8u.s 			page 17
+  77:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
+ 597              		.loc 1 77 25 view .LVU166
+ 598 021c 26EE875A 		vmul.f32	s10, s13, s14
+  77:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
+ 599              		.loc 1 77 20 view .LVU167
+ 600 0220 75EE855A 		vadd.f32	s11, s11, s10
+  77:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
+ 601              		.loc 1 77 35 view .LVU168
+ 602 0224 20EE0A5A 		vmul.f32	s10, s0, s20
+  77:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
+ 603              		.loc 1 77 30 view .LVU169
+ 604 0228 75EEC55A 		vsub.f32	s11, s11, s10
+  77:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
+ 605              		.loc 1 77 41 view .LVU170
+ 606 022c 65EE8B5A 		vmul.f32	s11, s11, s22
+  77:Core/Src/AHRS.c ****     q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
+ 607              		.loc 1 77 8 view .LVU171
+ 608 0230 36EE256A 		vadd.f32	s12, s12, s11
+ 609 0234 86ED006A 		vstr.32	s12, [r6]
+  78:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
+ 610              		.loc 1 78 5 is_stmt 1 view .LVU172
+  78:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
+ 611              		.loc 1 78 15 is_stmt 0 view .LVU173
+ 612 0238 67EE8A5A 		vmul.f32	s11, s15, s20
+  78:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
+ 613              		.loc 1 78 25 view .LVU174
+ 614 023c 26EE075A 		vmul.f32	s10, s12, s14
+  78:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
+ 615              		.loc 1 78 20 view .LVU175
+ 616 0240 75EEC55A 		vsub.f32	s11, s11, s10
+  78:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
+ 617              		.loc 1 78 35 view .LVU176
+ 618 0244 20EE095A 		vmul.f32	s10, s0, s18
+  78:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
+ 619              		.loc 1 78 30 view .LVU177
+ 620 0248 75EE855A 		vadd.f32	s11, s11, s10
+  78:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
+ 621              		.loc 1 78 41 view .LVU178
+ 622 024c 65EE8B5A 		vmul.f32	s11, s11, s22
+  78:Core/Src/AHRS.c ****     q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
+ 623              		.loc 1 78 8 view .LVU179
+ 624 0250 76EEA56A 		vadd.f32	s13, s13, s11
+ 625 0254 C5ED006A 		vstr.32	s13, [r5]
+  79:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+ 626              		.loc 1 79 5 is_stmt 1 view .LVU180
+  79:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+ 627              		.loc 1 79 15 is_stmt 0 view .LVU181
+ 628 0258 27EE877A 		vmul.f32	s14, s15, s14
+ 629              	.LVL57:
+  79:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+ 630              		.loc 1 79 25 view .LVU182
+ 631 025c 26EE0AAA 		vmul.f32	s20, s12, s20
+ 632              	.LVL58:
+  79:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+ 633              		.loc 1 79 20 view .LVU183
+ 634 0260 37EE0A7A 		vadd.f32	s14, s14, s20
+  79:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+ARM GAS  /tmp/ccwVx3D8.s 			page 17
 
 
-  78:Core/Src/AHRS.c ****     int16_t pitch = asinf(2 * (q0 * q2 - q3 * q1));
- 656              		.loc 1 78 13 view .LVU180
- 657 026a BDEEC00A 		vcvt.s32.f32	s0, s0
- 658 026e 10EE101A 		vmov	r1, s0	@ int
- 659 0272 0FFA81F9 		sxth	r9, r1
- 660              	.LVL65:
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 661              		.loc 1 79 5 is_stmt 1 view .LVU181
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 662              		.loc 1 79 35 is_stmt 0 view .LVU182
- 663 0276 B4F90030 		ldrsh	r3, [r4]
- 664 027a B5F90000 		ldrsh	r0, [r5]
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 665              		.loc 1 79 45 view .LVU183
- 666 027e B7F90010 		ldrsh	r1, [r7]
- 667 0282 B6F90020 		ldrsh	r2, [r6]
- 668 0286 01FB02F2 		mul	r2, r1, r2
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 669              		.loc 1 79 40 view .LVU184
- 670 028a 03FB0022 		mla	r2, r3, r0, r2
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 671              		.loc 1 79 29 view .LVU185
- 672 028e 5000     		lsls	r0, r2, #1
- 673 0290 00EE100A 		vmov	s0, r0	@ int
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 674              		.loc 1 79 74 view .LVU186
- 675 0294 01FB01F1 		mul	r1, r1, r1
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 676              		.loc 1 79 69 view .LVU187
- 677 0298 03FB0313 		mla	r3, r3, r3, r1
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 678              		.loc 1 79 58 view .LVU188
- 679 029c 5B00     		lsls	r3, r3, #1
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 680              		.loc 1 79 54 view .LVU189
- 681 029e C3F10101 		rsb	r1, r3, #1
- 682 02a2 00EE901A 		vmov	s1, r1	@ int
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 683              		.loc 1 79 20 view .LVU190
- 684 02a6 F8EEE00A 		vcvt.f32.s32	s1, s1
- 685 02aa B8EEC00A 		vcvt.f32.s32	s0, s0
- 686 02ae FFF7FEFF 		bl	atan2f
- 687              	.LVL66:
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 688              		.loc 1 79 13 view .LVU191
- 689 02b2 BDEEC08A 		vcvt.s32.f32	s16, s0
- 690              	.LVL67:
-  79:Core/Src/AHRS.c ****     int16_t roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
- 691              		.loc 1 79 13 view .LVU192
- 692 02b6 18EE101A 		vmov	r1, s16	@ int
- 693 02ba 09B2     		sxth	r1, r1
- 694 02bc 08EE101A 		vmov	s16, r1	@ int
- 695              	.LVL68:
-  81:Core/Src/AHRS.c ****     int16_t pitchAccel = atan2f(ay, az);
- 696              		.loc 1 81 5 is_stmt 1 view .LVU193
-  81:Core/Src/AHRS.c ****     int16_t pitchAccel = atan2f(ay, az);
- 697              		.loc 1 81 26 is_stmt 0 view .LVU194
-ARM GAS  /tmp/cctfyu8u.s 			page 18
+ 635              		.loc 1 79 35 view .LVU184
+ 636 0264 26EE899A 		vmul.f32	s18, s13, s18
+ 637              	.LVL59:
+  79:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+ 638              		.loc 1 79 30 view .LVU185
+ 639 0268 37EE497A 		vsub.f32	s14, s14, s18
+  79:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+ 640              		.loc 1 79 41 view .LVU186
+ 641 026c 27EE0B7A 		vmul.f32	s14, s14, s22
+  79:Core/Src/AHRS.c ****     q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+ 642              		.loc 1 79 8 view .LVU187
+ 643 0270 30EE077A 		vadd.f32	s14, s0, s14
+ 644 0274 84ED007A 		vstr.32	s14, [r4]
+  82:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+ 645              		.loc 1 82 5 is_stmt 1 view .LVU188
+  82:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+ 646              		.loc 1 82 23 is_stmt 0 view .LVU189
+ 647 0278 67EEA77A 		vmul.f32	s15, s15, s15
+  82:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+ 648              		.loc 1 82 33 view .LVU190
+ 649 027c 26EE066A 		vmul.f32	s12, s12, s12
+  82:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+ 650              		.loc 1 82 28 view .LVU191
+ 651 0280 77EE867A 		vadd.f32	s15, s15, s12
+  82:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+ 652              		.loc 1 82 43 view .LVU192
+ 653 0284 66EEA66A 		vmul.f32	s13, s13, s13
+  82:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+ 654              		.loc 1 82 38 view .LVU193
+ 655 0288 77EEA67A 		vadd.f32	s15, s15, s13
+  82:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+ 656              		.loc 1 82 53 view .LVU194
+ 657 028c 27EE077A 		vmul.f32	s14, s14, s14
+  82:Core/Src/AHRS.c ****     norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+ 658              		.loc 1 82 12 view .LVU195
+ 659 0290 37EE870A 		vadd.f32	s0, s15, s14
+ 660 0294 FFF7FEFF 		bl	invSqrt
+ 661              	.LVL60:
+  83:Core/Src/AHRS.c ****     q0 *= norm;
+ 662              		.loc 1 83 5 is_stmt 1 view .LVU196
+  83:Core/Src/AHRS.c ****     q0 *= norm;
+ 663              		.loc 1 83 8 is_stmt 0 view .LVU197
+ 664 0298 D7ED007A 		vldr.32	s15, [r7]
+ 665 029c 60EE277A 		vmul.f32	s15, s0, s15
+ 666 02a0 C7ED007A 		vstr.32	s15, [r7]
+  84:Core/Src/AHRS.c ****     q1 *= norm;
+ 667              		.loc 1 84 5 is_stmt 1 view .LVU198
+  84:Core/Src/AHRS.c ****     q1 *= norm;
+ 668              		.loc 1 84 8 is_stmt 0 view .LVU199
+ 669 02a4 96ED007A 		vldr.32	s14, [r6]
+ 670 02a8 20EE077A 		vmul.f32	s14, s0, s14
+ 671 02ac 86ED007A 		vstr.32	s14, [r6]
+  85:Core/Src/AHRS.c ****     q2 *= norm;
+ 672              		.loc 1 85 5 is_stmt 1 view .LVU200
+  85:Core/Src/AHRS.c ****     q2 *= norm;
+ 673              		.loc 1 85 8 is_stmt 0 view .LVU201
+ 674 02b0 D5ED006A 		vldr.32	s13, [r5]
+ARM GAS  /tmp/ccwVx3D8.s 			page 18
 
 
- 698 02c0 DDED017A 		vldr.32	s15, [sp, #4]	@ int
- 699 02c4 F8EEE70A 		vcvt.f32.s32	s1, s15
- 700 02c8 DDED007A 		vldr.32	s15, [sp]	@ int
- 701 02cc B8EEE70A 		vcvt.f32.s32	s0, s15
- 702 02d0 FFF7FEFF 		bl	atan2f
- 703              	.LVL69:
-  81:Core/Src/AHRS.c ****     int16_t pitchAccel = atan2f(ay, az);
- 704              		.loc 1 81 13 view .LVU195
- 705 02d4 BDEEC00A 		vcvt.s32.f32	s0, s0
- 706 02d8 10EE103A 		vmov	r3, s0	@ int
- 707 02dc 0FFA83FA 		sxth	r10, r3
- 708              	.LVL70:
-  82:Core/Src/AHRS.c ****     int16_t rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
- 709              		.loc 1 82 5 is_stmt 1 view .LVU196
-  82:Core/Src/AHRS.c ****     int16_t rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
- 710              		.loc 1 82 54 is_stmt 0 view .LVU197
- 711 02e0 019B     		ldr	r3, [sp, #4]
- 712 02e2 03FB03F8 		mul	r8, r3, r3
-  82:Core/Src/AHRS.c ****     int16_t rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
- 713              		.loc 1 82 49 view .LVU198
- 714 02e6 009B     		ldr	r3, [sp]
- 715 02e8 03FB0383 		mla	r3, r3, r3, r8
- 716 02ec 00EE103A 		vmov	s0, r3	@ int
-  82:Core/Src/AHRS.c ****     int16_t rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
- 717              		.loc 1 82 36 view .LVU199
- 718 02f0 B8EEC00B 		vcvt.f64.s32	d0, s0
- 719 02f4 FFF7FEFF 		bl	sqrt
- 720              	.LVL71:
-  82:Core/Src/AHRS.c ****     int16_t rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
- 721              		.loc 1 82 25 view .LVU200
- 722 02f8 F7EEC00B 		vcvt.f32.f64	s1, d0
- 723 02fc B8EEC90A 		vcvt.f32.s32	s0, s18
- 724 0300 FFF7FEFF 		bl	atan2f
- 725              	.LVL72:
-  82:Core/Src/AHRS.c ****     int16_t rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
- 726              		.loc 1 82 13 view .LVU201
- 727 0304 FDEEC07A 		vcvt.s32.f32	s15, s0
- 728 0308 17EE903A 		vmov	r3, s15	@ int
- 729 030c 1BB2     		sxth	r3, r3
- 730 030e 07EE903A 		vmov	s15, r3	@ int
- 731              	.LVL73:
-  84:Core/Src/AHRS.c ****     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
- 732              		.loc 1 84 5 is_stmt 1 view .LVU202
-  84:Core/Src/AHRS.c ****     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
- 733              		.loc 1 84 19 is_stmt 0 view .LVU203
- 734 0312 07EE109A 		vmov	s14, r9	@ int
- 735 0316 B8EEC77A 		vcvt.f32.s32	s14, s14
- 736 031a DFED395A 		vldr.32	s11, .L15+56
- 737 031e 27EE257A 		vmul.f32	s14, s14, s11
-  84:Core/Src/AHRS.c ****     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
- 738              		.loc 1 84 44 view .LVU204
- 739 0322 06EE90AA 		vmov	s13, r10	@ int
- 740 0326 F8EEE66A 		vcvt.f32.s32	s13, s13
- 741 032a 9FED366A 		vldr.32	s12, .L15+60
- 742 032e 66EE866A 		vmul.f32	s13, s13, s12
-  84:Core/Src/AHRS.c ****     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
- 743              		.loc 1 84 27 view .LVU205
-ARM GAS  /tmp/cctfyu8u.s 			page 19
+ 675 02b4 60EE266A 		vmul.f32	s13, s0, s13
+ 676 02b8 C5ED006A 		vstr.32	s13, [r5]
+  86:Core/Src/AHRS.c ****     q3 *= norm;
+ 677              		.loc 1 86 5 is_stmt 1 view .LVU202
+  86:Core/Src/AHRS.c ****     q3 *= norm;
+ 678              		.loc 1 86 8 is_stmt 0 view .LVU203
+ 679 02bc 94ED006A 		vldr.32	s12, [r4]
+ 680 02c0 20EE060A 		vmul.f32	s0, s0, s12
+ 681              	.LVL61:
+  86:Core/Src/AHRS.c ****     q3 *= norm;
+ 682              		.loc 1 86 8 view .LVU204
+ 683 02c4 84ED000A 		vstr.32	s0, [r4]
+  89:Core/Src/AHRS.c ****     const float alpha = 0.98f;  // 滤波系数
+ 684              		.loc 1 89 5 is_stmt 1 view .LVU205
+ 685              	.LVL62:
+  90:Core/Src/AHRS.c ****     float pitch = asinf(2 * (q0 * q2 - q3 * q1));
+ 686              		.loc 1 90 5 view .LVU206
+  90:Core/Src/AHRS.c ****     float pitch = asinf(2 * (q0 * q2 - q3 * q1));
+ 687              		.loc 1 90 33 is_stmt 0 view .LVU207
+ 688 02c8 67EEA67A 		vmul.f32	s15, s15, s13
+  90:Core/Src/AHRS.c ****     float pitch = asinf(2 * (q0 * q2 - q3 * q1));
+ 689              		.loc 1 90 43 view .LVU208
+ 690 02cc 27EE000A 		vmul.f32	s0, s14, s0
+  90:Core/Src/AHRS.c ****     float pitch = asinf(2 * (q0 * q2 - q3 * q1));
+ 691              		.loc 1 90 38 view .LVU209
+ 692 02d0 37EEC00A 		vsub.f32	s0, s15, s0
+  90:Core/Src/AHRS.c ****     float pitch = asinf(2 * (q0 * q2 - q3 * q1));
+ 693              		.loc 1 90 19 view .LVU210
+ 694 02d4 30EE000A 		vadd.f32	s0, s0, s0
+ 695 02d8 FFF7FEFF 		bl	asinf
+ 696              	.LVL63:
+ 697 02dc B0EE409A 		vmov.f32	s18, s0
+ 698              	.LVL64:
+  91:Core/Src/AHRS.c ****     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+ 699              		.loc 1 91 5 is_stmt 1 view .LVU211
+  91:Core/Src/AHRS.c ****     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+ 700              		.loc 1 91 33 is_stmt 0 view .LVU212
+ 701 02e0 D6ED000A 		vldr.32	s1, [r6]
+ 702 02e4 97ED000A 		vldr.32	s0, [r7]
+ 703              	.LVL65:
+  91:Core/Src/AHRS.c ****     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+ 704              		.loc 1 91 33 view .LVU213
+ 705 02e8 20EE800A 		vmul.f32	s0, s1, s0
+  91:Core/Src/AHRS.c ****     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+ 706              		.loc 1 91 43 view .LVU214
+ 707 02ec D5ED007A 		vldr.32	s15, [r5]
+ 708 02f0 94ED007A 		vldr.32	s14, [r4]
+ 709 02f4 27EE877A 		vmul.f32	s14, s15, s14
+  91:Core/Src/AHRS.c ****     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+ 710              		.loc 1 91 38 view .LVU215
+ 711 02f8 30EE070A 		vadd.f32	s0, s0, s14
+  91:Core/Src/AHRS.c ****     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+ 712              		.loc 1 91 62 view .LVU216
+ 713 02fc 60EEA00A 		vmul.f32	s1, s1, s1
+  91:Core/Src/AHRS.c ****     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+ 714              		.loc 1 91 72 view .LVU217
+ 715 0300 67EEA77A 		vmul.f32	s15, s15, s15
+ARM GAS  /tmp/ccwVx3D8.s 			page 19
 
 
- 744 0332 37EE267A 		vadd.f32	s14, s14, s13
-  84:Core/Src/AHRS.c ****     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
- 745              		.loc 1 84 11 view .LVU206
- 746 0336 BDEEC77A 		vcvt.s32.f32	s14, s14
- 747 033a 17EE103A 		vmov	r3, s14	@ int
- 748 033e 0FFA83F8 		sxth	r8, r3
- 749              	.LVL74:
-  85:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
- 750              		.loc 1 85 5 is_stmt 1 view .LVU207
-  85:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
- 751              		.loc 1 85 18 is_stmt 0 view .LVU208
- 752 0342 B8EEC88A 		vcvt.f32.s32	s16, s16
- 753              	.LVL75:
-  85:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
- 754              		.loc 1 85 18 view .LVU209
- 755 0346 28EE258A 		vmul.f32	s16, s16, s11
-  85:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
- 756              		.loc 1 85 42 view .LVU210
- 757 034a F8EEE77A 		vcvt.f32.s32	s15, s15
- 758              	.LVL76:
-  85:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
- 759              		.loc 1 85 42 view .LVU211
- 760 034e 67EE867A 		vmul.f32	s15, s15, s12
-  85:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
- 761              		.loc 1 85 25 view .LVU212
- 762 0352 38EE278A 		vadd.f32	s16, s16, s15
-  85:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
- 763              		.loc 1 85 10 view .LVU213
- 764 0356 BDEEC88A 		vcvt.s32.f32	s16, s16
- 765 035a 18EE103A 		vmov	r3, s16	@ int
- 766 035e 1BB2     		sxth	r3, r3
- 767 0360 08EE103A 		vmov	s16, r3	@ int
+  91:Core/Src/AHRS.c ****     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+ 716              		.loc 1 91 67 view .LVU218
+ 717 0304 70EEA70A 		vadd.f32	s1, s1, s15
+  91:Core/Src/AHRS.c ****     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+ 718              		.loc 1 91 56 view .LVU219
+ 719 0308 70EEA00A 		vadd.f32	s1, s1, s1
+  91:Core/Src/AHRS.c ****     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+ 720              		.loc 1 91 18 view .LVU220
+ 721 030c F7EE007A 		vmov.f32	s15, #1.0e+0
+ 722 0310 77EEE00A 		vsub.f32	s1, s15, s1
+ 723 0314 30EE000A 		vadd.f32	s0, s0, s0
+ 724 0318 FFF7FEFF 		bl	atan2f
+ 725              	.LVL66:
+ 726 031c B0EE40AA 		vmov.f32	s20, s0
+ 727              	.LVL67:
+  93:Core/Src/AHRS.c ****     float pitchAccel = atan2f(ay, az);
+ 728              		.loc 1 93 5 is_stmt 1 view .LVU221
+  93:Core/Src/AHRS.c ****     float pitchAccel = atan2f(ay, az);
+ 729              		.loc 1 93 24 is_stmt 0 view .LVU222
+ 730 0320 F0EE680A 		vmov.f32	s1, s17
+ 731 0324 B0EE480A 		vmov.f32	s0, s16
+ 732              	.LVL68:
+  93:Core/Src/AHRS.c ****     float pitchAccel = atan2f(ay, az);
+ 733              		.loc 1 93 24 view .LVU223
+ 734 0328 FFF7FEFF 		bl	atan2f
+ 735              	.LVL69:
+ 736 032c B0EE40BA 		vmov.f32	s22, s0
+ 737              	.LVL70:
+  94:Core/Src/AHRS.c ****     float rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
+ 738              		.loc 1 94 5 is_stmt 1 view .LVU224
+  94:Core/Src/AHRS.c ****     float rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
+ 739              		.loc 1 94 42 is_stmt 0 view .LVU225
+ 740 0330 68EE087A 		vmul.f32	s15, s16, s16
+  94:Core/Src/AHRS.c ****     float rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
+ 741              		.loc 1 94 52 view .LVU226
+ 742 0334 68EEA88A 		vmul.f32	s17, s17, s17
+ 743              	.LVL71:
+  94:Core/Src/AHRS.c ****     float rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
+ 744              		.loc 1 94 47 view .LVU227
+ 745 0338 77EEA87A 		vadd.f32	s15, s15, s17
+  94:Core/Src/AHRS.c ****     float rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
+ 746              		.loc 1 94 34 view .LVU228
+ 747 033c B7EEE70A 		vcvt.f64.f32	d0, s15
+ 748              	.LVL72:
+  94:Core/Src/AHRS.c ****     float rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
+ 749              		.loc 1 94 34 view .LVU229
+ 750 0340 FFF7FEFF 		bl	sqrt
+ 751              	.LVL73:
+  94:Core/Src/AHRS.c ****     float rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
+ 752              		.loc 1 94 23 view .LVU230
+ 753 0344 F7EEC00B 		vcvt.f32.f64	s1, d0
+ 754 0348 B0EE690A 		vmov.f32	s0, s19
+ 755 034c FFF7FEFF 		bl	atan2f
+ 756              	.LVL74:
+  96:Core/Src/AHRS.c ****     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
+ 757              		.loc 1 96 5 is_stmt 1 view .LVU231
+  96:Core/Src/AHRS.c ****     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
+ARM GAS  /tmp/ccwVx3D8.s 			page 20
+
+
+ 758              		.loc 1 96 19 is_stmt 0 view .LVU232
+ 759 0350 DFED318A 		vldr.32	s17, .L15+72
+ 760 0354 29EE288A 		vmul.f32	s16, s18, s17
+ 761              	.LVL75:
+  96:Core/Src/AHRS.c ****     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
+ 762              		.loc 1 96 44 view .LVU233
+ 763 0358 DFED307A 		vldr.32	s15, .L15+76
+ 764 035c 2BEE27BA 		vmul.f32	s22, s22, s15
+ 765              	.LVL76:
+  96:Core/Src/AHRS.c ****     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
+ 766              		.loc 1 96 11 view .LVU234
+ 767 0360 38EE0B8A 		vadd.f32	s16, s16, s22
  768              	.LVL77:
-  88:Core/Src/AHRS.c ****     int16_t sinHalfRoll = sinf(roll / 2.0f);
- 769              		.loc 1 88 5 is_stmt 1 view .LVU214
-  88:Core/Src/AHRS.c ****     int16_t sinHalfRoll = sinf(roll / 2.0f);
- 770              		.loc 1 88 27 is_stmt 0 view .LVU215
- 771 0364 B8EEC88A 		vcvt.f32.s32	s16, s16
- 772              	.LVL78:
-  88:Core/Src/AHRS.c ****     int16_t sinHalfRoll = sinf(roll / 2.0f);
- 773              		.loc 1 88 27 view .LVU216
- 774 0368 28EE288A 		vmul.f32	s16, s16, s17
- 775 036c B0EE480A 		vmov.f32	s0, s16
- 776              	.LVL79:
-  88:Core/Src/AHRS.c ****     int16_t sinHalfRoll = sinf(roll / 2.0f);
- 777              		.loc 1 88 27 view .LVU217
- 778 0370 FFF7FEFF 		bl	sinf
- 779              	.LVL80:
-  88:Core/Src/AHRS.c ****     int16_t sinHalfRoll = sinf(roll / 2.0f);
- 780              		.loc 1 88 13 view .LVU218
- 781 0374 BDEEC00A 		vcvt.s32.f32	s0, s0
- 782 0378 10EE103A 		vmov	r3, s0	@ int
- 783 037c 0FFA83F9 		sxth	r9, r3
+  97:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
+ 769              		.loc 1 97 5 is_stmt 1 view .LVU235
+  97:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
+ 770              		.loc 1 97 18 is_stmt 0 view .LVU236
+ 771 0364 6AEE288A 		vmul.f32	s17, s20, s17
+  97:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
+ 772              		.loc 1 97 42 view .LVU237
+ 773 0368 20EE270A 		vmul.f32	s0, s0, s15
+ 774              	.LVL78:
+  97:Core/Src/AHRS.c ****     roll = alpha * roll + (1.0f - alpha) * rollAccel;
+ 775              		.loc 1 97 10 view .LVU238
+ 776 036c 78EE808A 		vadd.f32	s17, s17, s0
+ 777              	.LVL79:
+ 100:Core/Src/AHRS.c ****     float sinHalfRoll = sinf(roll / 2.0f);
+ 778              		.loc 1 100 5 is_stmt 1 view .LVU239
+ 100:Core/Src/AHRS.c ****     float sinHalfRoll = sinf(roll / 2.0f);
+ 779              		.loc 1 100 25 is_stmt 0 view .LVU240
+ 780 0370 68EEAA8A 		vmul.f32	s17, s17, s21
+ 781              	.LVL80:
+ 100:Core/Src/AHRS.c ****     float sinHalfRoll = sinf(roll / 2.0f);
+ 782              		.loc 1 100 25 view .LVU241
+ 783 0374 B0EE680A 		vmov.f32	s0, s17
  784              	.LVL81:
-  89:Core/Src/AHRS.c ****     int16_t cosHalfRoll = cosf(roll / 2.0f);
- 785              		.loc 1 89 5 is_stmt 1 view .LVU219
-  89:Core/Src/AHRS.c ****     int16_t cosHalfRoll = cosf(roll / 2.0f);
-ARM GAS  /tmp/cctfyu8u.s 			page 20
+ 100:Core/Src/AHRS.c ****     float sinHalfRoll = sinf(roll / 2.0f);
+ 785              		.loc 1 100 25 view .LVU242
+ 786 0378 FFF7FEFF 		bl	sinf
+ 787              	.LVL82:
+ 788 037c B0EE409A 		vmov.f32	s18, s0
+ 789              	.LVL83:
+ 101:Core/Src/AHRS.c ****     float cosHalfRoll = cosf(roll / 2.0f);
+ 790              		.loc 1 101 5 is_stmt 1 view .LVU243
+ 101:Core/Src/AHRS.c ****     float cosHalfRoll = cosf(roll / 2.0f);
+ 791              		.loc 1 101 25 is_stmt 0 view .LVU244
+ 792 0380 B0EE680A 		vmov.f32	s0, s17
+ 793              	.LVL84:
+ 101:Core/Src/AHRS.c ****     float cosHalfRoll = cosf(roll / 2.0f);
+ 794              		.loc 1 101 25 view .LVU245
+ 795 0384 FFF7FEFF 		bl	cosf
+ 796              	.LVL85:
+ 797 0388 F0EE408A 		vmov.f32	s17, s0
+ 798              	.LVL86:
+ 102:Core/Src/AHRS.c ****     float sinHalfPitch = sinf(pitch / 2.0f);
+ 799              		.loc 1 102 5 is_stmt 1 view .LVU246
+ 102:Core/Src/AHRS.c ****     float sinHalfPitch = sinf(pitch / 2.0f);
+ARM GAS  /tmp/ccwVx3D8.s 			page 21
 
 
- 786              		.loc 1 89 27 is_stmt 0 view .LVU220
- 787 0380 B0EE480A 		vmov.f32	s0, s16
- 788 0384 FFF7FEFF 		bl	cosf
- 789              	.LVL82:
-  89:Core/Src/AHRS.c ****     int16_t cosHalfRoll = cosf(roll / 2.0f);
- 790              		.loc 1 89 13 view .LVU221
- 791 0388 BDEEC00A 		vcvt.s32.f32	s0, s0
- 792 038c 10EE103A 		vmov	r3, s0	@ int
- 793 0390 0FFA83FA 		sxth	r10, r3
- 794              	.LVL83:
-  90:Core/Src/AHRS.c ****     int16_t sinHalfPitch = sinf(pitch / 2.0f);
- 795              		.loc 1 90 5 is_stmt 1 view .LVU222
-  90:Core/Src/AHRS.c ****     int16_t sinHalfPitch = sinf(pitch / 2.0f);
- 796              		.loc 1 90 28 is_stmt 0 view .LVU223
- 797 0394 07EE908A 		vmov	s15, r8	@ int
- 798 0398 B8EEE77A 		vcvt.f32.s32	s14, s15
- 799 039c 67EE288A 		vmul.f32	s17, s14, s17
- 800 03a0 B0EE680A 		vmov.f32	s0, s17
- 801 03a4 FFF7FEFF 		bl	sinf
- 802              	.LVL84:
-  90:Core/Src/AHRS.c ****     int16_t sinHalfPitch = sinf(pitch / 2.0f);
- 803              		.loc 1 90 13 view .LVU224
- 804 03a8 BDEEC00A 		vcvt.s32.f32	s0, s0
- 805 03ac 10EE103A 		vmov	r3, s0	@ int
- 806 03b0 0FFA83F8 		sxth	r8, r3
- 807              	.LVL85:
-  91:Core/Src/AHRS.c ****     int16_t cosHalfPitch = cosf(pitch / 2.0f);
- 808              		.loc 1 91 5 is_stmt 1 view .LVU225
-  91:Core/Src/AHRS.c ****     int16_t cosHalfPitch = cosf(pitch / 2.0f);
- 809              		.loc 1 91 28 is_stmt 0 view .LVU226
- 810 03b4 B0EE680A 		vmov.f32	s0, s17
- 811 03b8 FFF7FEFF 		bl	cosf
- 812              	.LVL86:
-  91:Core/Src/AHRS.c ****     int16_t cosHalfPitch = cosf(pitch / 2.0f);
- 813              		.loc 1 91 13 view .LVU227
- 814 03bc FDEEC07A 		vcvt.s32.f32	s15, s0
- 815 03c0 22E0     		b	.L16
- 816              	.L17:
- 817 03c2 00BFAFF3 		.align	3
- 817      0080
- 818              	.L15:
- 819 03c8 182D4454 		.word	1413754136
- 820 03cc FB210940 		.word	1074340347
- 821 03d0 00000000 		.word	0
- 822 03d4 00806640 		.word	1080459264
- 823 03d8 00000000 		.word	.LANCHOR6
- 824 03dc 00000000 		.word	.LANCHOR7
- 825 03e0 00007A44 		.word	1148846080
- 826 03e4 00000000 		.word	.LANCHOR8
- 827 03e8 00000000 		.word	.LANCHOR9
- 828 03ec 00000000 		.word	.LANCHOR10
- 829 03f0 00000000 		.word	.LANCHOR1
- 830 03f4 00000000 		.word	.LANCHOR2
- 831 03f8 00000000 		.word	.LANCHOR3
- 832 03fc 00000000 		.word	.LANCHOR0
- 833 0400 48E17A3F 		.word	1065017672
- 834 0404 00D7A33C 		.word	1017370368
-ARM GAS  /tmp/cctfyu8u.s 			page 21
+ 800              		.loc 1 102 26 is_stmt 0 view .LVU247
+ 801 038c 68EE2AAA 		vmul.f32	s21, s16, s21
+ 802 0390 B0EE6A0A 		vmov.f32	s0, s21
+ 803              	.LVL87:
+ 102:Core/Src/AHRS.c ****     float sinHalfPitch = sinf(pitch / 2.0f);
+ 804              		.loc 1 102 26 view .LVU248
+ 805 0394 FFF7FEFF 		bl	sinf
+ 806              	.LVL88:
+ 807 0398 B0EE408A 		vmov.f32	s16, s0
+ 808              	.LVL89:
+ 103:Core/Src/AHRS.c ****     float cosHalfPitch = cosf(pitch / 2.0f);
+ 809              		.loc 1 103 5 is_stmt 1 view .LVU249
+ 103:Core/Src/AHRS.c ****     float cosHalfPitch = cosf(pitch / 2.0f);
+ 810              		.loc 1 103 26 is_stmt 0 view .LVU250
+ 811 039c B0EE6A0A 		vmov.f32	s0, s21
+ 812              	.LVL90:
+ 103:Core/Src/AHRS.c ****     float cosHalfPitch = cosf(pitch / 2.0f);
+ 813              		.loc 1 103 26 view .LVU251
+ 814 03a0 FFF7FEFF 		bl	cosf
+ 815              	.LVL91:
+ 105:Core/Src/AHRS.c ****     q0 = cosHalfRoll * cosHalfPitch;
+ 816              		.loc 1 105 5 is_stmt 1 view .LVU252
+ 105:Core/Src/AHRS.c ****     q0 = cosHalfRoll * cosHalfPitch;
+ 817              		.loc 1 105 22 is_stmt 0 view .LVU253
+ 818 03a4 68EE807A 		vmul.f32	s15, s17, s0
+ 105:Core/Src/AHRS.c ****     q0 = cosHalfRoll * cosHalfPitch;
+ 819              		.loc 1 105 8 view .LVU254
+ 820 03a8 C7ED007A 		vstr.32	s15, [r7]
+ 106:Core/Src/AHRS.c ****     q1 = sinHalfRoll * cosHalfPitch;
+ 821              		.loc 1 106 5 is_stmt 1 view .LVU255
+ 106:Core/Src/AHRS.c ****     q1 = sinHalfRoll * cosHalfPitch;
+ 822              		.loc 1 106 22 is_stmt 0 view .LVU256
+ 823 03ac 69EE007A 		vmul.f32	s15, s18, s0
+ 106:Core/Src/AHRS.c ****     q1 = sinHalfRoll * cosHalfPitch;
+ 824              		.loc 1 106 8 view .LVU257
+ 825 03b0 C6ED007A 		vstr.32	s15, [r6]
+ 107:Core/Src/AHRS.c ****     q2 = cosHalfRoll * sinHalfPitch;
+ 826              		.loc 1 107 5 is_stmt 1 view .LVU258
+ 107:Core/Src/AHRS.c ****     q2 = cosHalfRoll * sinHalfPitch;
+ 827              		.loc 1 107 22 is_stmt 0 view .LVU259
+ 828 03b4 68EE888A 		vmul.f32	s17, s17, s16
+ 829              	.LVL92:
+ 107:Core/Src/AHRS.c ****     q2 = cosHalfRoll * sinHalfPitch;
+ 830              		.loc 1 107 8 view .LVU260
+ 831 03b8 C5ED008A 		vstr.32	s17, [r5]
+ 108:Core/Src/AHRS.c ****     q3 = sinHalfRoll * sinHalfPitch;
+ 832              		.loc 1 108 5 is_stmt 1 view .LVU261
+ 108:Core/Src/AHRS.c ****     q3 = sinHalfRoll * sinHalfPitch;
+ 833              		.loc 1 108 22 is_stmt 0 view .LVU262
+ 834 03bc 29EE089A 		vmul.f32	s18, s18, s16
+ 835              	.LVL93:
+ 108:Core/Src/AHRS.c ****     q3 = sinHalfRoll * sinHalfPitch;
+ 836              		.loc 1 108 8 view .LVU263
+ 837 03c0 84ED009A 		vstr.32	s18, [r4]
+ 109:Core/Src/AHRS.c **** }
+ 838              		.loc 1 109 1 view .LVU264
+ 839 03c4 07B0     		add	sp, sp, #28
+ARM GAS  /tmp/ccwVx3D8.s 			page 22
 
 
- 835              	.L16:
- 836 0408 17EE901A 		vmov	r1, s15	@ int
- 837              	.LVL87:
-  93:Core/Src/AHRS.c ****     q0 = cosHalfRoll * cosHalfPitch;
- 838              		.loc 1 93 5 is_stmt 1 view .LVU228
-  93:Core/Src/AHRS.c ****     q0 = cosHalfRoll * cosHalfPitch;
- 839              		.loc 1 93 22 is_stmt 0 view .LVU229
- 840 040c 1FFA8AF2 		uxth	r2, r10
- 841 0410 12FB01F3 		smulbb	r3, r2, r1
-  93:Core/Src/AHRS.c ****     q0 = cosHalfRoll * cosHalfPitch;
- 842              		.loc 1 93 8 view .LVU230
- 843 0414 2B80     		strh	r3, [r5]	@ movhi
-  94:Core/Src/AHRS.c ****     q1 = sinHalfRoll * cosHalfPitch;
- 844              		.loc 1 94 5 is_stmt 1 view .LVU231
-  94:Core/Src/AHRS.c ****     q1 = sinHalfRoll * cosHalfPitch;
- 845              		.loc 1 94 22 is_stmt 0 view .LVU232
- 846 0416 1FFA89F3 		uxth	r3, r9
- 847 041a 11FB03F1 		smulbb	r1, r1, r3
- 848              	.LVL88:
-  94:Core/Src/AHRS.c ****     q1 = sinHalfRoll * cosHalfPitch;
- 849              		.loc 1 94 8 view .LVU233
- 850 041e 2180     		strh	r1, [r4]	@ movhi
-  95:Core/Src/AHRS.c ****     q2 = cosHalfRoll * sinHalfPitch;
- 851              		.loc 1 95 5 is_stmt 1 view .LVU234
-  95:Core/Src/AHRS.c ****     q2 = cosHalfRoll * sinHalfPitch;
- 852              		.loc 1 95 22 is_stmt 0 view .LVU235
- 853 0420 1FFA88F8 		uxth	r8, r8
-  95:Core/Src/AHRS.c ****     q2 = cosHalfRoll * sinHalfPitch;
- 854              		.loc 1 95 22 view .LVU236
- 855 0424 12FB08F2 		smulbb	r2, r2, r8
-  95:Core/Src/AHRS.c ****     q2 = cosHalfRoll * sinHalfPitch;
- 856              		.loc 1 95 8 view .LVU237
- 857 0428 3A80     		strh	r2, [r7]	@ movhi
-  96:Core/Src/AHRS.c ****     q3 = sinHalfRoll * sinHalfPitch;
- 858              		.loc 1 96 5 is_stmt 1 view .LVU238
-  96:Core/Src/AHRS.c ****     q3 = sinHalfRoll * sinHalfPitch;
- 859              		.loc 1 96 22 is_stmt 0 view .LVU239
- 860 042a 13FB08F3 		smulbb	r3, r3, r8
-  96:Core/Src/AHRS.c ****     q3 = sinHalfRoll * sinHalfPitch;
- 861              		.loc 1 96 8 view .LVU240
- 862 042e 3380     		strh	r3, [r6]	@ movhi
-  97:Core/Src/AHRS.c **** }
- 863              		.loc 1 97 1 view .LVU241
- 864 0430 0BB0     		add	sp, sp, #44
- 865              	.LCFI8:
- 866              		.cfi_def_cfa_offset 52
- 867              	.LVL89:
-  97:Core/Src/AHRS.c **** }
- 868              		.loc 1 97 1 view .LVU242
- 869              		@ sp needed
- 870 0432 BDEC048B 		vldm	sp!, {d8-d9}
- 871              	.LCFI9:
- 872              		.cfi_restore 82
- 873              		.cfi_restore 83
- 874              		.cfi_restore 80
- 875              		.cfi_restore 81
- 876              		.cfi_def_cfa_offset 36
-ARM GAS  /tmp/cctfyu8u.s 			page 22
+ 840              	.LCFI8:
+ 841              		.cfi_def_cfa_offset 60
+ 842              		@ sp needed
+ 843 03c6 BDEC0A8B 		vldm	sp!, {d8-d12}
+ 844              	.LCFI9:
+ 845              		.cfi_restore 88
+ 846              		.cfi_restore 89
+ 847              		.cfi_restore 86
+ 848              		.cfi_restore 87
+ 849              		.cfi_restore 84
+ 850              		.cfi_restore 85
+ 851              		.cfi_restore 82
+ 852              		.cfi_restore 83
+ 853              		.cfi_restore 80
+ 854              		.cfi_restore 81
+ 855              		.cfi_def_cfa_offset 20
+ 856              	.LVL94:
+ 109:Core/Src/AHRS.c **** }
+ 857              		.loc 1 109 1 view .LVU265
+ 858 03ca F0BD     		pop	{r4, r5, r6, r7, pc}
+ 859              	.L16:
+ 860 03cc AFF30080 		.align	3
+ 861              	.L15:
+ 862 03d0 182D4454 		.word	1413754136
+ 863 03d4 FB210940 		.word	1074340347
+ 864 03d8 00000000 		.word	0
+ 865 03dc 00806640 		.word	1080459264
+ 866 03e0 C3F51C41 		.word	1092416963
+ 867 03e4 00000038 		.word	939524096
+ 868 03e8 0000FA43 		.word	1140457472
+ 869 03ec 0681153E 		.word	1041596678
+ 870 03f0 00000000 		.word	.LANCHOR6
+ 871 03f4 00000000 		.word	.LANCHOR7
+ 872 03f8 00007A44 		.word	1148846080
+ 873 03fc 00000000 		.word	.LANCHOR8
+ 874 0400 00000000 		.word	.LANCHOR9
+ 875 0404 00000000 		.word	.LANCHOR10
+ 876 0408 00000000 		.word	.LANCHOR1
+ 877 040c 00000000 		.word	.LANCHOR2
+ 878 0410 00000000 		.word	.LANCHOR3
+ 879 0414 00000000 		.word	.LANCHOR0
+ 880 0418 48E17A3F 		.word	1065017672
+ 881 041c 00D7A33C 		.word	1017370368
+ 882              		.cfi_endproc
+ 883              	.LFE147:
+ 885              		.global	w3
+ 886              		.global	w2
+ 887              		.global	w1
+ 888              		.global	q3
+ 889              		.global	q2
+ 890              		.global	q1
+ 891              		.global	q0
+ 892              		.section	.bss.buffer.0,"aw",%nobits
+ 893              		.align	2
+ 894              		.set	.LANCHOR5,. + 0
+ 897              	buffer.0:
+ 898 0000 00000000 		.space	12
+ARM GAS  /tmp/ccwVx3D8.s 			page 23
 
 
- 877              	.LVL90:
-  97:Core/Src/AHRS.c **** }
- 878              		.loc 1 97 1 view .LVU243
- 879 0436 BDE8F08F 		pop	{r4, r5, r6, r7, r8, r9, r10, fp, pc}
-  97:Core/Src/AHRS.c **** }
- 880              		.loc 1 97 1 view .LVU244
- 881              		.cfi_endproc
- 882              	.LFE147:
- 884              		.global	w3
- 885              		.global	w2
- 886              		.global	w1
- 887              		.global	q3
- 888              		.global	q2
- 889              		.global	q1
- 890              		.global	q0
- 891 043a 00BF     		.section	.bss.buffer.0,"aw",%nobits
- 892              		.align	2
- 893              		.set	.LANCHOR5,. + 0
- 896              	buffer.0:
- 897 0000 00000000 		.space	6
- 897      0000
- 898              		.section	.bss.index.1,"aw",%nobits
- 899              		.align	2
- 900              		.set	.LANCHOR4,. + 0
- 903              	index.1:
- 904 0000 00000000 		.space	4
- 905              		.section	.bss.lastUpdate,"aw",%nobits
- 906              		.align	2
- 907              		.set	.LANCHOR7,. + 0
- 910              	lastUpdate:
- 911 0000 00000000 		.space	4
- 912              		.section	.bss.now,"aw",%nobits
- 913              		.align	2
- 914              		.set	.LANCHOR6,. + 0
- 917              	now:
- 918 0000 00000000 		.space	4
- 919              		.section	.bss.q1,"aw",%nobits
- 920              		.align	1
- 921              		.set	.LANCHOR1,. + 0
- 924              	q1:
- 925 0000 0000     		.space	2
- 926              		.section	.bss.q2,"aw",%nobits
- 927              		.align	1
- 928              		.set	.LANCHOR2,. + 0
- 931              	q2:
- 932 0000 0000     		.space	2
- 933              		.section	.bss.q3,"aw",%nobits
- 934              		.align	1
- 935              		.set	.LANCHOR3,. + 0
- 938              	q3:
- 939 0000 0000     		.space	2
- 940              		.section	.bss.w1,"aw",%nobits
- 941              		.align	1
- 942              		.set	.LANCHOR8,. + 0
- 945              	w1:
- 946 0000 0000     		.space	2
- 947              		.section	.bss.w2,"aw",%nobits
-ARM GAS  /tmp/cctfyu8u.s 			page 23
+ 898      00000000 
+ 898      00000000 
+ 899              		.section	.bss.index.1,"aw",%nobits
+ 900              		.align	2
+ 901              		.set	.LANCHOR4,. + 0
+ 904              	index.1:
+ 905 0000 00000000 		.space	4
+ 906              		.section	.bss.lastUpdate,"aw",%nobits
+ 907              		.align	2
+ 908              		.set	.LANCHOR7,. + 0
+ 911              	lastUpdate:
+ 912 0000 00000000 		.space	4
+ 913              		.section	.bss.now,"aw",%nobits
+ 914              		.align	2
+ 915              		.set	.LANCHOR6,. + 0
+ 918              	now:
+ 919 0000 00000000 		.space	4
+ 920              		.section	.bss.q1,"aw",%nobits
+ 921              		.align	2
+ 922              		.set	.LANCHOR1,. + 0
+ 925              	q1:
+ 926 0000 00000000 		.space	4
+ 927              		.section	.bss.q2,"aw",%nobits
+ 928              		.align	2
+ 929              		.set	.LANCHOR2,. + 0
+ 932              	q2:
+ 933 0000 00000000 		.space	4
+ 934              		.section	.bss.q3,"aw",%nobits
+ 935              		.align	2
+ 936              		.set	.LANCHOR3,. + 0
+ 939              	q3:
+ 940 0000 00000000 		.space	4
+ 941              		.section	.bss.w1,"aw",%nobits
+ 942              		.align	2
+ 943              		.set	.LANCHOR8,. + 0
+ 946              	w1:
+ 947 0000 00000000 		.space	4
+ 948              		.section	.bss.w2,"aw",%nobits
+ 949              		.align	2
+ 950              		.set	.LANCHOR9,. + 0
+ 953              	w2:
+ 954 0000 00000000 		.space	4
+ 955              		.section	.bss.w3,"aw",%nobits
+ 956              		.align	2
+ 957              		.set	.LANCHOR10,. + 0
+ 960              	w3:
+ 961 0000 00000000 		.space	4
+ 962              		.section	.data.q0,"aw"
+ 963              		.align	2
+ 964              		.set	.LANCHOR0,. + 0
+ 967              	q0:
+ 968 0000 0000803F 		.word	1065353216
+ 969              		.text
+ 970              	.Letext0:
+ 971              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
+ 972              		.file 3 "Core/Inc/MPU9250.h"
+ 973              		.file 4 "/usr/include/newlib/stdlib.h"
+ARM GAS  /tmp/ccwVx3D8.s 			page 24
 
 
- 948              		.align	1
- 949              		.set	.LANCHOR9,. + 0
- 952              	w2:
- 953 0000 0000     		.space	2
- 954              		.section	.bss.w3,"aw",%nobits
- 955              		.align	1
- 956              		.set	.LANCHOR10,. + 0
- 959              	w3:
- 960 0000 0000     		.space	2
- 961              		.section	.data.q0,"aw"
- 962              		.align	1
- 963              		.set	.LANCHOR0,. + 0
- 966              	q0:
- 967 0000 0100     		.short	1
- 968              		.text
- 969              	.Letext0:
- 970              		.file 2 "/usr/lib/gcc/arm-none-eabi/10.3.1/include/stdint.h"
- 971              		.file 3 "Core/Inc/MPU9250.h"
- 972              		.file 4 "/usr/include/newlib/stdlib.h"
- 973              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h"
- 974              		.file 6 "/usr/include/newlib/math.h"
-ARM GAS  /tmp/cctfyu8u.s 			page 24
+ 974              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h"
+ 975              		.file 6 "/usr/include/newlib/math.h"
+ARM GAS  /tmp/ccwVx3D8.s 			page 25
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 AHRS.c
-     /tmp/cctfyu8u.s:17     .text.compare_int16:0000000000000000 $t
-     /tmp/cctfyu8u.s:25     .text.compare_int16:0000000000000000 compare_int16
-     /tmp/cctfyu8u.s:63     .text.invSqrt:0000000000000000 $t
-     /tmp/cctfyu8u.s:70     .text.invSqrt:0000000000000000 invSqrt
-     /tmp/cctfyu8u.s:101    .text.AHRS_Init:0000000000000000 $t
-     /tmp/cctfyu8u.s:108    .text.AHRS_Init:0000000000000000 AHRS_Init
-     /tmp/cctfyu8u.s:128    .text.AHRS_GetQuaternion:0000000000000000 $t
-     /tmp/cctfyu8u.s:135    .text.AHRS_GetQuaternion:0000000000000000 AHRS_GetQuaternion
-     /tmp/cctfyu8u.s:168    .text.AHRS_GetQuaternion:000000000000001c $d
-     /tmp/cctfyu8u.s:176    .text.MedianFilter:0000000000000000 $t
-     /tmp/cctfyu8u.s:183    .text.MedianFilter:0000000000000000 MedianFilter
-     /tmp/cctfyu8u.s:249    .text.MedianFilter:0000000000000040 $d
-     /tmp/cctfyu8u.s:257    .text.AHRS_Update:0000000000000000 $t
-     /tmp/cctfyu8u.s:264    .text.AHRS_Update:0000000000000000 AHRS_Update
-     /tmp/cctfyu8u.s:819    .text.AHRS_Update:00000000000003c8 $d
-     /tmp/cctfyu8u.s:836    .text.AHRS_Update:0000000000000408 $t
-     /tmp/cctfyu8u.s:959    .bss.w3:0000000000000000 w3
-     /tmp/cctfyu8u.s:952    .bss.w2:0000000000000000 w2
-     /tmp/cctfyu8u.s:945    .bss.w1:0000000000000000 w1
-     /tmp/cctfyu8u.s:938    .bss.q3:0000000000000000 q3
-     /tmp/cctfyu8u.s:931    .bss.q2:0000000000000000 q2
-     /tmp/cctfyu8u.s:924    .bss.q1:0000000000000000 q1
-     /tmp/cctfyu8u.s:966    .data.q0:0000000000000000 q0
-     /tmp/cctfyu8u.s:892    .bss.buffer.0:0000000000000000 $d
-     /tmp/cctfyu8u.s:896    .bss.buffer.0:0000000000000000 buffer.0
-     /tmp/cctfyu8u.s:899    .bss.index.1:0000000000000000 $d
-     /tmp/cctfyu8u.s:903    .bss.index.1:0000000000000000 index.1
-     /tmp/cctfyu8u.s:906    .bss.lastUpdate:0000000000000000 $d
-     /tmp/cctfyu8u.s:910    .bss.lastUpdate:0000000000000000 lastUpdate
-     /tmp/cctfyu8u.s:913    .bss.now:0000000000000000 $d
-     /tmp/cctfyu8u.s:917    .bss.now:0000000000000000 now
-     /tmp/cctfyu8u.s:920    .bss.q1:0000000000000000 $d
-     /tmp/cctfyu8u.s:927    .bss.q2:0000000000000000 $d
-     /tmp/cctfyu8u.s:934    .bss.q3:0000000000000000 $d
-     /tmp/cctfyu8u.s:941    .bss.w1:0000000000000000 $d
-     /tmp/cctfyu8u.s:948    .bss.w2:0000000000000000 $d
-     /tmp/cctfyu8u.s:955    .bss.w3:0000000000000000 $d
-     /tmp/cctfyu8u.s:962    .data.q0:0000000000000000 $d
+     /tmp/ccwVx3D8.s:17     .text.compare_float:0000000000000000 $t
+     /tmp/ccwVx3D8.s:25     .text.compare_float:0000000000000000 compare_float
+     /tmp/ccwVx3D8.s:62     .text.invSqrt:0000000000000000 $t
+     /tmp/ccwVx3D8.s:69     .text.invSqrt:0000000000000000 invSqrt
+     /tmp/ccwVx3D8.s:94     .text.AHRS_Init:0000000000000000 $t
+     /tmp/ccwVx3D8.s:101    .text.AHRS_Init:0000000000000000 AHRS_Init
+     /tmp/ccwVx3D8.s:137    .text.AHRS_GetQuaternion:0000000000000000 $t
+     /tmp/ccwVx3D8.s:144    .text.AHRS_GetQuaternion:0000000000000000 AHRS_GetQuaternion
+     /tmp/ccwVx3D8.s:177    .text.AHRS_GetQuaternion:000000000000001c $d
+     /tmp/ccwVx3D8.s:185    .text.MedianFilter:0000000000000000 $t
+     /tmp/ccwVx3D8.s:192    .text.MedianFilter:0000000000000000 MedianFilter
+     /tmp/ccwVx3D8.s:251    .text.MedianFilter:0000000000000048 $d
+     /tmp/ccwVx3D8.s:259    .text.AHRS_Update:0000000000000000 $t
+     /tmp/ccwVx3D8.s:266    .text.AHRS_Update:0000000000000000 AHRS_Update
+     /tmp/ccwVx3D8.s:862    .text.AHRS_Update:00000000000003d0 $d
+     /tmp/ccwVx3D8.s:960    .bss.w3:0000000000000000 w3
+     /tmp/ccwVx3D8.s:953    .bss.w2:0000000000000000 w2
+     /tmp/ccwVx3D8.s:946    .bss.w1:0000000000000000 w1
+     /tmp/ccwVx3D8.s:939    .bss.q3:0000000000000000 q3
+     /tmp/ccwVx3D8.s:932    .bss.q2:0000000000000000 q2
+     /tmp/ccwVx3D8.s:925    .bss.q1:0000000000000000 q1
+     /tmp/ccwVx3D8.s:967    .data.q0:0000000000000000 q0
+     /tmp/ccwVx3D8.s:893    .bss.buffer.0:0000000000000000 $d
+     /tmp/ccwVx3D8.s:897    .bss.buffer.0:0000000000000000 buffer.0
+     /tmp/ccwVx3D8.s:900    .bss.index.1:0000000000000000 $d
+     /tmp/ccwVx3D8.s:904    .bss.index.1:0000000000000000 index.1
+     /tmp/ccwVx3D8.s:907    .bss.lastUpdate:0000000000000000 $d
+     /tmp/ccwVx3D8.s:911    .bss.lastUpdate:0000000000000000 lastUpdate
+     /tmp/ccwVx3D8.s:914    .bss.now:0000000000000000 $d
+     /tmp/ccwVx3D8.s:918    .bss.now:0000000000000000 now
+     /tmp/ccwVx3D8.s:921    .bss.q1:0000000000000000 $d
+     /tmp/ccwVx3D8.s:928    .bss.q2:0000000000000000 $d
+     /tmp/ccwVx3D8.s:935    .bss.q3:0000000000000000 $d
+     /tmp/ccwVx3D8.s:942    .bss.w1:0000000000000000 $d
+     /tmp/ccwVx3D8.s:949    .bss.w2:0000000000000000 $d
+     /tmp/ccwVx3D8.s:956    .bss.w3:0000000000000000 $d
+     /tmp/ccwVx3D8.s:963    .data.q0:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 sqrtf
 MPU9250_Init
+MPU9250_SetAccelRange
+MPU9250_SetGyroRange
+MPU9250_SetDLPFBandwidth
+MPU9250_SetSampleRateDivider
 qsort
 MPU9250_GetData
 HAL_GetTick

@@ -88,7 +88,7 @@ const osThreadAttr_t defaultTask_attributes = {
 osThreadId_t AttitudeTaskHandle;
 const osThreadAttr_t AttitudeTask_attributes = {
   .name = "AttitudeTask",
-  .stack_size = 256 * 4,
+  .stack_size = 1024 * 4,
   .priority = (osPriority_t) osPriorityRealtime3,
 };
 /* Definitions for ServoControlTas */
@@ -121,8 +121,8 @@ void print_gyro_data(int16_t GyroData[3]);
 void print_temp_data(float32_t TempData);
 
 void UART_ProcessCommand(uint8_t* buffer);
-void SendAttitudeToHost(int16_t q0, int16_t q1, int16_t q2, int16_t q3);
-void SendAttitudeToPC(int16_t q0, int16_t q1, int16_t q2, int16_t q3);
+void SendAttitudeToHost(float q[4]);
+void SendAttitudeToPC(float q[4]);
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -209,7 +209,7 @@ void StartDefaultTask(void *argument)
          // 打印四元数数据
         char printBuffer[256];
         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%d,%d,%d,%d,G:%d,%d,%d\n", ax, ay, az, gx,gy,gz);
-        //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+        HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 
     osDelay(1);
   }
@@ -243,15 +243,21 @@ void StartAttitudeTask(void *argument)
         float mx = imuData.mag[0] * 0.146f; // 将原始数据转换为 µT
         float my = imuData.mag[1] * 0.146f;
         float mz = imuData.mag[2] * 0.146f;
-         // 打印四元数数据
-        char printBuffer[256];
-        int len = snprintf(printBuffer, sizeof(printBuffer), "A:%.2f,%.2f,%.2f,%.2f,G:%.2f,%.2f,%.2f\n", ax, ay, az, gx,gy,gz);
+
+        // 打印传感器数据
+        char printBuffer[1024];
+        int len = snprintf(printBuffer, sizeof(printBuffer), 
+                         "A:%.2f,%.2f,%.2f G:%.2f,%.2f,%.2f M:%.2f,%.2f,%.2f\n", 
+                          ax, ay, az, gx, gy, gz, mx, my, mz);
+        //int len = snprintf(printBuffer, sizeof(printBuffer), 
+        //                 "A:%d,%d,%d G:%d,%d,%d M:%d,%d,%d\n", 
+        //                  (int16_t)ax, (int16_t)ay, (int16_t)az, (int16_t)gx, (int16_t)gy, (int16_t)gz, (int16_t)mx, (int16_t)my, (int16_t)mz);      
         HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 
         AHRS_Update();  // 更新姿态四元数
         // 获取并处理姿态四元数
         float quat[4] = {0};
-        SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态四元数给上位机
+        //SendAttitudeToHost(quat);  // 发送姿态四元数给上位机
         AHRS_GetQuaternion(quat);
         
         
@@ -294,7 +300,7 @@ void StartServoControlTask(void *argument)
          // 打印四元数数据
         char printBuffer[256];
         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%.2f,%.2f,%.2f,%.2f,G:%.2f,%.2f,%.2f\n", ax, ay, az, gx,gy,gz);
-        HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+        //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 
     osDelay(1);
   }
@@ -329,7 +335,7 @@ void StartGaitControlTask(void *argument)
          // 打印四元数数据
         char printBuffer[256];
         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%.2f,%.2f,%.2f,%.2f,G:%.2f,%.2f,%.2f\n", ax, ay, az, gx,gy,gz);
-        HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+        //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 
 
     switch (current_action) {
@@ -387,7 +393,7 @@ void StartSerialCommTask(void *argument)
          // 打印四元数数据
         char printBuffer[256];
         int len = snprintf(printBuffer, sizeof(printBuffer), "A:%.2f,%.2f,%.2f,%.2f,G:%.2f,%.2f,%.2f\n", ax, ay, az, gx,gy,gz);
-        HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
+        //HAL_UART_Transmit(&huart1, (uint8_t*)printBuffer, len, HAL_MAX_DELAY);
 
         osDelay(1);
 
@@ -444,7 +450,7 @@ void UART_ProcessCommand(uint8_t* buffer) {
             case 0x06:  // 请求姿态数据
                 
                 AHRS_GetQuaternion(quat);  // 获取当前四元数姿态数据
-                SendAttitudeToHost(quat[0], quat[1], quat[2], quat[3]);  // 发送姿态数据给上位机
+                SendAttitudeToHost(quat);  // 发送姿态数据给上位机
                 break;
             default:
                 break;

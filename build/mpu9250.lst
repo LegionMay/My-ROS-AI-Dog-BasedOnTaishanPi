@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccgWqG0G.s 			page 1
+ARM GAS  /tmp/ccRRh7VQ.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
   29:Core/Src/mpu9250.c **** const uint8_t DLPF_184 = 0x01;
   30:Core/Src/mpu9250.c **** const uint8_t DLPF_92 = 0x02;
   31:Core/Src/mpu9250.c **** const uint8_t DLPF_41 = 0x03;
-ARM GAS  /tmp/ccgWqG0G.s 			page 2
+ARM GAS  /tmp/ccRRh7VQ.s 			page 2
 
 
   32:Core/Src/mpu9250.c **** const uint8_t DLPF_20 = 0x04;
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
   86:Core/Src/mpu9250.c **** const uint8_t AK8963_CNTL2 = 0x0B;
   87:Core/Src/mpu9250.c **** const uint8_t AK8963_RESET = 0x01;
   88:Core/Src/mpu9250.c **** const uint8_t AK8963_ASA = 0x10;
-ARM GAS  /tmp/ccgWqG0G.s 			page 3
+ARM GAS  /tmp/ccRRh7VQ.s 			page 3
 
 
   89:Core/Src/mpu9250.c **** const uint8_t AK8963_WHO_AM_I = 0x00;
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  103:Core/Src/mpu9250.c **** 		return false;	
  104:Core/Src/mpu9250.c **** }
   70              		.loc 1 104 1 view .LVU7
-ARM GAS  /tmp/ccgWqG0G.s 			page 4
+ARM GAS  /tmp/ccRRh7VQ.s 			page 4
 
 
   71 0012 08BD     		pop	{r3, pc}
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  122              	.LVL5:
  109:Core/Src/mpu9250.c **** }
  123              		.loc 1 109 1 view .LVU15
-ARM GAS  /tmp/ccgWqG0G.s 			page 5
+ARM GAS  /tmp/ccRRh7VQ.s 			page 5
 
 
  124 001a 05B0     		add	sp, sp, #20
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  175 0018 0123     		movs	r3, #1
  176 001a 0DF10F02 		add	r2, sp, #15
  177              	.LVL8:
-ARM GAS  /tmp/ccgWqG0G.s 			page 6
+ARM GAS  /tmp/ccRRh7VQ.s 			page 6
 
 
  178              		.loc 1 114 2 is_stmt 0 view .LVU22
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  130:Core/Src/mpu9250.c **** uint8_t SPIx_WriteRead(uint8_t Byte)
  131:Core/Src/mpu9250.c **** {
  132:Core/Src/mpu9250.c **** 	uint8_t receivedbyte = 0;
-ARM GAS  /tmp/ccgWqG0G.s 			page 7
+ARM GAS  /tmp/ccRRh7VQ.s 			page 7
 
 
  133:Core/Src/mpu9250.c **** 	if(HAL_SPI_TransmitReceive(&hspi1,(uint8_t*) &Byte,(uint8_t*) &receivedbyte,1,0x1000)!=HAL_OK)
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  234 000a 0146     		mov	r1, r0
  235              	.LVL14:
  236              		.loc 1 171 2 is_stmt 0 view .LVU30
-ARM GAS  /tmp/ccgWqG0G.s 			page 8
+ARM GAS  /tmp/ccRRh7VQ.s 			page 8
 
 
  237 000c 0DF10700 		add	r0, sp, #7
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  283              		.loc 1 181 2 view .LVU38
  284 0008 1846     		mov	r0, r3
  285              	.LVL21:
-ARM GAS  /tmp/ccgWqG0G.s 			page 9
+ARM GAS  /tmp/ccRRh7VQ.s 			page 9
 
 
  286              		.loc 1 181 2 view .LVU39
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  221:Core/Src/mpu9250.c **** static uint8_t whoAmI(){
  303              		.loc 1 221 24 is_stmt 1 view -0
  304              		.cfi_startproc
-ARM GAS  /tmp/ccgWqG0G.s 			page 10
+ARM GAS  /tmp/ccRRh7VQ.s 			page 10
 
 
  305              		@ args = 0, pretend = 0, frame = 0
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  353 0002 0546     		mov	r5, r0
  354 0004 0C46     		mov	r4, r1
  189:Core/Src/mpu9250.c **** 
-ARM GAS  /tmp/ccgWqG0G.s 			page 11
+ARM GAS  /tmp/ccRRh7VQ.s 			page 11
 
 
  355              		.loc 1 189 2 is_stmt 1 view .LVU47
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  403              		.cfi_offset 4, -16
  404              		.cfi_offset 5, -12
  405              		.cfi_offset 6, -8
-ARM GAS  /tmp/ccgWqG0G.s 			page 12
+ARM GAS  /tmp/ccRRh7VQ.s 			page 12
 
 
  406              		.cfi_offset 14, -4
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  453              	.LFB153:
  228:Core/Src/mpu9250.c **** 
  229:Core/Src/mpu9250.c **** /* gets the AK8963 WHO_AM_I register value, expected to be 0x48 */
-ARM GAS  /tmp/ccgWqG0G.s 			page 13
+ARM GAS  /tmp/ccRRh7VQ.s 			page 13
 
 
  230:Core/Src/mpu9250.c **** static int whoAmIAK8963(){
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  496              		.cfi_startproc
  497              		@ args = 0, pretend = 0, frame = 0
  498              		@ frame_needed = 0, uses_anonymous_args = 0
-ARM GAS  /tmp/ccgWqG0G.s 			page 14
+ARM GAS  /tmp/ccRRh7VQ.s 			page 14
 
 
  499 0000 08B5     		push	{r3, lr}
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  536              	.LVL44:
  254:Core/Src/mpu9250.c **** 	
  255:Core/Src/mpu9250.c **** 	// set the I2C bus speed to 400 kHz
-ARM GAS  /tmp/ccgWqG0G.s 			page 15
+ARM GAS  /tmp/ccRRh7VQ.s 			page 15
 
 
  256:Core/Src/mpu9250.c **** 	writeRegister(I2C_MST_CTRL, I2C_MST_CLK);
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  575 006a 01D0     		beq	.L39
  272:Core/Src/mpu9250.c **** 	{
  273:Core/Src/mpu9250.c **** 		return 1;
-ARM GAS  /tmp/ccgWqG0G.s 			page 16
+ARM GAS  /tmp/ccRRh7VQ.s 			page 16
 
 
  576              		.loc 1 273 10 view .LVU89
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  324:Core/Src/mpu9250.c **** 	// long wait between AK8963 mode changes
  325:Core/Src/mpu9250.c **** 	HAL_Delay(100);
  326:Core/Src/mpu9250.c **** 
-ARM GAS  /tmp/ccgWqG0G.s 			page 17
+ARM GAS  /tmp/ccRRh7VQ.s 			page 17
 
 
  327:Core/Src/mpu9250.c **** 	// set AK8963 to 16 bit resolution, 100 Hz update rate
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  612 0098 0021     		movs	r1, #0
  613 009a 1920     		movs	r0, #25
  614 009c FFF7FEFF 		bl	writeRegister
-ARM GAS  /tmp/ccgWqG0G.s 			page 18
+ARM GAS  /tmp/ccRRh7VQ.s 			page 18
 
 
  615              	.LVL60:
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  658 00dc 1020     		movs	r0, #16
  659 00de FFF7FEFF 		bl	readAK8963Registers
  660              	.LVL68:
-ARM GAS  /tmp/ccgWqG0G.s 			page 19
+ARM GAS  /tmp/ccRRh7VQ.s 			page 19
 
 
  322:Core/Src/mpu9250.c **** 
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  708              		.thumb
  709              		.thumb_func
  710              		.fpu fpv5-d16
-ARM GAS  /tmp/ccgWqG0G.s 			page 20
+ARM GAS  /tmp/ccRRh7VQ.s 			page 20
 
 
  712              	MPU9250_SetAccelRange:
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  758 0002 0146     		mov	r1, r0
  352:Core/Src/mpu9250.c **** 	writeRegister(GYRO_CONFIG, range);
  759              		.loc 1 352 2 is_stmt 1 view .LVU124
-ARM GAS  /tmp/ccgWqG0G.s 			page 21
+ARM GAS  /tmp/ccRRh7VQ.s 			page 21
 
 
  760 0004 1B20     		movs	r0, #27
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  809              		.section	.text.MPU9250_SetSampleRateDivider,"ax",%progbits
  810              		.align	1
  811              		.global	MPU9250_SetSampleRateDivider
-ARM GAS  /tmp/ccgWqG0G.s 			page 22
+ARM GAS  /tmp/ccRRh7VQ.s 			page 22
 
 
  812              		.syntax unified
@@ -1318,7 +1318,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  377:Core/Src/mpu9250.c **** 		writeAK8963Register(AK8963_CNTL1,AK8963_CNT_MEAS1);
  851              		.loc 1 377 3 view .LVU141
  852 001e 1221     		movs	r1, #18
-ARM GAS  /tmp/ccgWqG0G.s 			page 23
+ARM GAS  /tmp/ccRRh7VQ.s 			page 23
 
 
  853 0020 0A20     		movs	r0, #10
@@ -1378,7 +1378,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  391:Core/Src/mpu9250.c **** 		// set AK8963 to 16 bit resolution, 100 Hz update rate
  880              		.loc 1 391 3 view .LVU147
  881 0048 6420     		movs	r0, #100
-ARM GAS  /tmp/ccgWqG0G.s 			page 24
+ARM GAS  /tmp/ccRRh7VQ.s 			page 24
 
 
  882 004a FFF7FEFF 		bl	HAL_Delay
@@ -1438,7 +1438,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  931              		.cfi_offset 14, -4
  932 0004 8046     		mov	r8, r0
  933 0006 0D46     		mov	r5, r1
-ARM GAS  /tmp/ccgWqG0G.s 			page 25
+ARM GAS  /tmp/ccRRh7VQ.s 			page 25
 
 
  934 0008 1746     		mov	r7, r2
@@ -1498,7 +1498,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  979              		.loc 1 416 54 view .LVU174
  980 003e 637A     		ldrb	r3, [r4, #9]	@ zero_extendqisi2
  981              		.loc 1 416 45 view .LVU175
-ARM GAS  /tmp/ccgWqG0G.s 			page 26
+ARM GAS  /tmp/ccRRh7VQ.s 			page 26
 
 
  982 0040 43EA0223 		orr	r3, r3, r2, lsl #8
@@ -1558,7 +1558,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  1030              		.loc 1 422 35 is_stmt 0 view .LVU200
  1031 0076 E27C     		ldrb	r2, [r4, #19]	@ zero_extendqisi2
  1032              		.loc 1 422 41 view .LVU201
-ARM GAS  /tmp/ccgWqG0G.s 			page 27
+ARM GAS  /tmp/ccRRh7VQ.s 			page 27
 
 
  1033 0078 1202     		lsls	r2, r2, #8
@@ -1618,7 +1618,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  1084 00cc 27EE267A 		vmul.f32	s14, s14, s13
  1085              		.loc 1 425 15 view .LVU223
  1086 00d0 BDEEC77A 		vcvt.s32.f32	s14, s14
-ARM GAS  /tmp/ccgWqG0G.s 			page 28
+ARM GAS  /tmp/ccRRh7VQ.s 			page 28
 
 
  1087              		.loc 1 425 13 view .LVU224
@@ -1678,7 +1678,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  1133              	.LVL111:
  1134              	.L58:
  1135              		.loc 1 433 1 view .LVU244
-ARM GAS  /tmp/ccgWqG0G.s 			page 29
+ARM GAS  /tmp/ccRRh7VQ.s 			page 29
 
 
  1136 012a 00BF     		.align	2
@@ -1738,7 +1738,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  1191              		.global	INT_DISABLE
  1192              		.global	INT_ENABLE
  1193              		.global	INT_PIN_CFG
-ARM GAS  /tmp/ccgWqG0G.s 			page 30
+ARM GAS  /tmp/ccRRh7VQ.s 			page 30
 
 
  1194              		.global	SMPDIV
@@ -1798,7 +1798,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  1256              		.section	.rodata.ACCEL_FS_SEL_4G,"a"
  1259              	ACCEL_FS_SEL_4G:
  1260 0000 08       		.byte	8
-ARM GAS  /tmp/ccgWqG0G.s 			page 31
+ARM GAS  /tmp/ccRRh7VQ.s 			page 31
 
 
  1261              		.section	.rodata.ACCEL_FS_SEL_8G,"a"
@@ -1858,7 +1858,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  1351              		.section	.rodata.DLPF_10,"a"
  1354              	DLPF_10:
  1355 0000 05       		.byte	5
-ARM GAS  /tmp/ccgWqG0G.s 			page 32
+ARM GAS  /tmp/ccRRh7VQ.s 			page 32
 
 
  1356              		.section	.rodata.DLPF_184,"a"
@@ -1918,7 +1918,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  1446              		.section	.rodata.GYRO_FS_SEL_500DPS,"a"
  1449              	GYRO_FS_SEL_500DPS:
  1450 0000 08       		.byte	8
-ARM GAS  /tmp/ccgWqG0G.s 			page 33
+ARM GAS  /tmp/ccRRh7VQ.s 			page 33
 
 
  1451              		.section	.rodata.GYRO_OUT,"a"
@@ -1978,7 +1978,7 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  1541              		.section	.rodata.MULTIPLEBYTE_CMD,"a"
  1544              	MULTIPLEBYTE_CMD:
  1545 0000 40       		.byte	64
-ARM GAS  /tmp/ccgWqG0G.s 			page 34
+ARM GAS  /tmp/ccRRh7VQ.s 			page 34
 
 
  1546              		.section	.rodata.PWR_CYCLE,"a"
@@ -2038,157 +2038,157 @@ ARM GAS  /tmp/ccgWqG0G.s 			page 1
  1630              		.file 5 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_dma.h"
  1631              		.file 6 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_i2c.h"
  1632              		.file 7 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal_uart.h"
-ARM GAS  /tmp/ccgWqG0G.s 			page 35
+ARM GAS  /tmp/ccRRh7VQ.s 			page 35
 
 
  1633              		.file 8 "Core/Inc/i2c.h"
  1634              		.file 9 "Core/Inc/MPU9250.h"
  1635              		.file 10 "Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h"
-ARM GAS  /tmp/ccgWqG0G.s 			page 36
+ARM GAS  /tmp/ccRRh7VQ.s 			page 36
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 mpu9250.c
-     /tmp/ccgWqG0G.s:17     .text.MPU9250_OnActivate:0000000000000000 $t
-     /tmp/ccgWqG0G.s:25     .text.MPU9250_OnActivate:0000000000000000 MPU9250_OnActivate
-     /tmp/ccgWqG0G.s:39     .text.MPU9250_IsConnected:0000000000000000 $t
-     /tmp/ccgWqG0G.s:46     .text.MPU9250_IsConnected:0000000000000000 MPU9250_IsConnected
-     /tmp/ccgWqG0G.s:79     .text.MPU9250_IsConnected:0000000000000018 $d
-     /tmp/ccgWqG0G.s:84     .text.MPU_I2C_Write:0000000000000000 $t
-     /tmp/ccgWqG0G.s:91     .text.MPU_I2C_Write:0000000000000000 MPU_I2C_Write
-     /tmp/ccgWqG0G.s:132    .text.MPU_I2C_Write:0000000000000020 $d
-     /tmp/ccgWqG0G.s:137    .text.MPU_I2C_Read:0000000000000000 $t
-     /tmp/ccgWqG0G.s:144    .text.MPU_I2C_Read:0000000000000000 MPU_I2C_Read
-     /tmp/ccgWqG0G.s:204    .text.MPU_I2C_Read:0000000000000038 $d
-     /tmp/ccgWqG0G.s:209    .text.writeRegister:0000000000000000 $t
-     /tmp/ccgWqG0G.s:216    .text.writeRegister:0000000000000000 writeRegister
-     /tmp/ccgWqG0G.s:256    .text.readRegisters:0000000000000000 $t
-     /tmp/ccgWqG0G.s:263    .text.readRegisters:0000000000000000 readRegisters
-     /tmp/ccgWqG0G.s:295    .text.whoAmI:0000000000000000 $t
-     /tmp/ccgWqG0G.s:301    .text.whoAmI:0000000000000000 whoAmI
-     /tmp/ccgWqG0G.s:326    .text.whoAmI:0000000000000014 $d
-     /tmp/ccgWqG0G.s:331    .text.writeAK8963Register:0000000000000000 $t
-     /tmp/ccgWqG0G.s:338    .text.writeAK8963Register:0000000000000000 writeAK8963Register
-     /tmp/ccgWqG0G.s:385    .text.readAK8963Registers:0000000000000000 $t
-     /tmp/ccgWqG0G.s:392    .text.readAK8963Registers:0000000000000000 readAK8963Registers
-     /tmp/ccgWqG0G.s:446    .text.whoAmIAK8963:0000000000000000 $t
-     /tmp/ccgWqG0G.s:452    .text.whoAmIAK8963:0000000000000000 whoAmIAK8963
-     /tmp/ccgWqG0G.s:477    .text.whoAmIAK8963:0000000000000014 $d
-     /tmp/ccgWqG0G.s:482    .rodata.MPU9250_Init.str1.4:0000000000000000 $d
-     /tmp/ccgWqG0G.s:486    .text.MPU9250_Init:0000000000000000 $t
-     /tmp/ccgWqG0G.s:493    .text.MPU9250_Init:0000000000000000 MPU9250_Init
-     /tmp/ccgWqG0G.s:697    .text.MPU9250_Init:0000000000000114 $d
-     /tmp/ccgWqG0G.s:705    .text.MPU9250_SetAccelRange:0000000000000000 $t
-     /tmp/ccgWqG0G.s:712    .text.MPU9250_SetAccelRange:0000000000000000 MPU9250_SetAccelRange
-     /tmp/ccgWqG0G.s:738    .text.MPU9250_SetGyroRange:0000000000000000 $t
-     /tmp/ccgWqG0G.s:745    .text.MPU9250_SetGyroRange:0000000000000000 MPU9250_SetGyroRange
-     /tmp/ccgWqG0G.s:771    .text.MPU9250_SetDLPFBandwidth:0000000000000000 $t
-     /tmp/ccgWqG0G.s:778    .text.MPU9250_SetDLPFBandwidth:0000000000000000 MPU9250_SetDLPFBandwidth
-     /tmp/ccgWqG0G.s:810    .text.MPU9250_SetSampleRateDivider:0000000000000000 $t
-     /tmp/ccgWqG0G.s:817    .text.MPU9250_SetSampleRateDivider:0000000000000000 MPU9250_SetSampleRateDivider
-     /tmp/ccgWqG0G.s:903    .text.MPU9250_SetSampleRateDivider:0000000000000068 $d
-     /tmp/ccgWqG0G.s:908    .text.MPU9250_GetData:0000000000000000 $t
-     /tmp/ccgWqG0G.s:915    .text.MPU9250_GetData:0000000000000000 MPU9250_GetData
-     /tmp/ccgWqG0G.s:1138   .text.MPU9250_GetData:000000000000012c $d
-     /tmp/ccgWqG0G.s:1334   .rodata.AK8963_WHO_AM_I:0000000000000000 AK8963_WHO_AM_I
-     /tmp/ccgWqG0G.s:1284   .rodata.AK8963_ASA:0000000000000000 AK8963_ASA
-     /tmp/ccgWqG0G.s:1329   .rodata.AK8963_RESET:0000000000000000 AK8963_RESET
-     /tmp/ccgWqG0G.s:1294   .rodata.AK8963_CNTL2:0000000000000000 AK8963_CNTL2
-     /tmp/ccgWqG0G.s:1309   .rodata.AK8963_FUSE_ROM:0000000000000000 AK8963_FUSE_ROM
-     /tmp/ccgWqG0G.s:1304   .rodata.AK8963_CNT_MEAS2:0000000000000000 AK8963_CNT_MEAS2
-     /tmp/ccgWqG0G.s:1299   .rodata.AK8963_CNT_MEAS1:0000000000000000 AK8963_CNT_MEAS1
-     /tmp/ccgWqG0G.s:1324   .rodata.AK8963_PWR_DOWN:0000000000000000 AK8963_PWR_DOWN
-     /tmp/ccgWqG0G.s:1289   .rodata.AK8963_CNTL1:0000000000000000 AK8963_CNTL1
-     /tmp/ccgWqG0G.s:1314   .rodata.AK8963_HXL:0000000000000000 AK8963_HXL
-     /tmp/ccgWqG0G.s:1319   .rodata.AK8963_I2C_ADDR:0000000000000000 AK8963_I2C_ADDR
-     /tmp/ccgWqG0G.s:1596   .rodata.Temp_Sensitivity:0000000000000000 Temp_Sensitivity
-     /tmp/ccgWqG0G.s:1575   .rodata.RoomTemp_Offset:0000000000000000 RoomTemp_Offset
-     /tmp/ccgWqG0G.s:1419   .rodata.FIFO_READ:0000000000000000 FIFO_READ
-ARM GAS  /tmp/ccgWqG0G.s 			page 37
+     /tmp/ccRRh7VQ.s:17     .text.MPU9250_OnActivate:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:25     .text.MPU9250_OnActivate:0000000000000000 MPU9250_OnActivate
+     /tmp/ccRRh7VQ.s:39     .text.MPU9250_IsConnected:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:46     .text.MPU9250_IsConnected:0000000000000000 MPU9250_IsConnected
+     /tmp/ccRRh7VQ.s:79     .text.MPU9250_IsConnected:0000000000000018 $d
+     /tmp/ccRRh7VQ.s:84     .text.MPU_I2C_Write:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:91     .text.MPU_I2C_Write:0000000000000000 MPU_I2C_Write
+     /tmp/ccRRh7VQ.s:132    .text.MPU_I2C_Write:0000000000000020 $d
+     /tmp/ccRRh7VQ.s:137    .text.MPU_I2C_Read:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:144    .text.MPU_I2C_Read:0000000000000000 MPU_I2C_Read
+     /tmp/ccRRh7VQ.s:204    .text.MPU_I2C_Read:0000000000000038 $d
+     /tmp/ccRRh7VQ.s:209    .text.writeRegister:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:216    .text.writeRegister:0000000000000000 writeRegister
+     /tmp/ccRRh7VQ.s:256    .text.readRegisters:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:263    .text.readRegisters:0000000000000000 readRegisters
+     /tmp/ccRRh7VQ.s:295    .text.whoAmI:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:301    .text.whoAmI:0000000000000000 whoAmI
+     /tmp/ccRRh7VQ.s:326    .text.whoAmI:0000000000000014 $d
+     /tmp/ccRRh7VQ.s:331    .text.writeAK8963Register:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:338    .text.writeAK8963Register:0000000000000000 writeAK8963Register
+     /tmp/ccRRh7VQ.s:385    .text.readAK8963Registers:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:392    .text.readAK8963Registers:0000000000000000 readAK8963Registers
+     /tmp/ccRRh7VQ.s:446    .text.whoAmIAK8963:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:452    .text.whoAmIAK8963:0000000000000000 whoAmIAK8963
+     /tmp/ccRRh7VQ.s:477    .text.whoAmIAK8963:0000000000000014 $d
+     /tmp/ccRRh7VQ.s:482    .rodata.MPU9250_Init.str1.4:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:486    .text.MPU9250_Init:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:493    .text.MPU9250_Init:0000000000000000 MPU9250_Init
+     /tmp/ccRRh7VQ.s:697    .text.MPU9250_Init:0000000000000114 $d
+     /tmp/ccRRh7VQ.s:705    .text.MPU9250_SetAccelRange:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:712    .text.MPU9250_SetAccelRange:0000000000000000 MPU9250_SetAccelRange
+     /tmp/ccRRh7VQ.s:738    .text.MPU9250_SetGyroRange:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:745    .text.MPU9250_SetGyroRange:0000000000000000 MPU9250_SetGyroRange
+     /tmp/ccRRh7VQ.s:771    .text.MPU9250_SetDLPFBandwidth:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:778    .text.MPU9250_SetDLPFBandwidth:0000000000000000 MPU9250_SetDLPFBandwidth
+     /tmp/ccRRh7VQ.s:810    .text.MPU9250_SetSampleRateDivider:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:817    .text.MPU9250_SetSampleRateDivider:0000000000000000 MPU9250_SetSampleRateDivider
+     /tmp/ccRRh7VQ.s:903    .text.MPU9250_SetSampleRateDivider:0000000000000068 $d
+     /tmp/ccRRh7VQ.s:908    .text.MPU9250_GetData:0000000000000000 $t
+     /tmp/ccRRh7VQ.s:915    .text.MPU9250_GetData:0000000000000000 MPU9250_GetData
+     /tmp/ccRRh7VQ.s:1138   .text.MPU9250_GetData:000000000000012c $d
+     /tmp/ccRRh7VQ.s:1334   .rodata.AK8963_WHO_AM_I:0000000000000000 AK8963_WHO_AM_I
+     /tmp/ccRRh7VQ.s:1284   .rodata.AK8963_ASA:0000000000000000 AK8963_ASA
+     /tmp/ccRRh7VQ.s:1329   .rodata.AK8963_RESET:0000000000000000 AK8963_RESET
+     /tmp/ccRRh7VQ.s:1294   .rodata.AK8963_CNTL2:0000000000000000 AK8963_CNTL2
+     /tmp/ccRRh7VQ.s:1309   .rodata.AK8963_FUSE_ROM:0000000000000000 AK8963_FUSE_ROM
+     /tmp/ccRRh7VQ.s:1304   .rodata.AK8963_CNT_MEAS2:0000000000000000 AK8963_CNT_MEAS2
+     /tmp/ccRRh7VQ.s:1299   .rodata.AK8963_CNT_MEAS1:0000000000000000 AK8963_CNT_MEAS1
+     /tmp/ccRRh7VQ.s:1324   .rodata.AK8963_PWR_DOWN:0000000000000000 AK8963_PWR_DOWN
+     /tmp/ccRRh7VQ.s:1289   .rodata.AK8963_CNTL1:0000000000000000 AK8963_CNTL1
+     /tmp/ccRRh7VQ.s:1314   .rodata.AK8963_HXL:0000000000000000 AK8963_HXL
+     /tmp/ccRRh7VQ.s:1319   .rodata.AK8963_I2C_ADDR:0000000000000000 AK8963_I2C_ADDR
+     /tmp/ccRRh7VQ.s:1596   .rodata.Temp_Sensitivity:0000000000000000 Temp_Sensitivity
+     /tmp/ccRRh7VQ.s:1575   .rodata.RoomTemp_Offset:0000000000000000 RoomTemp_Offset
+     /tmp/ccRRh7VQ.s:1419   .rodata.FIFO_READ:0000000000000000 FIFO_READ
+ARM GAS  /tmp/ccRRh7VQ.s 			page 37
 
 
-     /tmp/ccgWqG0G.s:1399   .rodata.FIFO_COUNT:0000000000000000 FIFO_COUNT
-     /tmp/ccgWqG0G.s:1414   .rodata.FIFO_MAG:0000000000000000 FIFO_MAG
-     /tmp/ccgWqG0G.s:1394   .rodata.FIFO_ACCEL:0000000000000000 FIFO_ACCEL
-     /tmp/ccgWqG0G.s:1409   .rodata.FIFO_GYRO:0000000000000000 FIFO_GYRO
-     /tmp/ccgWqG0G.s:1424   .rodata.FIFO_TEMP:0000000000000000 FIFO_TEMP
-     /tmp/ccgWqG0G.s:1404   .rodata.FIFO_EN:0000000000000000 FIFO_EN
-     /tmp/ccgWqG0G.s:1606   .rodata.WHO_AM_I:0000000000000000 WHO_AM_I
-     /tmp/ccgWqG0G.s:1611   .rodata.WOM_THR:0000000000000000 WOM_THR
-     /tmp/ccgWqG0G.s:1534   .rodata.LP_ACCEL_ODR:0000000000000000 LP_ACCEL_ODR
-     /tmp/ccgWqG0G.s:1274   .rodata.ACCEL_INTEL_MODE:0000000000000000 ACCEL_INTEL_MODE
-     /tmp/ccgWqG0G.s:1269   .rodata.ACCEL_INTEL_EN:0000000000000000 ACCEL_INTEL_EN
-     /tmp/ccgWqG0G.s:1539   .rodata.MOT_DETECT_CTRL:0000000000000000 MOT_DETECT_CTRL
-     /tmp/ccgWqG0G.s:1474   .rodata.I2C_READ_FLAG:0000000000000000 I2C_READ_FLAG
-     /tmp/ccgWqG0G.s:1494   .rodata.I2C_SLV0_EN:0000000000000000 I2C_SLV0_EN
-     /tmp/ccgWqG0G.s:1484   .rodata.I2C_SLV0_CTRL:0000000000000000 I2C_SLV0_CTRL
-     /tmp/ccgWqG0G.s:1489   .rodata.I2C_SLV0_DO:0000000000000000 I2C_SLV0_DO
-     /tmp/ccgWqG0G.s:1499   .rodata.I2C_SLV0_REG:0000000000000000 I2C_SLV0_REG
-     /tmp/ccgWqG0G.s:1479   .rodata.I2C_SLV0_ADDR:0000000000000000 I2C_SLV0_ADDR
-     /tmp/ccgWqG0G.s:1464   .rodata.I2C_MST_CTRL:0000000000000000 I2C_MST_CTRL
-     /tmp/ccgWqG0G.s:1459   .rodata.I2C_MST_CLK:0000000000000000 I2C_MST_CLK
-     /tmp/ccgWqG0G.s:1469   .rodata.I2C_MST_EN:0000000000000000 I2C_MST_EN
-     /tmp/ccgWqG0G.s:1601   .rodata.USER_CTRL:0000000000000000 USER_CTRL
-     /tmp/ccgWqG0G.s:1349   .rodata.DIS_GYRO:0000000000000000 DIS_GYRO
-     /tmp/ccgWqG0G.s:1580   .rodata.SEN_ENABLE:0000000000000000 SEN_ENABLE
-     /tmp/ccgWqG0G.s:1559   .rodata.PWR_MGMNT_2:0000000000000000 PWR_MGMNT_2
-     /tmp/ccgWqG0G.s:1339   .rodata.CLOCK_SEL_PLL:0000000000000000 CLOCK_SEL_PLL
-     /tmp/ccgWqG0G.s:1564   .rodata.PWR_RESET:0000000000000000 PWR_RESET
-     /tmp/ccgWqG0G.s:1549   .rodata.PWR_CYCLE:0000000000000000 PWR_CYCLE
-     /tmp/ccgWqG0G.s:1554   .rodata.PWR_MGMNT_1:0000000000000000 PWR_MGMNT_1
-     /tmp/ccgWqG0G.s:1524   .rodata.INT_RAW_RDY_EN:0000000000000000 INT_RAW_RDY_EN
-     /tmp/ccgWqG0G.s:1529   .rodata.INT_WOM_EN:0000000000000000 INT_WOM_EN
-     /tmp/ccgWqG0G.s:1519   .rodata.INT_PULSE_50US:0000000000000000 INT_PULSE_50US
-     /tmp/ccgWqG0G.s:1504   .rodata.INT_DISABLE:0000000000000000 INT_DISABLE
-     /tmp/ccgWqG0G.s:1509   .rodata.INT_ENABLE:0000000000000000 INT_ENABLE
-     /tmp/ccgWqG0G.s:1514   .rodata.INT_PIN_CFG:0000000000000000 INT_PIN_CFG
-     /tmp/ccgWqG0G.s:1585   .rodata.SMPDIV:0000000000000000 SMPDIV
-     /tmp/ccgWqG0G.s:1344   .rodata.CONFIG:0000000000000000 CONFIG
-     /tmp/ccgWqG0G.s:1374   .rodata.DLPF_5:0000000000000000 DLPF_5
-     /tmp/ccgWqG0G.s:1354   .rodata.DLPF_10:0000000000000000 DLPF_10
-     /tmp/ccgWqG0G.s:1364   .rodata.DLPF_20:0000000000000000 DLPF_20
-     /tmp/ccgWqG0G.s:1369   .rodata.DLPF_41:0000000000000000 DLPF_41
-     /tmp/ccgWqG0G.s:1379   .rodata.DLPF_92:0000000000000000 DLPF_92
-     /tmp/ccgWqG0G.s:1359   .rodata.DLPF_184:0000000000000000 DLPF_184
-     /tmp/ccgWqG0G.s:1244   .rodata.ACCEL_CONFIG2:0000000000000000 ACCEL_CONFIG2
-     /tmp/ccgWqG0G.s:1439   .rodata.GYRO_FS_SEL_2000DPS:0000000000000000 GYRO_FS_SEL_2000DPS
-     /tmp/ccgWqG0G.s:1434   .rodata.GYRO_FS_SEL_1000DPS:0000000000000000 GYRO_FS_SEL_1000DPS
-     /tmp/ccgWqG0G.s:1449   .rodata.GYRO_FS_SEL_500DPS:0000000000000000 GYRO_FS_SEL_500DPS
-     /tmp/ccgWqG0G.s:1444   .rodata.GYRO_FS_SEL_250DPS:0000000000000000 GYRO_FS_SEL_250DPS
-     /tmp/ccgWqG0G.s:1429   .rodata.GYRO_CONFIG:0000000000000000 GYRO_CONFIG
-     /tmp/ccgWqG0G.s:1249   .rodata.ACCEL_FS_SEL_16G:0000000000000000 ACCEL_FS_SEL_16G
-     /tmp/ccgWqG0G.s:1264   .rodata.ACCEL_FS_SEL_8G:0000000000000000 ACCEL_FS_SEL_8G
-     /tmp/ccgWqG0G.s:1259   .rodata.ACCEL_FS_SEL_4G:0000000000000000 ACCEL_FS_SEL_4G
-     /tmp/ccgWqG0G.s:1254   .rodata.ACCEL_FS_SEL_2G:0000000000000000 ACCEL_FS_SEL_2G
-     /tmp/ccgWqG0G.s:1239   .rodata.ACCEL_CONFIG:0000000000000000 ACCEL_CONFIG
-     /tmp/ccgWqG0G.s:1389   .rodata.EXT_SENS_DATA_00:0000000000000000 EXT_SENS_DATA_00
-     /tmp/ccgWqG0G.s:1590   .rodata.TEMP_OUT:0000000000000000 TEMP_OUT
-     /tmp/ccgWqG0G.s:1454   .rodata.GYRO_OUT:0000000000000000 GYRO_OUT
-ARM GAS  /tmp/ccgWqG0G.s 			page 38
+     /tmp/ccRRh7VQ.s:1399   .rodata.FIFO_COUNT:0000000000000000 FIFO_COUNT
+     /tmp/ccRRh7VQ.s:1414   .rodata.FIFO_MAG:0000000000000000 FIFO_MAG
+     /tmp/ccRRh7VQ.s:1394   .rodata.FIFO_ACCEL:0000000000000000 FIFO_ACCEL
+     /tmp/ccRRh7VQ.s:1409   .rodata.FIFO_GYRO:0000000000000000 FIFO_GYRO
+     /tmp/ccRRh7VQ.s:1424   .rodata.FIFO_TEMP:0000000000000000 FIFO_TEMP
+     /tmp/ccRRh7VQ.s:1404   .rodata.FIFO_EN:0000000000000000 FIFO_EN
+     /tmp/ccRRh7VQ.s:1606   .rodata.WHO_AM_I:0000000000000000 WHO_AM_I
+     /tmp/ccRRh7VQ.s:1611   .rodata.WOM_THR:0000000000000000 WOM_THR
+     /tmp/ccRRh7VQ.s:1534   .rodata.LP_ACCEL_ODR:0000000000000000 LP_ACCEL_ODR
+     /tmp/ccRRh7VQ.s:1274   .rodata.ACCEL_INTEL_MODE:0000000000000000 ACCEL_INTEL_MODE
+     /tmp/ccRRh7VQ.s:1269   .rodata.ACCEL_INTEL_EN:0000000000000000 ACCEL_INTEL_EN
+     /tmp/ccRRh7VQ.s:1539   .rodata.MOT_DETECT_CTRL:0000000000000000 MOT_DETECT_CTRL
+     /tmp/ccRRh7VQ.s:1474   .rodata.I2C_READ_FLAG:0000000000000000 I2C_READ_FLAG
+     /tmp/ccRRh7VQ.s:1494   .rodata.I2C_SLV0_EN:0000000000000000 I2C_SLV0_EN
+     /tmp/ccRRh7VQ.s:1484   .rodata.I2C_SLV0_CTRL:0000000000000000 I2C_SLV0_CTRL
+     /tmp/ccRRh7VQ.s:1489   .rodata.I2C_SLV0_DO:0000000000000000 I2C_SLV0_DO
+     /tmp/ccRRh7VQ.s:1499   .rodata.I2C_SLV0_REG:0000000000000000 I2C_SLV0_REG
+     /tmp/ccRRh7VQ.s:1479   .rodata.I2C_SLV0_ADDR:0000000000000000 I2C_SLV0_ADDR
+     /tmp/ccRRh7VQ.s:1464   .rodata.I2C_MST_CTRL:0000000000000000 I2C_MST_CTRL
+     /tmp/ccRRh7VQ.s:1459   .rodata.I2C_MST_CLK:0000000000000000 I2C_MST_CLK
+     /tmp/ccRRh7VQ.s:1469   .rodata.I2C_MST_EN:0000000000000000 I2C_MST_EN
+     /tmp/ccRRh7VQ.s:1601   .rodata.USER_CTRL:0000000000000000 USER_CTRL
+     /tmp/ccRRh7VQ.s:1349   .rodata.DIS_GYRO:0000000000000000 DIS_GYRO
+     /tmp/ccRRh7VQ.s:1580   .rodata.SEN_ENABLE:0000000000000000 SEN_ENABLE
+     /tmp/ccRRh7VQ.s:1559   .rodata.PWR_MGMNT_2:0000000000000000 PWR_MGMNT_2
+     /tmp/ccRRh7VQ.s:1339   .rodata.CLOCK_SEL_PLL:0000000000000000 CLOCK_SEL_PLL
+     /tmp/ccRRh7VQ.s:1564   .rodata.PWR_RESET:0000000000000000 PWR_RESET
+     /tmp/ccRRh7VQ.s:1549   .rodata.PWR_CYCLE:0000000000000000 PWR_CYCLE
+     /tmp/ccRRh7VQ.s:1554   .rodata.PWR_MGMNT_1:0000000000000000 PWR_MGMNT_1
+     /tmp/ccRRh7VQ.s:1524   .rodata.INT_RAW_RDY_EN:0000000000000000 INT_RAW_RDY_EN
+     /tmp/ccRRh7VQ.s:1529   .rodata.INT_WOM_EN:0000000000000000 INT_WOM_EN
+     /tmp/ccRRh7VQ.s:1519   .rodata.INT_PULSE_50US:0000000000000000 INT_PULSE_50US
+     /tmp/ccRRh7VQ.s:1504   .rodata.INT_DISABLE:0000000000000000 INT_DISABLE
+     /tmp/ccRRh7VQ.s:1509   .rodata.INT_ENABLE:0000000000000000 INT_ENABLE
+     /tmp/ccRRh7VQ.s:1514   .rodata.INT_PIN_CFG:0000000000000000 INT_PIN_CFG
+     /tmp/ccRRh7VQ.s:1585   .rodata.SMPDIV:0000000000000000 SMPDIV
+     /tmp/ccRRh7VQ.s:1344   .rodata.CONFIG:0000000000000000 CONFIG
+     /tmp/ccRRh7VQ.s:1374   .rodata.DLPF_5:0000000000000000 DLPF_5
+     /tmp/ccRRh7VQ.s:1354   .rodata.DLPF_10:0000000000000000 DLPF_10
+     /tmp/ccRRh7VQ.s:1364   .rodata.DLPF_20:0000000000000000 DLPF_20
+     /tmp/ccRRh7VQ.s:1369   .rodata.DLPF_41:0000000000000000 DLPF_41
+     /tmp/ccRRh7VQ.s:1379   .rodata.DLPF_92:0000000000000000 DLPF_92
+     /tmp/ccRRh7VQ.s:1359   .rodata.DLPF_184:0000000000000000 DLPF_184
+     /tmp/ccRRh7VQ.s:1244   .rodata.ACCEL_CONFIG2:0000000000000000 ACCEL_CONFIG2
+     /tmp/ccRRh7VQ.s:1439   .rodata.GYRO_FS_SEL_2000DPS:0000000000000000 GYRO_FS_SEL_2000DPS
+     /tmp/ccRRh7VQ.s:1434   .rodata.GYRO_FS_SEL_1000DPS:0000000000000000 GYRO_FS_SEL_1000DPS
+     /tmp/ccRRh7VQ.s:1449   .rodata.GYRO_FS_SEL_500DPS:0000000000000000 GYRO_FS_SEL_500DPS
+     /tmp/ccRRh7VQ.s:1444   .rodata.GYRO_FS_SEL_250DPS:0000000000000000 GYRO_FS_SEL_250DPS
+     /tmp/ccRRh7VQ.s:1429   .rodata.GYRO_CONFIG:0000000000000000 GYRO_CONFIG
+     /tmp/ccRRh7VQ.s:1249   .rodata.ACCEL_FS_SEL_16G:0000000000000000 ACCEL_FS_SEL_16G
+     /tmp/ccRRh7VQ.s:1264   .rodata.ACCEL_FS_SEL_8G:0000000000000000 ACCEL_FS_SEL_8G
+     /tmp/ccRRh7VQ.s:1259   .rodata.ACCEL_FS_SEL_4G:0000000000000000 ACCEL_FS_SEL_4G
+     /tmp/ccRRh7VQ.s:1254   .rodata.ACCEL_FS_SEL_2G:0000000000000000 ACCEL_FS_SEL_2G
+     /tmp/ccRRh7VQ.s:1239   .rodata.ACCEL_CONFIG:0000000000000000 ACCEL_CONFIG
+     /tmp/ccRRh7VQ.s:1389   .rodata.EXT_SENS_DATA_00:0000000000000000 EXT_SENS_DATA_00
+     /tmp/ccRRh7VQ.s:1590   .rodata.TEMP_OUT:0000000000000000 TEMP_OUT
+     /tmp/ccRRh7VQ.s:1454   .rodata.GYRO_OUT:0000000000000000 GYRO_OUT
+ARM GAS  /tmp/ccRRh7VQ.s 			page 38
 
 
-     /tmp/ccgWqG0G.s:1279   .rodata.ACCEL_OUT:0000000000000000 ACCEL_OUT
-     /tmp/ccgWqG0G.s:1623   .rodata._i2cRate:0000000000000000 _i2cRate
-     /tmp/ccgWqG0G.s:1617   .rodata._dev_add:0000000000000000 _dev_add
-     /tmp/ccgWqG0G.s:1384   .rodata.DUMMY_BYTE:0000000000000000 DUMMY_BYTE
-     /tmp/ccgWqG0G.s:1544   .rodata.MULTIPLEBYTE_CMD:0000000000000000 MULTIPLEBYTE_CMD
-     /tmp/ccgWqG0G.s:1569   .rodata.READWRITE_CMD:0000000000000000 READWRITE_CMD
-     /tmp/ccgWqG0G.s:1223   .bss._buffer:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1227   .bss._buffer:0000000000000000 _buffer
-     /tmp/ccgWqG0G.s:1230   .bss._mag_adjust:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1234   .bss._mag_adjust:0000000000000000 _mag_adjust
-     /tmp/ccgWqG0G.s:1255   .rodata.ACCEL_FS_SEL_2G:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1325   .rodata.AK8963_PWR_DOWN:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1335   .rodata.AK8963_WHO_AM_I:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1385   .rodata.DUMMY_BYTE:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1445   .rodata.GYRO_FS_SEL_250DPS:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1505   .rodata.INT_DISABLE:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1520   .rodata.INT_PULSE_50US:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1572   .rodata.RoomTemp_Offset:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1581   .rodata.SEN_ENABLE:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1593   .rodata.Temp_Sensitivity:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1614   .rodata._dev_add:0000000000000000 $d
-     /tmp/ccgWqG0G.s:1620   .rodata._i2cRate:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1279   .rodata.ACCEL_OUT:0000000000000000 ACCEL_OUT
+     /tmp/ccRRh7VQ.s:1623   .rodata._i2cRate:0000000000000000 _i2cRate
+     /tmp/ccRRh7VQ.s:1617   .rodata._dev_add:0000000000000000 _dev_add
+     /tmp/ccRRh7VQ.s:1384   .rodata.DUMMY_BYTE:0000000000000000 DUMMY_BYTE
+     /tmp/ccRRh7VQ.s:1544   .rodata.MULTIPLEBYTE_CMD:0000000000000000 MULTIPLEBYTE_CMD
+     /tmp/ccRRh7VQ.s:1569   .rodata.READWRITE_CMD:0000000000000000 READWRITE_CMD
+     /tmp/ccRRh7VQ.s:1223   .bss._buffer:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1227   .bss._buffer:0000000000000000 _buffer
+     /tmp/ccRRh7VQ.s:1230   .bss._mag_adjust:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1234   .bss._mag_adjust:0000000000000000 _mag_adjust
+     /tmp/ccRRh7VQ.s:1255   .rodata.ACCEL_FS_SEL_2G:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1325   .rodata.AK8963_PWR_DOWN:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1335   .rodata.AK8963_WHO_AM_I:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1385   .rodata.DUMMY_BYTE:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1445   .rodata.GYRO_FS_SEL_250DPS:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1505   .rodata.INT_DISABLE:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1520   .rodata.INT_PULSE_50US:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1572   .rodata.RoomTemp_Offset:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1581   .rodata.SEN_ENABLE:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1593   .rodata.Temp_Sensitivity:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1614   .rodata._dev_add:0000000000000000 $d
+     /tmp/ccRRh7VQ.s:1620   .rodata._i2cRate:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 HAL_I2C_IsDeviceReady

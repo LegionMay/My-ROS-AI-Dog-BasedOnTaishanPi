@@ -1,4 +1,4 @@
-ARM GAS  /tmp/ccq3kZXF.s 			page 1
+ARM GAS  /tmp/ccyhJuwp.s 			page 1
 
 
    1              		.cpu cortex-m7
@@ -58,7 +58,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
   42              	.L2:
   43 0008 00000000 		.word	.LANCHOR0
   44              		.cfi_endproc
-ARM GAS  /tmp/ccq3kZXF.s 			page 2
+ARM GAS  /tmp/ccyhJuwp.s 			page 2
 
 
   45              	.LFE148:
@@ -118,7 +118,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  101 0008 00000000 		.word	.LANCHOR0
  102              		.cfi_endproc
  103              	.LFE150:
-ARM GAS  /tmp/ccq3kZXF.s 			page 3
+ARM GAS  /tmp/ccyhJuwp.s 			page 3
 
 
  105              		.section	.text.Turn_Right,"ax",%progbits
@@ -178,7 +178,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  160              		.cfi_endproc
  161              	.LFE152:
  163              		.section	.text.InverseKinematics,"ax",%progbits
-ARM GAS  /tmp/ccq3kZXF.s 			page 4
+ARM GAS  /tmp/ccyhJuwp.s 			page 4
 
 
  164              		.align	1
@@ -238,7 +238,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  212 0026 9FED1A0A 		vldr.32	s0, .L18+4
  213 002a 77EEC07A 		vsub.f32	s15, s15, s0
  214              	.LVL3:
-ARM GAS  /tmp/ccq3kZXF.s 			page 5
+ARM GAS  /tmp/ccyhJuwp.s 			page 5
 
 
   26:Core/Src/robocontrol.c ****     float phi2 = acosf(D);  // 小腿角度
@@ -298,7 +298,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
   31:Core/Src/robocontrol.c **** }
  264              		.loc 1 31 1 view .LVU46
  265 0086 BDEC048B 		vldm	sp!, {d8-d9}
-ARM GAS  /tmp/ccq3kZXF.s 			page 6
+ARM GAS  /tmp/ccyhJuwp.s 			page 6
 
 
  266              	.LCFI2:
@@ -358,7 +358,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  315 0004 F6EE007A 		vmov.f32	s15, #5.0e-1
  316 0008 B4EEE70A 		vcmpe.f32	s0, s15
  317 000c F1EE10FA 		vmrs	APSR_nzcv, FPSCR
-ARM GAS  /tmp/ccq3kZXF.s 			page 7
+ARM GAS  /tmp/ccyhJuwp.s 			page 7
 
 
  318 0010 18D5     		bpl	.L25
@@ -418,7 +418,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  358 0054 9FED087B 		vldr.64	d7, .L27+8
  359 0058 20EE070B 		vmul.f64	d0, d0, d7
  360 005c B7EEC00B 		vcvt.f32.f64	s0, d0
-ARM GAS  /tmp/ccq3kZXF.s 			page 8
+ARM GAS  /tmp/ccyhJuwp.s 			page 8
 
 
   44:Core/Src/robocontrol.c ****         *y = 0;
@@ -478,7 +478,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  408              	.L30:
   53:Core/Src/robocontrol.c ****     } else {
   54:Core/Src/robocontrol.c ****         return (ServoID)((leg * 2));  // 小腿舵机（单数）
-ARM GAS  /tmp/ccq3kZXF.s 			page 9
+ARM GAS  /tmp/ccyhJuwp.s 			page 9
 
 
  409              		.loc 1 54 9 is_stmt 1 view .LVU81
@@ -538,7 +538,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  458              	.L34:
  459              	.LVL29:
   62:Core/Src/robocontrol.c ****         float x, y;
-ARM GAS  /tmp/ccq3kZXF.s 			page 10
+ARM GAS  /tmp/ccyhJuwp.s 			page 10
 
 
  460              		.loc 1 62 9 is_stmt 1 discriminator 4 view .LVU91
@@ -598,7 +598,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
   60:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;  // 对角腿同步：Leg 0 和 Leg 3 相�
  502              		.loc 1 60 48 is_stmt 0 discriminator 4 view .LVU102
  503 004c 0134     		adds	r4, r4, #1
-ARM GAS  /tmp/ccq3kZXF.s 			page 11
+ARM GAS  /tmp/ccyhJuwp.s 			page 11
 
 
  504              	.LVL38:
@@ -658,7 +658,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  551 0000 70B5     		push	{r4, r5, r6, lr}
  552              	.LCFI7:
  553              		.cfi_def_cfa_offset 16
-ARM GAS  /tmp/ccq3kZXF.s 			page 12
+ARM GAS  /tmp/ccyhJuwp.s 			page 12
 
 
  554              		.cfi_offset 4, -16
@@ -718,7 +718,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  598 0034 0646     		mov	r6, r0
  599              	.LVL46:
   89:Core/Src/robocontrol.c ****         ServoID lowerLegServo = GetServoIDForLeg(leg, false);
-ARM GAS  /tmp/ccq3kZXF.s 			page 13
+ARM GAS  /tmp/ccyhJuwp.s 			page 13
 
 
  600              		.loc 1 89 9 is_stmt 1 discriminator 4 view .LVU121
@@ -778,7 +778,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  643              		.cfi_def_cfa_offset 16
  644              		@ sp needed
  645 006a 70BD     		pop	{r4, r5, r6, pc}
-ARM GAS  /tmp/ccq3kZXF.s 			page 14
+ARM GAS  /tmp/ccyhJuwp.s 			page 14
 
 
  646              	.LVL52:
@@ -838,7 +838,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  102:Core/Src/robocontrol.c ****         // 左侧腿向后，右侧腿向前
  103:Core/Src/robocontrol.c ****         if (leg == 0 || leg == 3) {
  104:Core/Src/robocontrol.c ****             CalculateGait(1.0 - time, &x, &y);  // 左侧腿后移
-ARM GAS  /tmp/ccq3kZXF.s 			page 15
+ARM GAS  /tmp/ccyhJuwp.s 			page 15
 
 
  105:Core/Src/robocontrol.c ****         } else {
@@ -898,7 +898,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
   98:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
  736              		.loc 1 98 45 discriminator 2 view .LVU148
   98:Core/Src/robocontrol.c ****         float time = (leg == 0 || leg == 3) ? 0.0 : 0.5;
-ARM GAS  /tmp/ccq3kZXF.s 			page 16
+ARM GAS  /tmp/ccyhJuwp.s 			page 16
 
 
  737              		.loc 1 98 48 is_stmt 0 discriminator 2 view .LVU149
@@ -958,7 +958,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  779              	.LCFI12:
  780              		.cfi_def_cfa_offset 16
  781              		@ sp needed
-ARM GAS  /tmp/ccq3kZXF.s 			page 17
+ARM GAS  /tmp/ccyhJuwp.s 			page 17
 
 
  782 007e 70BD     		pop	{r4, r5, r6, pc}
@@ -1018,7 +1018,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  126:Core/Src/robocontrol.c **** 
  127:Core/Src/robocontrol.c ****         // 左侧腿向前，右侧腿向后
  128:Core/Src/robocontrol.c ****         if (leg == 0 || leg == 3) {
-ARM GAS  /tmp/ccq3kZXF.s 			page 18
+ARM GAS  /tmp/ccyhJuwp.s 			page 18
 
 
  129:Core/Src/robocontrol.c ****             CalculateGait(time, &x, &y);  // 左侧腿前移
@@ -1078,7 +1078,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  872 004c 9DED030A 		vldr.32	s0, [sp, #12]
  873 0050 2846     		mov	r0, r5
  874 0052 FFF7FEFF 		bl	Set_Servo_Angle
-ARM GAS  /tmp/ccq3kZXF.s 			page 19
+ARM GAS  /tmp/ccyhJuwp.s 			page 19
 
 
  875              	.LVL80:
@@ -1138,7 +1138,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  915              		.loc 1 144 1 view .LVU190
  916 007c 04B0     		add	sp, sp, #16
  917              	.LCFI15:
-ARM GAS  /tmp/ccq3kZXF.s 			page 20
+ARM GAS  /tmp/ccyhJuwp.s 			page 20
 
 
  918              		.cfi_def_cfa_offset 16
@@ -1198,7 +1198,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  150:Core/Src/robocontrol.c ****         float x, y;
  969              		.loc 1 150 9 is_stmt 1 discriminator 4 view .LVU198
  151:Core/Src/robocontrol.c **** 
-ARM GAS  /tmp/ccq3kZXF.s 			page 21
+ARM GAS  /tmp/ccyhJuwp.s 			page 21
 
 
  152:Core/Src/robocontrol.c ****         CalculateGait(time, &x, &y);  // 在原地移动
@@ -1258,7 +1258,7 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  1011              		.loc 1 148 48 is_stmt 0 discriminator 4 view .LVU209
  1012 004c 0134     		adds	r4, r4, #1
  1013              	.LVL96:
-ARM GAS  /tmp/ccq3kZXF.s 			page 22
+ARM GAS  /tmp/ccyhJuwp.s 			page 22
 
 
  1014              	.L73:
@@ -1308,51 +1308,51 @@ ARM GAS  /tmp/ccq3kZXF.s 			page 1
  1055              		.file 2 "Core/Inc/servo_control.h"
  1056              		.file 3 "Core/Inc/robocontrol.h"
  1057              		.file 4 "/usr/include/newlib/math.h"
-ARM GAS  /tmp/ccq3kZXF.s 			page 23
+ARM GAS  /tmp/ccyhJuwp.s 			page 23
 
 
 DEFINED SYMBOLS
                             *ABS*:0000000000000000 robocontrol.c
-     /tmp/ccq3kZXF.s:17     .text.Move_Forward:0000000000000000 $t
-     /tmp/ccq3kZXF.s:25     .text.Move_Forward:0000000000000000 Move_Forward
-     /tmp/ccq3kZXF.s:43     .text.Move_Forward:0000000000000008 $d
-     /tmp/ccq3kZXF.s:48     .text.Move_Backward:0000000000000000 $t
-     /tmp/ccq3kZXF.s:55     .text.Move_Backward:0000000000000000 Move_Backward
-     /tmp/ccq3kZXF.s:72     .text.Move_Backward:0000000000000008 $d
-     /tmp/ccq3kZXF.s:77     .text.Turn_Left:0000000000000000 $t
-     /tmp/ccq3kZXF.s:84     .text.Turn_Left:0000000000000000 Turn_Left
-     /tmp/ccq3kZXF.s:101    .text.Turn_Left:0000000000000008 $d
-     /tmp/ccq3kZXF.s:106    .text.Turn_Right:0000000000000000 $t
-     /tmp/ccq3kZXF.s:113    .text.Turn_Right:0000000000000000 Turn_Right
-     /tmp/ccq3kZXF.s:130    .text.Turn_Right:0000000000000008 $d
-     /tmp/ccq3kZXF.s:135    .text.Stop:0000000000000000 $t
-     /tmp/ccq3kZXF.s:142    .text.Stop:0000000000000000 Stop
-     /tmp/ccq3kZXF.s:159    .text.Stop:0000000000000008 $d
-     /tmp/ccq3kZXF.s:164    .text.InverseKinematics:0000000000000000 $t
-     /tmp/ccq3kZXF.s:171    .text.InverseKinematics:0000000000000000 InverseKinematics
-     /tmp/ccq3kZXF.s:280    .text.InverseKinematics:000000000000008c $d
-     /tmp/ccq3kZXF.s:289    .text.CalculateGait:0000000000000000 $t
-     /tmp/ccq3kZXF.s:296    .text.CalculateGait:0000000000000000 CalculateGait
-     /tmp/ccq3kZXF.s:372    .text.CalculateGait:0000000000000070 $d
-     /tmp/ccq3kZXF.s:381    .text.GetServoIDForLeg:0000000000000000 $t
-     /tmp/ccq3kZXF.s:388    .text.GetServoIDForLeg:0000000000000000 GetServoIDForLeg
-     /tmp/ccq3kZXF.s:422    .text.Gait_Forward:0000000000000000 $t
-     /tmp/ccq3kZXF.s:429    .text.Gait_Forward:0000000000000000 Gait_Forward
-     /tmp/ccq3kZXF.s:533    .text.Gait_Forward:0000000000000064 $d
-     /tmp/ccq3kZXF.s:538    .text.Gait_Backward:0000000000000000 $t
-     /tmp/ccq3kZXF.s:545    .text.Gait_Backward:0000000000000000 Gait_Backward
-     /tmp/ccq3kZXF.s:651    .text.Gait_Backward:000000000000006c $d
-     /tmp/ccq3kZXF.s:656    .text.Gait_Turn_Left:0000000000000000 $t
-     /tmp/ccq3kZXF.s:663    .text.Gait_Turn_Left:0000000000000000 Gait_Turn_Left
-     /tmp/ccq3kZXF.s:788    .text.Gait_Turn_Left:0000000000000080 $d
-     /tmp/ccq3kZXF.s:793    .text.Gait_Turn_Right:0000000000000000 $t
-     /tmp/ccq3kZXF.s:800    .text.Gait_Turn_Right:0000000000000000 Gait_Turn_Right
-     /tmp/ccq3kZXF.s:926    .text.Gait_Turn_Right:0000000000000080 $d
-     /tmp/ccq3kZXF.s:931    .text.Gait_March_In_Place:0000000000000000 $t
-     /tmp/ccq3kZXF.s:938    .text.Gait_March_In_Place:0000000000000000 Gait_March_In_Place
-     /tmp/ccq3kZXF.s:1042   .text.Gait_March_In_Place:0000000000000064 $d
-     /tmp/ccq3kZXF.s:1051   .bss.current_action:0000000000000000 current_action
-     /tmp/ccq3kZXF.s:1052   .bss.current_action:0000000000000000 $d
+     /tmp/ccyhJuwp.s:17     .text.Move_Forward:0000000000000000 $t
+     /tmp/ccyhJuwp.s:25     .text.Move_Forward:0000000000000000 Move_Forward
+     /tmp/ccyhJuwp.s:43     .text.Move_Forward:0000000000000008 $d
+     /tmp/ccyhJuwp.s:48     .text.Move_Backward:0000000000000000 $t
+     /tmp/ccyhJuwp.s:55     .text.Move_Backward:0000000000000000 Move_Backward
+     /tmp/ccyhJuwp.s:72     .text.Move_Backward:0000000000000008 $d
+     /tmp/ccyhJuwp.s:77     .text.Turn_Left:0000000000000000 $t
+     /tmp/ccyhJuwp.s:84     .text.Turn_Left:0000000000000000 Turn_Left
+     /tmp/ccyhJuwp.s:101    .text.Turn_Left:0000000000000008 $d
+     /tmp/ccyhJuwp.s:106    .text.Turn_Right:0000000000000000 $t
+     /tmp/ccyhJuwp.s:113    .text.Turn_Right:0000000000000000 Turn_Right
+     /tmp/ccyhJuwp.s:130    .text.Turn_Right:0000000000000008 $d
+     /tmp/ccyhJuwp.s:135    .text.Stop:0000000000000000 $t
+     /tmp/ccyhJuwp.s:142    .text.Stop:0000000000000000 Stop
+     /tmp/ccyhJuwp.s:159    .text.Stop:0000000000000008 $d
+     /tmp/ccyhJuwp.s:164    .text.InverseKinematics:0000000000000000 $t
+     /tmp/ccyhJuwp.s:171    .text.InverseKinematics:0000000000000000 InverseKinematics
+     /tmp/ccyhJuwp.s:280    .text.InverseKinematics:000000000000008c $d
+     /tmp/ccyhJuwp.s:289    .text.CalculateGait:0000000000000000 $t
+     /tmp/ccyhJuwp.s:296    .text.CalculateGait:0000000000000000 CalculateGait
+     /tmp/ccyhJuwp.s:372    .text.CalculateGait:0000000000000070 $d
+     /tmp/ccyhJuwp.s:381    .text.GetServoIDForLeg:0000000000000000 $t
+     /tmp/ccyhJuwp.s:388    .text.GetServoIDForLeg:0000000000000000 GetServoIDForLeg
+     /tmp/ccyhJuwp.s:422    .text.Gait_Forward:0000000000000000 $t
+     /tmp/ccyhJuwp.s:429    .text.Gait_Forward:0000000000000000 Gait_Forward
+     /tmp/ccyhJuwp.s:533    .text.Gait_Forward:0000000000000064 $d
+     /tmp/ccyhJuwp.s:538    .text.Gait_Backward:0000000000000000 $t
+     /tmp/ccyhJuwp.s:545    .text.Gait_Backward:0000000000000000 Gait_Backward
+     /tmp/ccyhJuwp.s:651    .text.Gait_Backward:000000000000006c $d
+     /tmp/ccyhJuwp.s:656    .text.Gait_Turn_Left:0000000000000000 $t
+     /tmp/ccyhJuwp.s:663    .text.Gait_Turn_Left:0000000000000000 Gait_Turn_Left
+     /tmp/ccyhJuwp.s:788    .text.Gait_Turn_Left:0000000000000080 $d
+     /tmp/ccyhJuwp.s:793    .text.Gait_Turn_Right:0000000000000000 $t
+     /tmp/ccyhJuwp.s:800    .text.Gait_Turn_Right:0000000000000000 Gait_Turn_Right
+     /tmp/ccyhJuwp.s:926    .text.Gait_Turn_Right:0000000000000080 $d
+     /tmp/ccyhJuwp.s:931    .text.Gait_March_In_Place:0000000000000000 $t
+     /tmp/ccyhJuwp.s:938    .text.Gait_March_In_Place:0000000000000000 Gait_March_In_Place
+     /tmp/ccyhJuwp.s:1042   .text.Gait_March_In_Place:0000000000000064 $d
+     /tmp/ccyhJuwp.s:1051   .bss.current_action:0000000000000000 current_action
+     /tmp/ccyhJuwp.s:1052   .bss.current_action:0000000000000000 $d
 
 UNDEFINED SYMBOLS
 acosf

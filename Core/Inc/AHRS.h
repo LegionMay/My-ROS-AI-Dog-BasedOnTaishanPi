@@ -7,7 +7,7 @@
 void AHRS_Init(void);
 void AHRS_Update(void);
 void AHRS_GetQuaternion(float* quat);
-int16_t MedianFilter(float input);
+float MedianFilter(float input);
 int compare_int16(const void* a, const void* b);
 
 #endif
