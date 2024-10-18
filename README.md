@@ -47,7 +47,7 @@ $ echo $ROS_PACKAGE_PATH
 $roslaunch ydlidar_ros_driver lidar_view.launch
 ```
 #### ROS2  
-参考https://github.com/YDLIDAR/ydlidar_ros2_driver/tree/master，大体如上所述，记得根据自己的激光雷达型号和串口修改相应的.py和.yaml文件。  
+参考https://github.com/YDLIDAR/ydlidar_ros2_driver/tree/master ，大体如上所述，记得根据自己的激光雷达型号和串口修改相应的.py和.yaml文件。  
 ![920ba163fa977b7833bc164a6cb42b1](https://github.com/user-attachments/assets/75b7e348-bf4d-483b-a431-a6709fff12a0)
 
 ### 3.2 修改设备树  
