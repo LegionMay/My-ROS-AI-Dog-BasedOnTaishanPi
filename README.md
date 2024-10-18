@@ -21,7 +21,8 @@ OpenCV库SDK下路径  ```/home/osboxes/RK3566APP/tspi_linux_sdk_20230916/Releas
 ### 2.6 实现多种基本步态  
 ## 3. 泰山派ROS开发  
 ### 3.1 配置激光雷达ROS环境  
-由于成本限制，我采用的YDLIDAR X2激光雷达官方只提供了ROS1支持。  
+我采用的YDLIDAR X2激光雷达官方提供了ROS1 与 ROS2 支持。
+#### ROS1  
 根据官方SDK和使用手册来驱动激光雷达，首先编译并安装SDK  
 ```$ git clone https://github.com/YDLIDAR/YDLidar-SDK.git
 $ cd YDLidar-SDK/build  
@@ -44,7 +45,9 @@ $ echo $ROS_PACKAGE_PATH
 使用启动文件运行 ydlidar_ros_driver并利用rviz查看扫描结果  
 ```$ roslaunch ydlidar_ros_driver X2.launch
 $roslaunch ydlidar_ros_driver lidar_view.launch
-```  
+```
+#### ROS2  
+参考https://github.com/YDLIDAR/ydlidar_ros2_driver/tree/master，大体如上所述，记得根据自己的激光雷达型号和串口修改相应的.py和.yaml文件。  
 ![920ba163fa977b7833bc164a6cb42b1](https://github.com/user-attachments/assets/75b7e348-bf4d-483b-a431-a6709fff12a0)
 
 ### 3.2 修改设备树  
