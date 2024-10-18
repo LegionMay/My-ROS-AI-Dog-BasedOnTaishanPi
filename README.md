@@ -48,6 +48,9 @@ $roslaunch ydlidar_ros_driver lidar_view.launch
 ```
 #### ROS2  
 参考https://github.com/YDLIDAR/ydlidar_ros2_driver/tree/master ，大体如上所述，记得根据自己的激光雷达型号和串口修改相应的.py和.yaml文件。  
+这样就成功连接的激光雷达：  
+<img width="1093" alt="ee1b0e7ba54520ba57ae3b90c3dc009" src="https://github.com/user-attachments/assets/8ad233ed-eb75-440d-8154-39f3afa0b4db">  
+
 ![920ba163fa977b7833bc164a6cb42b1](https://github.com/user-attachments/assets/75b7e348-bf4d-483b-a431-a6709fff12a0)
 
 ### 3.2 修改设备树  
