@@ -21,6 +21,7 @@
 #include "cmsis_os.h"
 #include "dma.h"
 #include "i2c.h"
+#include "memorymap.h"
 #include "tim.h"
 #include "usart.h"
 #include "gpio.h"
@@ -43,8 +44,8 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define MPU9250_ADDRESS 0x68 // 或 0x69
-#define BMP280_ADDRESS 0x76 // 或 0x77
+#define MPU9250_ADDRESS 0x68 // �? 0x69
+#define BMP280_ADDRESS 0x76 // �? 0x77
 
 /* USER CODE END PD */
 
@@ -92,9 +93,9 @@ int fgetc(FILE *f)
 void scan_I2C_bus(void) {
     HAL_UART_Transmit(&huart1, (uint8_t*)"Scanning I2C bus...\r\n", 22, 1000);   
     for (uint8_t address = 0x03; address < 0xD0; address++) {
-        // 发送一个空数据包，来探测该地址是否有设备响应
+        // 发�?�一个空数据包，来探测该地址是否有设备响�?
         if (HAL_I2C_IsDeviceReady(&hi2c1, address << 1, 1, 10) == HAL_OK) {
-            char tbuffer[256];  // 临时缓冲区
+            char tbuffer[256];  // 临时缓冲�?
             int len = snprintf(tbuffer, sizeof(tbuffer), "Device found at address 0x%02X\r\n", address);
             HAL_UART_Transmit(&huart1, (uint8_t*)tbuffer, len, 1500);
             //HAL_Delay(100);
@@ -161,12 +162,12 @@ int main(void)
  Servo_Init();
       
  
-   // 初始化 MPU9250 传感器
+   // 初始�? MPU9250 传感�?
     MPU9250_Init();
     // 设置传感器的配置参数
-    MPU9250_SetAccelRange(ACCEL_RANGE_4G);    // 设置加速度计量程为 4G
-    MPU9250_SetGyroRange(GYRO_RANGE_500DPS);  // 设置陀螺仪量程为 500DPS
-    MPU9250_SetDLPFBandwidth(DLPF_BANDWIDTH_92HZ); // 设置低通滤波带宽为 92Hz
+    MPU9250_SetAccelRange(ACCEL_RANGE_4G);    // 设置加�?�度计量程为 4G
+    MPU9250_SetGyroRange(GYRO_RANGE_500DPS);  // 设置�?螺仪量程�? 500DPS
+    MPU9250_SetDLPFBandwidth(DLPF_BANDWIDTH_92HZ); // 设置低�?�滤波带宽为 92Hz
     MPU9250_SetSampleRateDivider(LP_ACCEL_ODR_125HZ); // 设置采样率为 125Hz
 
 

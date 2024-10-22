@@ -40,8 +40,8 @@ build/main.o: Core/Src/main.c Core/Inc/main.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/list.h \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
- Core/Inc/dma.h Core/Inc/main.h Core/Inc/i2c.h Core/Inc/tim.h \
- Core/Inc/usart.h Core/Inc/gpio.h Core/Inc/MPU9250.h \
+ Core/Inc/dma.h Core/Inc/main.h Core/Inc/i2c.h Core/Inc/memorymap.h \
+ Core/Inc/tim.h Core/Inc/usart.h Core/Inc/gpio.h Core/Inc/MPU9250.h \
  Core/Inc/MPU9250_Config.h Core/Inc/i2c.h Core/Inc/servo_control.h
 Core/Inc/main.h:
 Drivers/STM32H7xx_HAL_Driver/Inc/stm32h7xx_hal.h:
@@ -90,6 +90,7 @@ Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 Core/Inc/dma.h:
 Core/Inc/main.h:
 Core/Inc/i2c.h:
+Core/Inc/memorymap.h:
 Core/Inc/tim.h:
 Core/Inc/usart.h:
 Core/Inc/gpio.h:

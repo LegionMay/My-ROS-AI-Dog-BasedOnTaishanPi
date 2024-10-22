@@ -42,6 +42,8 @@ build/freertos.o: Core/Src/freertos.c \
  Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  Middlewares/Third_Party/FreeRTOS/Source/include/task.h \
+ Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h \
+ Middlewares/Third_Party/FreeRTOS/Source/include/queue.h \
  Core/Inc/servo_control.h Core/Inc/MPU9250.h Core/Inc/main.h \
  Core/Inc/MPU9250_Config.h Core/Inc/i2c.h Core/Inc/robocontrol.h \
  Core/Inc/servo_control.h Core/Inc/VMC.h Core/Inc/AHRS.h \
@@ -92,6 +94,8 @@ Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os.h:
 Middlewares/Third_Party/FreeRTOS/Source/CMSIS_RTOS_V2/cmsis_os2.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 Middlewares/Third_Party/FreeRTOS/Source/include/task.h:
+Middlewares/Third_Party/FreeRTOS/Source/include/semphr.h:
+Middlewares/Third_Party/FreeRTOS/Source/include/queue.h:
 Core/Inc/servo_control.h:
 Core/Inc/MPU9250.h:
 Core/Inc/main.h:
