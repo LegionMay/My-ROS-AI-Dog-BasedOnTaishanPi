@@ -17,18 +17,16 @@ void Turn_Right() { current_action = ACTION_TURN_RIGHT; }
 void Stop() { current_action = ACTION_STOP; }
 
 /*** 计算步态：根据时间计算每一步的足尖位置 ***/
-void CalculateGait(float time, float* x, float* y) {
-    float stepLength = 20.0;  // 步长，单位：毫米
-    float stepHeight = 15.0;  // 抬脚高度，单位：毫米
+void CalculateGait(float time, float* theta1, float* theta2) {
 
     if (time < 0.5) {
         // 大腿向前摆动时，小腿逐渐伸展
-        *x = stepLength * (2 * time);  // 向前移动
-        *y = stepHeight * sinf(M_PI * time);  // 抬脚
+        * theta1 = 70;  // 向前移动
+        * theta2 = -30;  // 抬脚
     } else {
         // 大腿向后摆动时，小腿应收回
-        *x = stepLength * (2 * (1.0 - time));  // 向后滑动
-        *y = stepHeight * sinf(M_PI * time);  // 小腿应抬起防止碰到地面
+        * theta1 = 15;  // 向后滑动
+        * theta2 = 20;  // 小腿应抬起防止碰到地面
     }
 }
 
@@ -82,48 +80,44 @@ void Gait_Forward(void) {
     while (true) {
         // 控制 Leg 1 和 Leg 3 (左前右后)
         for (int leg = 0; leg < 4; leg += 2) {  // leg == 0 -> Leg 1, leg == 2 -> Leg 3
-            float x, y;
-            CalculateGait(phase_leg1_3, &x, &y);  // 计算足尖位置
+            //float x, y;
             float theta1, theta2;
-            InverseKinematics(x, y, &theta1, &theta2);  // 计算关节角度
+            //InverseKinematics(x, y, &theta1, &theta2);  // 计算关节角度
+            CalculateGait(phase_leg1_3, &theta1, &theta2);  // 计算足尖位置
 
             // 控制大腿和小腿舵机
             if (leg == 0) {  // Leg 1 (左前腿)
-                Set_Servo_Angle(GetServoIDForLeg(leg, true), 90 - theta1);  // 设置大腿角度
-                if(theta2 - 90 <= 20)
-                    Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 - (theta2 - 90));  // 小腿角度调整为相对范围
-                else
-                    Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 - 20);
+                //Set_Servo_Angle(GetServoIDForLeg(leg, true), 90 - theta1);  // 设置大腿角度
+                servos[GetServoIDForLeg(leg,true)].target_angle = 90 - theta1;
+                //Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 - theta2);
+                servos[GetServoIDForLeg(leg,false)].target_angle = 90 - theta2;
 
             } else {  // Leg 3 (右后腿)
-                Set_Servo_Angle(GetServoIDForLeg(leg, true), 90 + theta1);  // 设置大腿角度
-                if(theta2 - 90 <= 20)
-                    Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 + (theta2 - 90));  // 小腿角度调整为相对范围
-                else
-                    Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 + 20);
+                //Set_Servo_Angle(GetServoIDForLeg(leg, true), 90 + theta1);  // 设置大腿角度
+                servos[GetServoIDForLeg(leg,true)].target_angle = 90 + theta1;
+                //Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 + theta2);
+                servos[GetServoIDForLeg(leg,false)].target_angle = 90 + theta2;
             }
         }
 
         // 控制 Leg 2 和 Leg 4 (右前左后)
         for (int leg = 1; leg < 4; leg += 2) {  // leg == 1 -> Leg 2, leg == 3 -> Leg 4
-            float x, y;
-            CalculateGait(phase_leg2_4, &x, &y);  // 计算足尖位置
+            //float x, y;
             float theta1, theta2;
-            InverseKinematics(x, y, &theta1, &theta2);  // 计算关节角度
+            //InverseKinematics(x, y, &theta1, &theta2);  // 计算关节角度
+            CalculateGait(phase_leg2_4, &theta1, &theta2);  // 计算足尖位置
 
             // 控制大腿和小腿舵机
             if (leg == 1) {  // Leg 2 (右前腿)
-                Set_Servo_Angle(GetServoIDForLeg(leg, true), 90 - theta1);  // 设置大腿角度
-                if(theta2 - 90 <= 20)
-                    Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 - (theta2 - 90));  // 小腿角度调整为相对范围
-                else
-                    Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 - 20);
+                //Set_Servo_Angle(GetServoIDForLeg(leg, true), 90 - theta1);  // 设置大腿角度
+                servos[GetServoIDForLeg(leg,true)].target_angle = 90 - theta1;
+                //Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 - theta2);
+                servos[GetServoIDForLeg(leg,false)].target_angle = 90 - theta2;
             } else {  // Leg 4 (左后腿)
-                Set_Servo_Angle(GetServoIDForLeg(leg, true), 90 + theta1);  // 设置大腿角度
-                if(theta2 - 90 <= 20)
-                    Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 + (theta2 - 90));  // 小腿角度调整为相对范围
-                else
-                    Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 + 20);
+                //Set_Servo_Angle(GetServoIDForLeg(leg, true), 90 + theta1);  // 设置大腿角度
+                servos[GetServoIDForLeg(leg,true)].target_angle = 90 + theta1;
+                Set_Servo_Angle(GetServoIDForLeg(leg, false), 90 + theta2);
+                servos[GetServoIDForLeg(leg,false)].target_angle = 90 + theta2;
             }
         }
 

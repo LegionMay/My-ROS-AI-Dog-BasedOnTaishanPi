@@ -1,6 +1,7 @@
 
 
 #include "MPU9250.h"
+#include "cmsis_os.h"
 
 const uint8_t READWRITE_CMD = 0x80;
 const uint8_t MULTIPLEBYTE_CMD = 0x40;
@@ -97,7 +98,7 @@ __weak void MPU9250_OnActivate()
 #ifndef USE_SPI
 bool	MPU9250_IsConnected()
 {
-	if(HAL_I2C_IsDeviceReady(&_MPU9250_I2C,_dev_add,1,100)==HAL_OK)
+ 	if(HAL_I2C_IsDeviceReady(&_MPU9250_I2C,_dev_add,1,100)==HAL_OK)
 		return true;
 	else
 		return false;	
@@ -170,7 +171,7 @@ void writeRegister(uint8_t subAddress, uint8_t data)
 	#else
 	MPU_I2C_Write(&data, subAddress, 1);
 	#endif
-	HAL_Delay(10);
+	osDelay(10);
 }
 
 /* reads registers from MPU9250 given a starting register address, number of bytes, and a pointer to store data */
@@ -211,7 +212,7 @@ void readAK8963Registers(uint8_t subAddress, uint8_t count, uint8_t* dest)
 	writeRegister(I2C_SLV0_CTRL,I2C_SLV0_EN | count);
 
 	// takes some time for these registers to fill
-	HAL_Delay(1);
+	osDelay(1);
 
 	// read the bytes off the MPU9250 EXT_SENS_DATA registers
 	readRegisters(EXT_SENS_DATA_00,count,dest);
@@ -242,7 +243,7 @@ uint8_t MPU9250_Init()
 	while(MPU9250_IsConnected() == false)
 	{
 		HAL_UART_Transmit(&huart1, (uint8_t*)"MPU9250 Connected false\r\n", 64, 1000);
-		HAL_Delay(300);
+		osDelay(300);
 	}
 	#endif
 	
@@ -260,7 +261,7 @@ uint8_t MPU9250_Init()
 	// reset the MPU9250
 	writeRegister(PWR_MGMNT_1,PWR_RESET);
 	// wait for MPU-9250 to come back up
-	HAL_Delay(10);
+	osDelay(10);
 	// reset the AK8963
 	writeAK8963Register(AK8963_CNTL2,AK8963_RESET);
 	// select clock source to gyro
@@ -307,13 +308,13 @@ uint8_t MPU9250_Init()
 	// set AK8963 to Power Down
 	writeAK8963Register(AK8963_CNTL1,AK8963_PWR_DOWN);
 
-	HAL_Delay(100); // long wait between AK8963 mode changes
+	osDelay(100); // long wait between AK8963 mode changes
 
 	// set AK8963 to FUSE ROM access
 	writeAK8963Register(AK8963_CNTL1,AK8963_FUSE_ROM);
 
 	// long wait between AK8963 mode changes
-	HAL_Delay(100);
+	osDelay(100);
 
 	// read the AK8963 ASA registers and compute magnetometer scale factors
 	readAK8963Registers(AK8963_ASA, 3, _mag_adjust);
@@ -322,13 +323,13 @@ uint8_t MPU9250_Init()
 	writeAK8963Register(AK8963_CNTL1,AK8963_PWR_DOWN);
 
 	// long wait between AK8963 mode changes
-	HAL_Delay(100);
+	osDelay(100);
 
 	// set AK8963 to 16 bit resolution, 100 Hz update rate
 	writeAK8963Register(AK8963_CNTL1,AK8963_CNT_MEAS2);
 
 	// long wait between AK8963 mode changes
-	HAL_Delay(100);
+	osDelay(100);
 
 	// select clock source to gyro
 	writeRegister(PWR_MGMNT_1,CLOCK_SEL_PLL);
@@ -371,13 +372,13 @@ void MPU9250_SetSampleRateDivider(SampleRateDivider srd)
 		writeAK8963Register(AK8963_CNTL1,AK8963_PWR_DOWN);
 
 		// long wait between AK8963 mode changes
-		HAL_Delay(100);
+		osDelay(100);
 
 		// set AK8963 to 16 bit resolution, 8 Hz update rate
 		writeAK8963Register(AK8963_CNTL1,AK8963_CNT_MEAS1);
 
 		// long wait between AK8963 mode changes
-		HAL_Delay(100);
+		osDelay(100);
 
 		// instruct the MPU9250 to get 7 bytes of data from the AK8963 at the sample rate
 		readAK8963Registers(AK8963_HXL,7,_buffer);
@@ -388,12 +389,12 @@ void MPU9250_SetSampleRateDivider(SampleRateDivider srd)
 		// set AK8963 to Power Down
 		writeAK8963Register(AK8963_CNTL1,AK8963_PWR_DOWN);
 		// long wait between AK8963 mode changes
-		HAL_Delay(100);
+		osDelay(100);
 		// set AK8963 to 16 bit resolution, 100 Hz update rate
 		writeAK8963Register(AK8963_CNTL1,AK8963_CNT_MEAS2);
 
 		// long wait between AK8963 mode changes
-		HAL_Delay(100);
+		osDelay(100);
 
 		// instruct the MPU9250 to get 7 bytes of data from the AK8963 at the sample rate
 		readAK8963Registers(AK8963_HXL,7,_buffer);

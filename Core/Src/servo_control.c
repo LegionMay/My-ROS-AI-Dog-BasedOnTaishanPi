@@ -69,5 +69,6 @@ void Init_Servos() {
     for (int i = 0; i < sizeof(servos) / sizeof(servos[0]); i++) {
         servos[i].servo = i;
         servos[i].target_angle = 0.0f;
+        servos[i].current_angle = 0.0f;
     }
 }

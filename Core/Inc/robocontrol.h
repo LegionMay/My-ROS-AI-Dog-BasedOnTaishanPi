@@ -42,6 +42,6 @@ void Gait_March_In_Place(void);
 ServoID GetServoIDForLeg(int leg, bool isUpperLeg);
 
 void InverseKinematics(float x, float y, float* theta1, float* theta2);
-void CalculateGait(float time, float* x, float* y);
+void CalculateGait(float time, float* theta1, float* theta2);
 
 #endif // ROBOCONTROL_H
