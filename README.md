@@ -13,11 +13,22 @@ OpenCV库SDK下路径  ```/home/osboxes/RK3566APP/tspi_linux_sdk_20230916/Releas
 参考 (https://github.com/fishros/install) 快速搭建ROS环境  
 ## 2. 基于FreeRTOS部署运动控制算法  
 ### 2.1 编写舵机控制相关函数  
-### 2.2 部署运动学逆解算法  
-### 2.3 编写MPU9250读写相关代码   
-### 2.4 使用扩展卡尔曼滤波(EKF)进行AHRS九轴姿态融合  
+### 2.2 编写步态控制相关函数  
+### 2.3 编写MPU9250 IIC读写相关代码   
+### 2.4 使用互补滤波进行AHRS九轴姿态融合  
 ### 2.5 在任务中实现串口通信    
-首先确保编译器支持浮点数格式化
+首先确保编译器支持浮点数格式化  
+另外，根据(https://www.armbbs.cn/forum.php?mod=viewthread&tid=123953)STM32H743内存地址的分配：  
+DTCM： 0x20000000 ~ 0x20020000(size:128K)  
+AXI SRAM（RAM_D1) : 0x24000000 ~ 0x24080000(size:512K)  
+AHB SRAM（RAM_D2）：0x30000000 ~ 0x30048000(size:288K)  
+SRAM4（RAM_D3）：0x38000000 ~ 0x38010000(size:64K)  
+普通方式定义的全局变量都被分配到DTCM内存上  
+其中DTCM和ITCM不支持DMA1、DMA2，后面的几块内存都是支持DMA1和DMA2的。  
+在缓冲数组前加上__attribute__((section(".RAM_D2")))指定分配空间即可  
+除此之外，要想在FreeRTOS任务中实现连续的串口中断发送，需要在发送完成回调函数中手动恢复串口状态为就绪态  
+
+
 ### 2.6 实现多种基本步态  
 ## 3. 泰山派ROS开发  
 ### 3.1 配置激光雷达ROS环境  
