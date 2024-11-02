@@ -41,7 +41,6 @@ Core/Src/mpu9250.c \
 Core/Src/servo_control.c \
 Core/Src/robocontrol.c \
 Core/Src/AHRS.c \
-Core/Src/VMC.c \
 Core/Src/gpio.c \
 Core/Src/tim.c \
 Core/Src/stm32h7xx_it.c \

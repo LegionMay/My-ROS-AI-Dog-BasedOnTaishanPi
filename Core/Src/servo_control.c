@@ -1,6 +1,7 @@
 // servo_control.c
 
 #include "servo_control.h"
+#include "tim.h"
 
 // 定义180度舵机的PWM信号范围
 #define SERVO_MIN_PULSE_WIDTH 500   // 最小脉宽 (0.5 ms)
@@ -27,7 +28,9 @@ static TIM_HandleTypeDef* servo_timers[] = {
     &htim13,
     &htim14,
     &htim15,
-    &htim16
+
+    &htim16,
+    &htim17
 };
 
 static uint32_t servo_channels[] = {

@@ -2,7 +2,8 @@
 CAD.formats=
 CAD.pinconfig=
 CAD.provider=
-CORTEX_M7.IPParameters=default_mode_Activation
+CORTEX_M7.Enable_S-Cortex_Memory_Protection_Unit_Region2_Settings_S=__NULL
+CORTEX_M7.IPParameters=default_mode_Activation,Enable_S-Cortex_Memory_Protection_Unit_Region2_Settings_S
 CORTEX_M7.default_mode_Activation=1
 Dma.Request0=USART1_RX
 Dma.Request1=USART1_TX
