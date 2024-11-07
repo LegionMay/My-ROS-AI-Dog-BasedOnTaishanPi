@@ -11,14 +11,14 @@ OpenCV库SDK下路径  ```/home/osboxes/RK3566APP/tspi_linux_sdk_20230916/Releas
 
 ### 1.3 ROS环境搭建  
 参考 (https://github.com/fishros/install) 快速搭建ROS环境  
-## 2. 基于FreeRTOS部署运动控制算法  
+## 2. 基于FreeRTOS开发下位机    
 ### 2.1 编写舵机控制相关函数  
 ### 2.2 编写步态控制相关函数  
 ### 2.3 编写MPU9250 IIC读写相关代码   
 ### 2.4 使用互补滤波进行AHRS九轴姿态融合  
 ### 2.5 在任务中实现串口通信    
 首先确保编译器支持浮点数格式化  
-另外，根据(https://www.armbbs.cn/forum.php?mod=viewthread&tid=123953)STM32H743内存地址的分配：  
+另外，根据[STM32H743内存地址的分配](https://www.armbbs.cn/forum.php?mod=viewthread&tid=123953)：  
 DTCM： 0x20000000 ~ 0x20020000(size:128K)  
 AXI SRAM（RAM_D1) : 0x24000000 ~ 0x24080000(size:512K)  
 AHB SRAM（RAM_D2）：0x30000000 ~ 0x30048000(size:288K)  
@@ -28,6 +28,30 @@ SRAM4（RAM_D3）：0x38000000 ~ 0x38010000(size:64K)
 在缓冲数组前加上__attribute__((section(".RAM_D2")))指定分配空间即可  
 除此之外，要想在FreeRTOS任务中实现连续的串口中断发送，需要在发送完成回调函数中手动恢复串口状态为就绪态  
 
+在这里，我使用了串口的中断接收模式，在接收完成回调函数中通过队列作为消息缓冲区向串口数据解析任务传递接收到的指令。
+在串口数据解析任务中，我利用有限状态机判断帧头帧尾和指令内容：  
+```
+typedef enum {
+    STATE_WAIT_HEADER,    // 等待帧头0xAA
+    STATE_WAIT_COMMAND,   // 等待命令字节
+    STATE_WAIT_FOOTER     // 等待帧尾0x55
+} UART_ParseState;
+```
+同时，我还利用互斥量和串口发送完成信号量实现了一个线程安全的串口发送函数：
+```
+// 线程安全的串口发送函数
+void UART_SendData_IT(uint8_t *data, uint16_t size) {
+    // 获取互斥量
+    if (xSemaphoreTake(uartMutex, portMAX_DELAY) == pdTRUE) {
+            HAL_UART_Transmit_IT(&huart1, data, size);  // 使用中断发送数据
+            if (xSemaphoreTake(uartTxCompleteSemaphore, pdMS_TO_TICKS(500)) != pdTRUE) {
+                xSemaphoreGive(uartMutex);                          // 超时释放互斥量
+            }
+        xSemaphoreGive(uartMutex);                                  // 释放互斥量
+    }
+}
+```
+<img width="970" alt="dd3eb012ef10ecc18c1abe1ce6fcf68" src="https://github.com/user-attachments/assets/a3747ac6-c8db-4137-84a9-c27457fb415f">
 
 ### 2.6 实现多种基本步态  
 ## 3. 泰山派ROS开发  
@@ -109,4 +133,4 @@ $roslaunch ydlidar_ros_driver lidar_view.launch
 
 
 
-### 3.4 实现导航与避障算法  
+### 3.4 实现避障算法  
