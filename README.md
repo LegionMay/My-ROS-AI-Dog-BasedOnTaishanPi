@@ -20,7 +20,8 @@ typedef struct {
     float target_angle;
     float current_angle;
 } ServoControl;
-
+```
+```
 //判断并更新舵机状态
         for(uint8_t i=0; i<8; i++){
             if(servos[i].current_angle != servos[i].target_angle){
