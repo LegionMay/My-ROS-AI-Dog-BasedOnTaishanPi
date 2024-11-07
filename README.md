@@ -18,7 +18,7 @@ OpenCV库SDK下路径  ```/home/osboxes/RK3566APP/tspi_linux_sdk_20230916/Releas
 ### 2.4 使用互补滤波进行AHRS九轴姿态融合  
 ### 2.5 在任务中实现串口通信    
 首先确保编译器支持浮点数格式化  
-另外，根据(https://www.armbbs.cn/forum.php?mod=viewthread&tid=123953)STM32H743内存地址的分配：  
+另外，根据[STM32H743内存地址的分配](https://www.armbbs.cn/forum.php?mod=viewthread&tid=123953)：  
 DTCM： 0x20000000 ~ 0x20020000(size:128K)  
 AXI SRAM（RAM_D1) : 0x24000000 ~ 0x24080000(size:512K)  
 AHB SRAM（RAM_D2）：0x30000000 ~ 0x30048000(size:288K)  
