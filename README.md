@@ -12,10 +12,10 @@ OpenCV库SDK下路径  ```/home/osboxes/RK3566APP/tspi_linux_sdk_20230916/Releas
 ### 1.3 ROS环境搭建  
 参考 (https://github.com/fishros/install) 快速搭建ROS环境  
 ## 2. 基于FreeRTOS开发下位机    
-### 2.1 编写舵机控制相关函数  
-### 2.2 编写步态控制相关函数  
-### 2.3 编写MPU9250 IIC读写相关代码   
-### 2.4 使用互补滤波进行AHRS九轴姿态融合  
+### 2.1 舵机控制  
+### 2.2 MPU9250 IIC读写   
+### 2.3 使用互补滤波进行AHRS九轴姿态融合    
+### 2.4 步态控制    
 ### 2.5 在任务中实现串口通信    
 首先确保编译器支持浮点数格式化  
 另外，根据[STM32H743内存地址的分配](https://www.armbbs.cn/forum.php?mod=viewthread&tid=123953)：  
