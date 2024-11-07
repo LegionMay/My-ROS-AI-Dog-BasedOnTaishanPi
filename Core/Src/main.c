@@ -44,14 +44,12 @@
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define MPU9250_ADDRESS 0x68 // �?? 0x69
-#define BMP280_ADDRESS 0x76 // �?? 0x77
+
 
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
-
 
 /* USER CODE END PM */
 
@@ -74,28 +72,14 @@ void MX_FREERTOS_Init(void);
 /* Private user code ---------------------------------------------------------*/
 /* USER CODE BEGIN 0 */
 
-int fputc(int ch,FILE *f)
-{
-	HAL_UART_Transmit(&huart1,(uint8_t*)&ch,1,10);
-	return ch;
-}
-int fgetc(FILE *f)
-{
-	int ch;
-	if(HAL_UART_Receive_IT(&huart1,(uint8_t*)&ch,1) == HAL_OK)
-	return ch;
-	else return EOF;
-}
-
-
 
 
 void scan_I2C_bus(void) {
     HAL_UART_Transmit(&huart1, (uint8_t*)"Scanning I2C bus...\r\n", 22, 1000);   
     for (uint8_t address = 0x03; address < 0xD0; address++) {
-        // 发�?�一个空数据包，来探测该地址是否有设备响�??
+        // 发�?�一个空数据包，来探测该地址是否有设备响�????????
         if (HAL_I2C_IsDeviceReady(&hi2c1, address << 1, 1, 10) == HAL_OK) {
-            char tbuffer[256];  // 临时缓冲�??
+            char tbuffer[256];  // 临时缓冲�????????
             int len = snprintf(tbuffer, sizeof(tbuffer), "Device found at address 0x%02X\r\n", address);
             HAL_UART_Transmit(&huart1, (uint8_t*)tbuffer, len, 1500);
             //HAL_Delay(100);
@@ -104,6 +88,8 @@ void scan_I2C_bus(void) {
     
     HAL_UART_Transmit(&huart1, (uint8_t*)"Scan complete.\r\n", 16, 1000); 
 }
+
+
 
 
 /* USER CODE END 0 */
@@ -150,42 +136,10 @@ int main(void)
   MX_TIM16_Init();
   MX_TIM17_Init();
   MX_I2C1_Init();
-  MX_USART1_UART_Init();
-  MX_TIM3_Init();
   MX_TIM4_Init();
+  MX_TIM3_Init();
+  MX_USART1_UART_Init();
   /* USER CODE BEGIN 2 */
-  //I2C_Scan();
-  //scan_I2C_bus();
-
-
-
- Servo_Init();
-      
- 
-   // 初始�?? MPU9250 传感�??
-    //MPU9250_Init();
-    // 设置传感器的配置参数
-    //MPU9250_SetAccelRange(ACCEL_RANGE_4G);    // 设置加�?�度计量程为 4G
-   // MPU9250_SetGyroRange(GYRO_RANGE_500DPS);  // 设置�??螺仪量程�?? 500DPS
-    //MPU9250_SetDLPFBandwidth(DLPF_BANDWIDTH_92HZ); // 设置低�?�滤波带宽为 92Hz
-    //MPU9250_SetSampleRateDivider(LP_ACCEL_ODR_125HZ); // 设置采样率为 125Hz
-
-
-  // 定义数据存储变量
-  int16_t AccData0[3] = {0};
-  int16_t MagData0[3] = {0};
-  int16_t GyroData0[3] = {0};
-  float TempData0 = 0.0;
-
- // MPU9250_GetData(AccData0, MagData0, GyroData0, &TempData0);
-  //int len = snprintf(buffer, sizeof(buffer), "MagData: X=%d, Y=%d, Z=%d\n", MagData0[0], MagData0[1], MagData0[2]);
- 
-  //HAL_UART_Transmit(&huart1, (uint8_t*)buffer, len, HAL_MAX_DELAY);
-  
-
-
-  //len = snprintf(buffer, sizeof(buffer), "MagData: X=%d, Y=%d, Z=%d\n", MagData0[0], MagData0[1], MagData0[2]);
-  //HAL_UART_Transmit(&huart1, (uint8_t*)buffer, len, HAL_MAX_DELAY);
 
   /* USER CODE END 2 */
 
@@ -204,15 +158,7 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   while (1)
   {
-     // MPU9250_GetData(AccData0, MagData0, GyroData0, &TempData0);
-    //int len = snprintf(buffer, sizeof(buffer), "MagData: X=%d, Y=%d, Z=%d\n", MagData0[0], MagData0[1], MagData0[2]);
 
-  //HAL_UART_Transmit(&huart1, (uint8_t*)buffer, len, HAL_MAX_DELAY);
-  
-  //MPU9250_GetData(AccData0, MagData0, GyroData0, &TempData0);
- 
-  //len = snprintf(buffer, sizeof(buffer), "MagData: X=%d, Y=%d, Z=%d\n", MagData0[0], MagData0[1], MagData0[2]);
-  //HAL_UART_Transmit(&huart1, (uint8_t*)buffer, len, HAL_MAX_DELAY);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */

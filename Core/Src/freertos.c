@@ -42,41 +42,44 @@
 extern UART_HandleTypeDef huart1;
 IMUData imuData;
 
+typedef enum {
+    STATE_WAIT_HEADER,    // 等待帧头0xAA
+    STATE_WAIT_COMMAND,   // 等待命令字节
+    STATE_WAIT_FOOTER     // 等待帧尾0x55
+} UART_ParseState;
+
 /* USER CODE END PTD */
 
 /* Private define ------------------------------------------------------------*/
 /* USER CODE BEGIN PD */
-#define RX_BUFFER_SIZE 10 // 接收缓冲区大�?
-#define UART_DMA_IDLE
+#define RX_Queue_SIZE 64     // UART接收队列大小
+#define RX_BUFFER_SIZE 3     // UART接收数据大小
+#define RING_BUFFER_SIZE 128 // 环形缓冲区大小
+//#define UART_DMA_IDLE
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
-// 定义队列用于四元数数据传�?
-QueueHandle_t quatQueue; // 四元数队�?
-SemaphoreHandle_t uartMutex;  // 串口互斥信号
-SemaphoreHandle_t uartTxCompleteSemaphore; // 串口发�?�完成信号量
-SemaphoreHandle_t uartRxCompleteSemaphore; // 串口接收完成信号�?
+QueueHandle_t rxQueue;                     // 串口接收队列
+QueueHandle_t quatQueue;                   // 四元数队列
+SemaphoreHandle_t uartMutex;               // 串口互斥信号
+SemaphoreHandle_t uartTxCompleteSemaphore; // 串口发送完成信号量
+SemaphoreHandle_t uartRxCompleteSemaphore; // 串口接收完成信号量
 
 /* USER CODE END PM */
 
 /* Private variables ---------------------------------------------------------*/
 /* USER CODE BEGIN Variables */
 
-// 定义数据存储变量
-int16_t AccData[3] = {0};
-int16_t MagData[3] = {0};
-int16_t GyroData[3] = {0};
-float TempData = 0.0;
-//char printBuffer[100] __attribute__((section(".sram_d2"), aligned(4)));
-//char printBuffer[100] __attribute__((section(".dtcmram"), aligned(4)));
 char printBuffer[100];
-uint8_t __attribute__((section(".RAM_D2"))) rxBuffer[RX_BUFFER_SIZE]; // 接收缓冲�????
-uint8_t __attribute__((section(".RAM_D2"))) txBuffer[22];
+uint8_t rxBuffer[RX_BUFFER_SIZE];
+uint8_t txBuffer[22];
+uint8_t data = 0;
 
-// 用于标记DMA是否空闲
-volatile uint8_t dma_tx_ready = 1;
+uint8_t ringBuffer[RING_BUFFER_SIZE]; // 定义环形缓冲区
+volatile uint16_t writeIndex = 0;
+volatile uint16_t readIndex = 0;
 
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
@@ -91,7 +94,7 @@ osThreadId_t AttitudeTaskHandle;
 const osThreadAttr_t AttitudeTask_attributes = {
   .name = "AttitudeTask",
   .stack_size = 1024 * 4,
-  .priority = (osPriority_t) osPriorityRealtime,
+  .priority = (osPriority_t) osPriorityRealtime1,
 };
 /* Definitions for ServoControlTas */
 osThreadId_t ServoControlTasHandle;
@@ -111,18 +114,17 @@ const osThreadAttr_t GaitControlTask_attributes = {
 osThreadId_t SerialCommTaskHandle;
 const osThreadAttr_t SerialCommTask_attributes = {
   .name = "SerialCommTask",
-  .stack_size = 1024 * 4,
-  .priority = (osPriority_t) osPriorityRealtime1,
+  .stack_size = 2048 * 4,
+  .priority = (osPriority_t) osPriorityRealtime2,
 };
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
 uint32_t inHandlerMode(void);
 void print_usart1(char *format, ...);
-void UART_ProcessCommand(uint8_t* buffer);
 void SendAttitudeToHost(float q[4]);
 void vApplicationIdleHook(void);
-
+void UART_SendData_IT(uint8_t *data, uint16_t size);
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -142,24 +144,19 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
     Servo_Init();
 
-    //HAL_UART_Transmit(&huart1, (uint8_t*)"FreertosInit", 100, HAL_MAX_DELAY);
-    //HAL_UART_Transmit_DMA(&huart1, (uint8_t*)"InitDMA", 100);
+    //memset(rxBuffer, 0, sizeof(rxBuffer));
+    huart1.gState = HAL_UART_STATE_READY;
+    HAL_UART_Receive_IT(&huart1, &data, 1);
 
-    memset(rxBuffer, 0, sizeof(rxBuffer));
-    //HAL_UART_Receive_DMA(&huart1, rxBuffer, RX_BUFFER_SIZE);  // 启动 UART 接收 DMA
+#ifdef UART_DMA_IDLE
+//    if (huart1.RxState != HAL_UART_STATE_READY) {
+//        HAL_UART_DeInit(&huart1);
+//        HAL_UART_Init(&huart1);
+//    }
+//    __HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
+//    SCB_CleanInvalidateDCache_by_Addr((uint32_t*)rxBuffer, RX_BUFFER_SIZE);
 
-
-    // �?�? UART 状�?�并重置（如果需要）
-    if (huart1.RxState != HAL_UART_STATE_READY) {
-        HAL_UART_DeInit(&huart1);
-        HAL_UART_Init(&huart1);  // 重新初始�? UART
-    }
-    //__HAL_UART_ENABLE_IT(&huart1, UART_IT_IDLE);
-    HAL_NVIC_EnableIRQ(DMA1_Stream0_IRQn);  // 使能 DMA 接收中断
-
-    SCB_CleanInvalidateDCache_by_Addr((uint32_t*)rxBuffer, RX_BUFFER_SIZE);
-    HAL_Delay(100);
-//// 启动 UART DMA 接收，支�? IDLE 中断
+//    启动 UART DMA 接收，支持 IDLE 中断
 //    if (HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rxBuffer, RX_BUFFER_SIZE) != HAL_OK) {
 //        //HAL_UART_Transmit_IT(&huart1, (uint8_t*)"DMA Error", strlen("DMA Error"));
 //        HAL_Delay(1000);
@@ -167,25 +164,7 @@ void MX_FREERTOS_Init(void) {
 //        //HAL_UART_Transmit_IT(&huart1, (uint8_t*)"DMA Started", strlen("DMA Started"));
 //        HAL_Delay(1000);
 //    }
-
-//     Init_Servos();
-//     Set_Servo_Angle(H1, 90);  // 设置舵机角度
-//     Set_Servo_Angle(H2, 90);
-//     Set_Servo_Angle(H3, 90);
-//     Set_Servo_Angle(H4, 90);
-//     Set_Servo_Angle(H5, 90);
-//     Set_Servo_Angle(H6, 90);
-//     Set_Servo_Angle(H7, 90);
-//     Set_Servo_Angle(H8, 90);
-//     HAL_Delay(1000);
-//     Set_Servo_Angle(H1, 90 - 20);  // 设置舵机角度
-//     Set_Servo_Angle(H2, 90 - 30);
-//     Set_Servo_Angle(H3, 90 + 20);
-//     Set_Servo_Angle(H4, 90 + 30);
-//     Set_Servo_Angle(H5, 90 - 20);
-//     Set_Servo_Angle(H6, 90 - 30);
-//     Set_Servo_Angle(H7, 90 + 20);
-//     Set_Servo_Angle(H8, 90 + 30);
+#endif
 
   /* USER CODE END Init */
 
@@ -195,9 +174,9 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
     /* add semaphores, ... */
-    uartMutex = xSemaphoreCreateMutex();  // 创建串口互斥信号�????
-    uartTxCompleteSemaphore = xSemaphoreCreateBinary();  // 创建串口发�?�完成信号量
-    uartRxCompleteSemaphore = xSemaphoreCreateBinary();  // 创建串口接收完成信号�????
+    uartMutex = xSemaphoreCreateMutex();                    // 串口互斥信号量
+    uartTxCompleteSemaphore = xSemaphoreCreateBinary();     // 串口发送完成信号量
+    uartRxCompleteSemaphore = xSemaphoreCreateBinary();     // 串口接收完成信号量
   /* USER CODE END RTOS_SEMAPHORES */
 
   /* USER CODE BEGIN RTOS_TIMERS */
@@ -205,7 +184,8 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
-    quatQueue = xQueueCreate(10, sizeof(int16_t[4]));  // 创建队列，存储四元数数据
+    quatQueue = xQueueCreate(10, sizeof(int16_t[4]));        //四元数数据队列
+    rxQueue = xQueueCreate(RX_Queue_SIZE, sizeof(uint8_t)); //串口接收数据队列
     /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
 
@@ -226,7 +206,7 @@ void MX_FREERTOS_Init(void) {
   SerialCommTaskHandle = osThreadNew(StartSerialCommTask, NULL, &SerialCommTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-    vTaskStartScheduler();  // 确保启动调度�???
+    vTaskStartScheduler();  // 确保启动调度�??????
     /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
@@ -246,19 +226,6 @@ void MX_FREERTOS_Init(void) {
 void StartDefaultTask(void *argument)
 {
   /* USER CODE BEGIN StartDefaultTask */
-    //HAL_UART_Receive_DMA(&huart1, rxBuffer, RX_BUFFER_SIZE);  // 启动 UART 接收 DMA
-    //HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rxBuffer, RX_BUFFER_SIZE);
-
-    vTaskDelete(NULL);
-    // 启动 UART DMA 接收，支�? IDLE 中断
-//    if (HAL_UARTEx_ReceiveToIdle_DMA(&huart1, rxBuffer, RX_BUFFER_SIZE) != HAL_OK) {
-//        //HAL_UART_Transmit_IT(&huart1, (uint8_t*)"DMA Error", strlen("DMA Error"));
-//        osDelay(1);
-//    } else {
-//        //HAL_UART_Transmit_IT(&huart1, (uint8_t*)"DMA Started", strlen("DMA Started"));
-//        osDelay(1);
-//    }
-
   /* Infinite loop */
   for(;;)
   {
@@ -278,74 +245,22 @@ void StartDefaultTask(void *argument)
 void StartAttitudeTask(void *argument)
 {
   /* USER CODE BEGIN StartAttitudeTask */
-    AHRS_Init();
-    IMUData imuData;
+    AHRS_Init();                    // 初始化姿态解算
     float quat[4] = {0};
-
 
     /* Infinite loop */
     for(;;)
     {
-        //HAL_UART_Transmit(&huart1, (uint8_t*)"StartAttitudeTask", 100, HAL_MAX_DELAY);
-
-        MPU9250_GetData(imuData.accel, imuData.mag, imuData.gyro, NULL);  // 读取IMU数据
-        // 获取加�?�度、陀螺仪和磁力计原始数据
-        AHRS_Update();  // 更新姿�?�四元数
-        // 获取并处理姿态四元数
-        AHRS_GetQuaternion(quat);
-
+        AHRS_Update();              // 更新四元数
+        AHRS_GetQuaternion(quat);   // 获取并处理姿态四元数
 
         int len = snprintf(printBuffer, sizeof(printBuffer),
                            "%.2f,%.2f,%.2f,%.2f\n",
                            quat[0], quat[1], quat[2], quat[3]);
 
-        //if(HAL_UART_Transmit_DMA(&huart1, (uint8_t*)printBuffer, len) != HAL_OK)
-        //    continue;
-        //HAL_UART_Transmit_IT(&huart1, (uint8_t*)printBuffer, len);
-        //print_usart1("%.2f, %.2f, %.2f, %.2f\n", quat[0], quat[1], quat[2], quat[3]);
+        //UART_SendData_IT((uint8_t *)printBuffer, len);
 
-//        memset(printBuffer, 0, sizeof(printBuffer));
-//        strncpy((char*)printBuffer, "StartAttitudeTask", sizeof(printBuffer));
-
-        //进入临界�?
-//        taskENTER_CRITICAL();
-//        // 确保清理的地�?和长度对�?32字节
-//        //SCB_CleanDCache_by_Addr((uint32_t*)printBuffer, ((sizeof(printBuffer) + 31) / 32) * 32);
-//        //SCB_CleanDCache_by_Addr((uint32_t*)printBuffer, len);
-//
-
-       //HAL_UART_Transmit_IT(&huart1, (uint8_t*)printBuffer, len);
-
-//        //�?出临界区
-//        taskEXIT_CRITICAL();
-        // 将姿态四元数发�?�给GaitControlTask
-         xQueueSend(quatQueue, &quat, portMAX_DELAY);
-
-        // 准备发�?�四元数数据
-        //在堆上分配txBudder
-
-        memset(txBuffer, 0, sizeof(txBuffer));  // 清除发�?�缓冲区
-        txBuffer[0] = 0xAA;  // 帧头
-        txBuffer[1] = 0x06;  // 数据类型 (姿�?�数�????)
-        memcpy(&txBuffer[2], &quat[0], sizeof(float));  // 复制四元数数�????
-        memcpy(&txBuffer[6], &quat[1], sizeof(float));
-        memcpy(&txBuffer[10], &quat[2], sizeof(float));
-        memcpy(&txBuffer[14], &quat[3], sizeof(float));
-        txBuffer[18] = 0x55;  // 帧尾
-
-        //HAL_UART_Transmit(&huart1, txBuffer, sizeof(txBuffer), HAL_MAX_DELAY);
-        //HAL_UART_Transmit_DMA(&huart1, txBuffer, sizeof(txBuffer));
-
-        //串口互斥量判�??
-        if (HAL_UART_GetState(&huart1) == HAL_UART_STATE_READY && dma_tx_ready) {
-            dma_tx_ready = 0;
-
-            // 使用DMA
-           // HAL_UART_Transmit_DMA(&huart1, txBuffer, sizeof(txBuffer));
-
-            // 等待发完
-            xSemaphoreTake(uartTxCompleteSemaphore, portMAX_DELAY);
-        }
+         xQueueSend(quatQueue, &quat, portMAX_DELAY); // 将姿态四元数发送到队列
 
         vTaskDelay(pdMS_TO_TICKS(10));
     }
@@ -390,18 +305,13 @@ void StartServoControlTask(void *argument)
     /* Infinite loop */
     for(;;)
     {
-
-        //HAL_UART_Transmit(&huart1, (uint8_t*)"StartServoControlTask", 100, HAL_MAX_DELAY);
-
-
-
-        //判断并更新舵机状�???
+        //判断并更新舵机状�??????
         for(uint8_t i=0; i<8; i++){
             if(servos[i].current_angle != servos[i].target_angle){
-                Set_Servo_Angle(i, servos[i].target_angle);
+               //Set_Servo_Angle(i, servos[i].target_angle);
                 servos[i].current_angle = servos[i].target_angle;
             }
-            //vTaskDelay(pdMS_TO_TICKS(10));
+            vTaskDelay(pdMS_TO_TICKS(10));
         }
 
         vTaskDelay(pdMS_TO_TICKS(10));
@@ -422,56 +332,31 @@ void StartGaitControlTask(void *argument)
     current_action = ACTION_FORWARD;
 
     Init_Servos();
-    Set_Servo_Angle(H1, 90);  // 设置舵机角度
-    Set_Servo_Angle(H2, 90);
-    Set_Servo_Angle(H3, 90);
-    Set_Servo_Angle(H4, 90);
-    Set_Servo_Angle(H5, 90);
-    Set_Servo_Angle(H6, 90);
-    Set_Servo_Angle(H7, 90);
-    Set_Servo_Angle(H8, 90);
-    vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1ms
-    Set_Servo_Angle(H1, 90 - 20);  // 设置舵机角度
-    Set_Servo_Angle(H2, 90 - 30);
-    Set_Servo_Angle(H3, 90 + 20);
-    Set_Servo_Angle(H4, 90 + 30);
-    Set_Servo_Angle(H5, 90 - 20);
-    Set_Servo_Angle(H6, 90 - 30);
-    Set_Servo_Angle(H7, 90 + 20);
-    Set_Servo_Angle(H8, 90 + 30);
-
-    vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1s
+//    Set_Servo_Angle(H1, 90);  // 设置舵机角度
+//    Set_Servo_Angle(H2, 90);
+//    Set_Servo_Angle(H3, 90);
+//    Set_Servo_Angle(H4, 90);
+//    Set_Servo_Angle(H5, 90);
+//    Set_Servo_Angle(H6, 90);
+//    Set_Servo_Angle(H7, 90);
+//    Set_Servo_Angle(H8, 90);
+//    vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1ms
+//    Set_Servo_Angle(H1, 90 - 20);  // 设置舵机角度
+//    Set_Servo_Angle(H2, 90 - 30);
+//    Set_Servo_Angle(H3, 90 + 20);
+//    Set_Servo_Angle(H4, 90 + 30);
+//    Set_Servo_Angle(H5, 90 - 20);
+//    Set_Servo_Angle(H6, 90 - 30);
+//    Set_Servo_Angle(H7, 90 + 20);
+//    Set_Servo_Angle(H8, 90 + 30);
+//
+//    vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1s
 
     /* Infinite loop */
     for(;;)
     {
-        //Gait_Forward();
-        //HAL_UART_Transmit(&huart1, (uint8_t*)"StartGaitControlTask", 100, HAL_MAX_DELAY);
-
         GaitControl();
-
-//        switch (current_action) {
-//            case ACTION_FORWARD:
-//                Gait_Forward();
-//                break;
-//            case ACTION_BACKWARD:
-//                Gait_Backward();
-//                break;
-//            case ACTION_TURN_LEFT:
-//                Gait_Turn_Left();
-//                break;
-//            case ACTION_TURN_RIGHT:
-//                Gait_Turn_Right();
-//                break;
-//            case ACTION_MARCH_IN_PLACE:
-//                Gait_March_In_Place();
-//                break;
-//            case ACTION_STOP:
-//            default:
-//
-//                break;
-//        }
-        vTaskDelay(pdMS_TO_TICKS(50)); // �????50ms更新�????次步�????
+        vTaskDelay(pdMS_TO_TICKS(50));
 
     }
   /* USER CODE END StartGaitControlTask */
@@ -487,27 +372,76 @@ void StartGaitControlTask(void *argument)
 void StartSerialCommTask(void *argument)
 {
   /* USER CODE BEGIN StartSerialCommTask */
+    uint8_t receivedByte;
+    UART_ParseState state = STATE_WAIT_HEADER;
+    uint8_t command = 0;
 
     /* Infinite loop */
     for(;;)
     {
 
-        UART_ProcessCommand(rxBuffer);
-        // 等待 DMA 接收到数�????
-        if (xSemaphoreTake(uartRxCompleteSemaphore, portMAX_DELAY) == pdTRUE) {
-            // 线程安全：�?�过互斥量保�???? UART 资源/
-            if (xSemaphoreTake(uartMutex, portMAX_DELAY) == pdTRUE) {
-                // 处理接收到的数据
-                //UART_ProcessCommand(rxBuffer);
-                // 释放互斥量，允许其他任务访问 UART
-                xSemaphoreGive(uartMutex);
-            }
-            // 重新启动 DMA 接收
-            //HAL_UART_Receive_DMA(&huart1, rxBuffer, RX_BUFFER_SIZE);
-        }
-        memset(rxBuffer, 0, sizeof(rxBuffer));  // 清除接收缓�???
 
-        vTaskDelay(pdMS_TO_TICKS(1));  // 延时 1 毫秒
+        // 从队列读取数据
+        if (xQueueReceive(rxQueue, &receivedByte, portMAX_DELAY) == pdTRUE) {
+            switch (state) {
+                case STATE_WAIT_HEADER:
+                    if (receivedByte == 0xAA) {
+                        state = STATE_WAIT_COMMAND;     // 检测到帧头，进入命令解析状态
+                    }
+                    break;
+
+                case STATE_WAIT_COMMAND:
+                    command = receivedByte;             // 记录命令字节
+                    state = STATE_WAIT_FOOTER;
+                    break;
+
+                case STATE_WAIT_FOOTER:
+                    if (receivedByte == 0x55) {          // 检测到帧尾，解析完整命令
+                        switch (command) {
+                            case 0x01:
+                                Move_Forward();
+                                UART_SendData_IT((uint8_t *) "Forward\n", 8);
+                                break;
+                            case 0x02:
+                                Move_Backward();
+                                UART_SendData_IT((uint8_t *) "Backward\n", 9);
+                                break;
+                            case 0x03:
+                                Turn_Left();
+                                UART_SendData_IT((uint8_t *) "Left\n", 5);
+                                break;
+                            case 0x04:
+                                Turn_Right();
+                                UART_SendData_IT((uint8_t *) "Right\n", 6);
+                                break;
+                            case 0x05:
+                                Stop();
+                                UART_SendData_IT((uint8_t *) "Stop\n", 5);
+                                break;
+                            case 0x06: {
+                                float quat[4];
+                                if (xQueueReceive(quatQueue, &quat, pdMS_TO_TICKS(10)) == pdTRUE) {
+                                    SendAttitudeToHost(quat);  // 发送姿态数据
+                                } else {
+                                    UART_SendData_IT((uint8_t *) "No Data\n", 8);
+                                }
+                                break;
+                            }
+                            default:
+                                HAL_UART_Transmit(&huart1, (uint8_t *) "Unknown Command\n", 16, HAL_MAX_DELAY);
+                                break;
+                        }
+                    }
+                    // 重置状态以准备接收下一帧
+                    state = STATE_WAIT_HEADER;
+                    break;
+            }
+
+        }
+
+
+
+        //vTaskDelay(pdMS_TO_TICKS(1));  // 延时 1 毫秒
     }
   /* USER CODE END StartSerialCommTask */
 }
@@ -515,89 +449,64 @@ void StartSerialCommTask(void *argument)
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
 
-void UART_ProcessCommand(uint8_t* buffer) {
-    if (buffer[0] == 0xAA && buffer[2] == 0x55) {  // 判断头和尾标�????
-        uint8_t command = buffer[1];  // 提取指令类型
-        float quat[4];
-        switch (command) {
-            case 0x01:  // 前进
-                Move_Forward();
-                break;
-            case 0x02:  // 后�??
-                Move_Backward();
-                break;
-            case 0x03:  // 左转
-                Turn_Left();
-                break;
-            case 0x04:  // 右转
-                Turn_Right();
-                break;
-            case 0x05:  // 停止
-                Stop();
-                break;
-            case 0x06:  // 请求姿�?�数�????
 
-                AHRS_GetQuaternion(quat);  // 获取当前四元数姿态数�????
-                SendAttitudeToHost(quat);  // 发�?�姿态数据给上位�????
-                break;
-            default:
-                break;
-        }
-    }
-}
 
-/* SendAttitudeToHost - Sends the current attitude (quaternion) to the host via UART */
+
 void SendAttitudeToHost(float q[4]) {
-    // 准备发�?�四元数数据
 
-    memset(txBuffer, 0, sizeof(txBuffer));  // 清除发�?�缓冲区
-    txBuffer[0] = 0xAA;  // 帧头
-    txBuffer[1] = 0x06;  // 数据类型 (姿�?�数�????)
-    memcpy(&txBuffer[2], &q[0], sizeof(float));  // 复制四元数数�????
+    memset(txBuffer, 0, sizeof(txBuffer));          // 清除发送缓冲区
+    txBuffer[0] = 0xAA;                             // 帧头
+    txBuffer[1] = 0x06;                             // 数据类型
+    memcpy(&txBuffer[2], &q[0], sizeof(float));     // 复制四元数
     memcpy(&txBuffer[6], &q[1], sizeof(float));
     memcpy(&txBuffer[10], &q[2], sizeof(float));
     memcpy(&txBuffer[14], &q[3], sizeof(float));
     txBuffer[18] = 0x55;  // 帧尾
 
-    // 通过UART发�?�姿态数�????
-    HAL_UART_Transmit_IT(&huart1, txBuffer, sizeof(txBuffer));
-
-    /* if (HAL_UART_GetState(&huart1) == HAL_UART_STATE_READY && dma_tx_ready) {
-         dma_tx_ready = 0;
-
-         // 使用DMA
-         HAL_UART_Transmit_DMA(&huart1, txBuffer, sizeof(txBuffer));
-
-         // 等待发完
-         xSemaphoreTake(uartTxCompleteSemaphore, portMAX_DELAY);
-     }*/
+    UART_SendData_IT(txBuffer, sizeof(txBuffer));
 
 }
 
+// 线程安全的串口发送函数
+void UART_SendData_IT(uint8_t *data, uint16_t size) {
+    // 获取互斥量
+    if (xSemaphoreTake(uartMutex, portMAX_DELAY) == pdTRUE) {
+            huart1.gState = HAL_UART_STATE_READY;
+            HAL_UART_Transmit_IT(&huart1, data, size);  // 使用中断发送数据
+            if (xSemaphoreTake(uartTxCompleteSemaphore, pdMS_TO_TICKS(500)) != pdTRUE) {
+                xSemaphoreGive(uartMutex);                          // 超时释放互斥量
+            }
+        xSemaphoreGive(uartMutex);                                  // 释放互斥量
+    }
+}
 
-// DMA 发�?�完成回�????
 void HAL_UART_TxCpltCallback(UART_HandleTypeDef *huart) {
     if (huart->Instance == USART1) {
-        //串口变为就绪�?
+        //串口变为就绪态
         huart1.gState = HAL_UART_STATE_READY;
-        dma_tx_ready = 1;  // 标记DMA发�?�空�????
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-        // 发�?�完成信号量
+        // 发送完成信号量
         xSemaphoreGiveFromISR(uartTxCompleteSemaphore, &xHigherPriorityTaskWoken);
         portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
     }
 }
 
 #ifndef UART_DMA_IDLE
-// DMA 接收完成回调
+//UART接收完成回调
 void HAL_UART_RxCpltCallback(UART_HandleTypeDef *huart) {
     if (huart->Instance == USART1) {
+//        ringBuffer[writeIndex] = data;  // 存入环形缓冲区
+//        writeIndex = (writeIndex + 1) % RING_BUFFER_SIZE;
+        HAL_UART_Receive_IT(&huart1, &data, 1);
         BaseType_t xHigherPriorityTaskWoken = pdFALSE;
-        //HAL_UART_Transmit_IT(&huart1, (uint8_t*)"StartDMARX", 100);
-        HAL_UART_Receive_IT(&huart1, rxBuffer, RX_BUFFER_SIZE);
-        // 通知接收完成
-        xSemaphoreGiveFromISR(uartRxCompleteSemaphore, &xHigherPriorityTaskWoken);
-        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);
+        // 如果队列满，将旧数据丢弃
+//        if (uxQueueSpacesAvailable(rxQueue) == 0) {
+//            xQueueReceive(rxQueue, NULL, 0);  // 丢弃旧数据
+//        }
+        xQueueSendFromISR(rxQueue, &data, &xHigherPriorityTaskWoken);  // 将接收数据放入队列
+        //xSemaphoreGiveFromISR(uartRxCompleteSemaphore, &xHigherPriorityTaskWoken);
+        huart1.gState = HAL_UART_STATE_READY;
+        portYIELD_FROM_ISR(xHigherPriorityTaskWoken);                   // 若有高优先级任务则切换
     }
 }
 #elif defined UART_DMA_IDLE
@@ -610,49 +519,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size){
 }
 #endif
 
-// �????测是否处于中断上下文
-uint32_t inHandlerMode(void)
-{
-    return __get_IPSR() != 0U;
-}
-
-// 串口非阻塞发送函数，支持中断模式下安全调�????
-void print_usart1(char *format, ...)
-{
-    char buf[64];  // 发�?�缓�????
-
-    // �????查是否在中断模式
-    if (inHandlerMode() != 0)
-    {
-        // 禁用全局中断，确保中断中不会有重入问�????
-        taskDISABLE_INTERRUPTS();
-    }
-    else
-    {
-        // �????查串口是否忙，如果忙则让出CPU
-        while (HAL_UART_GetState(&huart1) == HAL_UART_STATE_BUSY_TX)
-        {
-            taskYIELD();
-        }
-    }
-
-    // 格式化要发�?�的字符�????
-    va_list ap;
-    va_start(ap, format);
-    vsprintf(buf, format, ap);
-    va_end(ap);
-
-    // 使用中断方式发�?�数�????
-    HAL_UART_Transmit_IT(&huart1, (uint8_t *)buf, strlen(buf));
-
-    // 如果在中断模式下，恢复中�????
-    if (inHandlerMode() != 0)
-    {
-        taskENABLE_INTERRUPTS();
-    }
-}
-
-/* 自定义空闲任务钩子函�??? */
+/* 自定义空闲任务钩子函�?????? */
 void vApplicationIdleHook(void) {
     vTaskDelay(1);
 }

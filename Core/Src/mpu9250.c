@@ -242,7 +242,7 @@ uint8_t MPU9250_Init()
 	#ifndef USE_SPI
 	while(MPU9250_IsConnected() == false)
 	{
-		HAL_UART_Transmit(&huart1, (uint8_t*)"MPU9250 Connected false\r\n", 64, 1000);
+		//HAL_UART_Transmit(&huart1, (uint8_t*)"MPU9250 Connected false\r\n", 64, 1000);
 		osDelay(300);
 	}
 	#endif

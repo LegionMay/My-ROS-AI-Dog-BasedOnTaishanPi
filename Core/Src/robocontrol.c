@@ -5,7 +5,7 @@
 #include "queue.h"
 #include <math.h>
 
-#define PI 3.14159265358979323846
+#define PI 3.14159
 #define Tf 0.5  // 步态周期
 
 // PID参数
@@ -101,7 +101,7 @@ void CalculateFootTrajectory(float t, float x_target, float z_target, FootPositi
     }
 }
 
-//逆运动学
+// 逆运动学
 void InverseKinematics(float x, float y, float *theta1, float *theta2) {
     float L1 = LEG_UPPER_LENGTH;
     float L2 = LEG_LOWER_LENGTH;
@@ -113,8 +113,9 @@ void InverseKinematics(float x, float y, float *theta1, float *theta2) {
     float phi2 = acosf(fmaxf(fminf(cos_theta2, 1.0f), -1.0f));
     float phi1 = atan2f(y, x) - atan2f(L2 * sinf(phi2), L1 + L2 * cosf(phi2));
 
-    *theta1 = phi1 * 180.0f / PI;
-    *theta2 = phi2 * 180.0f / PI;
+    // 调整theta1和theta2的初始值
+    *theta1 = phi1 * 180.0f / PI; // 大腿角度，不需要调整
+    *theta2 = (phi2 - PI / 2) * 180.0f / PI; // 小腿角度，减去90度
 }
 
 //步态控制
@@ -157,13 +158,16 @@ void GaitControl() {
                     finalTheta2 += adjust_roll;
                 }
 
+                finalTheta1 = fmodf(finalTheta1 + 90, 180) - 90;
+                finalTheta2 = fmodf(finalTheta2 + 90, 180) - 90;
+
                 // 设置舵机角度，根据腿的位置调整方向
                 if (leg % 2 == 0) {  // 单数腿
                     servos[GetServoIDForLeg(leg, true)].target_angle = 90 + ((leg == 0) ? finalTheta1 : -finalTheta1);
                     servos[GetServoIDForLeg(leg, false)].target_angle = 90 + ((leg == 0) ? -finalTheta2 : finalTheta2);
                 } else {  // 双数腿
                     servos[GetServoIDForLeg(leg, true)].target_angle = 90 + ((leg == 1) ? -finalTheta1 : finalTheta1);
-                    servos[GetServoIDForLeg(leg, false)].target_angle = 90 + ((leg == 1) ? finalTheta2 : -finalTheta2);
+                     servos[GetServoIDForLeg(leg, false)].target_angle = 90 + ((leg == 1) ? finalTheta2 : -finalTheta2);
                 }
             }
 
@@ -182,16 +186,13 @@ void GaitControl() {
 //    if (time < 0.5) {
 //        // 大腿向前摆动时，小腿逐渐伸展
 //        * theta1 = 45;  // 向前移动70
-//        * theta2 = -10;  // 抬脚-30
+//        * theta2 = 5;  // 抬脚-30
 //    } else {
 //        // 大腿向后摆动时，小腿应收回
 //        * theta1 = 25;  // 向后滑动15
-//        * theta2 = 5;  // 小腿应抬起防止碰到地面20
+//        * theta2 = -10;  // 小腿应抬起防止碰到地面20
 //    }
 //}
-//
-//
-//
 //
 //
 //
