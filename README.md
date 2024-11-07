@@ -13,6 +13,23 @@ OpenCV库SDK下路径  ```/home/osboxes/RK3566APP/tspi_linux_sdk_20230916/Releas
 参考 (https://github.com/fishros/install) 快速搭建ROS环境  
 ## 2. 基于FreeRTOS开发下位机    
 ### 2.1 舵机控制  
+在任务中，我利用基于事件的状态机来控制八个舵机，使用一个独立的舵机控制任务更新舵机状态：  
+```
+typedef struct {
+    ServoID servo;
+    float target_angle;
+    float current_angle;
+} ServoControl;
+
+//判断并更新舵机状态
+        for(uint8_t i=0; i<8; i++){
+            if(servos[i].current_angle != servos[i].target_angle){
+               Set_Servo_Angle(i, servos[i].target_angle);
+                servos[i].current_angle = servos[i].target_angle;
+            }
+            vTaskDelay(pdMS_TO_TICKS(10));
+        }
+```
 ### 2.2 MPU9250 IIC读写   
 ### 2.3 使用互补滤波进行AHRS九轴姿态融合    
 ### 2.4 步态控制    
