@@ -255,7 +255,7 @@ void GaitControl() {
         if (phase_leg1_4 >= 1.0) phase_leg1_4 -= 1.0;
         if (phase_leg2_3 >= 1.0) phase_leg2_3 -= 1.0;
 
-        vTaskDelay(pdMS_TO_TICKS(50));  // 延时 50 毫秒，控制步态节奏
+        vTaskDelay(pdMS_TO_TICKS(500));  // 延时 50 毫秒，控制步态节奏
     }
 }
 
@@ -264,7 +264,8 @@ void GaitControl() {
 void SetInitServosPosition() {
     // 遍历所有舵机，设置每个舵机的角度
     for (int i = 0; i < 8; i++) {
-        Set_Servo_Angle(i + 1, 90);
+        Set_Servo_Angle(i , 90);
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
 
@@ -284,6 +285,7 @@ void SetStandbyPosition() {
 
     // 遍历所有舵机，设置每个舵机的角度
     for (int i = 0; i < 8; i++) {
-        Set_Servo_Angle(i + 1, angles[i]);
+        Set_Servo_Angle(i , angles[i]);
+        vTaskDelay(pdMS_TO_TICKS(10));
     }
 }
