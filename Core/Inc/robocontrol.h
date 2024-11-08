@@ -28,14 +28,6 @@ void Move_Backward();
 void Turn_Left();
 void Turn_Right();
 void Stop();
-void March_In_Place();
-
-void Gait_Forward(void);
-void Gait_Backward(void);
-void Gait_Turn_Left(void);
-void Gait_Turn_Right(void);
-void Gait_March_In_Place(void);
-
 
 ServoID GetServoIDForLeg(int leg, bool isUpperLeg);
 
@@ -44,5 +36,7 @@ void CalculateGait(float time, float* theta1, float* theta2);
 
 void CalculateBalanceAdjustment(float quat[4], float* adjust_pitch, float* adjust_roll);
 void GaitControl();
+void SetInitServosPosition();
+void SetStandbyPosition();
 
 #endif // ROBOCONTROL_H

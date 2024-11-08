@@ -42,6 +42,7 @@ static uint32_t servo_channels[] = {
     TIM_CHANNEL_1,
     TIM_CHANNEL_1,
     TIM_CHANNEL_1,
+    TIM_CHANNEL_1,
     TIM_CHANNEL_1
 };
 

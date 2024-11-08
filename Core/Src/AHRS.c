@@ -89,7 +89,7 @@ void AHRS_Update() {
     const float alpha = 0.98f;  // 滤波系数
     float pitch = asinf(2 * (q0 * q2 - q3 * q1));
     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
-    
+
     float pitchAccel = atan2f(ay, az);
     float rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
 

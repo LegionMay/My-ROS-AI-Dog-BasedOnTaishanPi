@@ -27,6 +27,7 @@
 /* USER CODE BEGIN Includes */
 #include "queue.h"
 #include "semphr.h"
+#include "event_groups.h"
 #include "servo_control.h"
 #include "MPU9250.h"
 #include "robocontrol.h"
@@ -55,12 +56,19 @@ typedef enum {
 #define RX_Queue_SIZE 64     // UART接收队列大小
 #define RX_BUFFER_SIZE 3     // UART接收数据大小
 #define RING_BUFFER_SIZE 128 // 环形缓冲区大小
+
+// 定义事件位
+#define EVENT_QUAT_STATUS_ON  (1 << 0)   // 事件位0表示 QuatTestStatus = 1
+#define EVENT_QUAT_STATUS_OFF (1 << 1)   // 事件位1表示 QuatTestStatus = 0
+
 //#define UART_DMA_IDLE
+
 /* USER CODE END PD */
 
 /* Private macro -------------------------------------------------------------*/
 /* USER CODE BEGIN PM */
 
+EventGroupHandle_t xEventGroup;            // 事件组句柄
 QueueHandle_t rxQueue;                     // 串口接收队列
 QueueHandle_t quatQueue;                   // 四元数队列
 SemaphoreHandle_t uartMutex;               // 串口互斥信号
@@ -93,7 +101,7 @@ const osThreadAttr_t defaultTask_attributes = {
 osThreadId_t AttitudeTaskHandle;
 const osThreadAttr_t AttitudeTask_attributes = {
   .name = "AttitudeTask",
-  .stack_size = 1024 * 4,
+  .stack_size = 2048 * 4,
   .priority = (osPriority_t) osPriorityRealtime1,
 };
 /* Definitions for ServoControlTas */
@@ -120,8 +128,6 @@ const osThreadAttr_t SerialCommTask_attributes = {
 
 /* Private function prototypes -----------------------------------------------*/
 /* USER CODE BEGIN FunctionPrototypes */
-uint32_t inHandlerMode(void);
-void print_usart1(char *format, ...);
 void SendAttitudeToHost(float q[4]);
 void vApplicationIdleHook(void);
 void UART_SendData_IT(uint8_t *data, uint16_t size);
@@ -144,6 +150,8 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE BEGIN Init */
     Servo_Init();
 
+    xEventGroup = xEventGroupCreate();
+    xEventGroupClearBits(xEventGroup, EVENT_QUAT_STATUS_OFF);
     //memset(rxBuffer, 0, sizeof(rxBuffer));
     huart1.gState = HAL_UART_STATE_READY;
     HAL_UART_Receive_IT(&huart1, &data, 1);
@@ -169,12 +177,12 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END Init */
 
   /* USER CODE BEGIN RTOS_MUTEX */
+    uartMutex = xSemaphoreCreateMutex();                    // 串口互斥信号量
     /* add mutexes, ... */
   /* USER CODE END RTOS_MUTEX */
 
   /* USER CODE BEGIN RTOS_SEMAPHORES */
     /* add semaphores, ... */
-    uartMutex = xSemaphoreCreateMutex();                    // 串口互斥信号量
     uartTxCompleteSemaphore = xSemaphoreCreateBinary();     // 串口发送完成信号量
     uartRxCompleteSemaphore = xSemaphoreCreateBinary();     // 串口接收完成信号量
   /* USER CODE END RTOS_SEMAPHORES */
@@ -184,7 +192,7 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
-    quatQueue = xQueueCreate(10, sizeof(int16_t[4]));        //四元数数据队列
+    quatQueue = xQueueCreate(20, sizeof(int16_t[4]));        //四元数数据队列
     rxQueue = xQueueCreate(RX_Queue_SIZE, sizeof(uint8_t)); //串口接收数据队列
     /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -247,20 +255,29 @@ void StartAttitudeTask(void *argument)
   /* USER CODE BEGIN StartAttitudeTask */
     AHRS_Init();                    // 初始化姿态解算
     float quat[4] = {0};
-
+    EventBits_t uxBits;             //等待 QuatTestStatus 状态变化
     /* Infinite loop */
     for(;;)
     {
         AHRS_Update();              // 更新四元数
         AHRS_GetQuaternion(quat);   // 获取并处理姿态四元数
 
-        int len = snprintf(printBuffer, sizeof(printBuffer),
-                           "%.2f,%.2f,%.2f,%.2f\n",
-                           quat[0], quat[1], quat[2], quat[3]);
+        // 等待事件位
+        uxBits = xEventGroupWaitBits(
+                xEventGroup,                                  // 事件组句柄
+                EVENT_QUAT_STATUS_ON,           // 等待的位
+                pdFALSE,                           // 读取位后不清除
+                pdFALSE,                         // 等待任意位满足
+                pdMS_TO_TICKS(10));               // 等待10ms
 
-        //UART_SendData_IT((uint8_t *)printBuffer, len);
+        if ((uxBits & EVENT_QUAT_STATUS_ON) != 0) {
+            int len = snprintf(printBuffer, sizeof(printBuffer),
+                               "%.2f,%.2f,%.2f,%.2f\n",
+                               quat[0], quat[1], quat[2], quat[3]);
+            UART_SendData_IT((uint8_t *) printBuffer, len);
+        }
 
-         xQueueSend(quatQueue, &quat, portMAX_DELAY); // 将姿态四元数发送到队列
+         xQueueSend(quatQueue, &quat, pdMS_TO_TICKS(10));          // 将姿态四元数发送到队列
 
         vTaskDelay(pdMS_TO_TICKS(10));
     }
@@ -278,42 +295,19 @@ void StartServoControlTask(void *argument)
 {
   /* USER CODE BEGIN StartServoControlTask */
 
-    Init_Servos();
-//    Set_Servo_Angle(H1, 90);  // 设置舵机角度
-//    Set_Servo_Angle(H2, 90);
-//    Set_Servo_Angle(H3, 90);
-//    Set_Servo_Angle(H4, 90);
-//    Set_Servo_Angle(H5, 90);
-//    Set_Servo_Angle(H6, 90);
-//    Set_Servo_Angle(H7, 90);
-//    Set_Servo_Angle(H8, 90);
-    //   vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1ms
-//     Set_Servo_Angle(H1, 90 - 20);  // 设置舵机角度
-//     Set_Servo_Angle(H2, 90 - 30);
-//     Set_Servo_Angle(H3, 90 + 20);
-//     Set_Servo_Angle(H4, 90 + 30);
-//     Set_Servo_Angle(H5, 90 - 20);
-//     Set_Servo_Angle(H6, 90 - 30);
-//     Set_Servo_Angle(H7, 90 + 20);
-//     Set_Servo_Angle(H8, 90 + 30);
-
-    // vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1s
-
-
     //Gait_Forward();
 
     /* Infinite loop */
     for(;;)
     {
-        //判断并更新舵机状�??????
+        //判断并更新舵机状态
         for(uint8_t i=0; i<8; i++){
             if(servos[i].current_angle != servos[i].target_angle){
                //Set_Servo_Angle(i, servos[i].target_angle);
                 servos[i].current_angle = servos[i].target_angle;
             }
-            vTaskDelay(pdMS_TO_TICKS(10));
+            //vTaskDelay(pdMS_TO_TICKS(10));
         }
-
         vTaskDelay(pdMS_TO_TICKS(10));
     }
   /* USER CODE END StartServoControlTask */
@@ -332,30 +326,15 @@ void StartGaitControlTask(void *argument)
     current_action = ACTION_FORWARD;
 
     Init_Servos();
-//    Set_Servo_Angle(H1, 90);  // 设置舵机角度
-//    Set_Servo_Angle(H2, 90);
-//    Set_Servo_Angle(H3, 90);
-//    Set_Servo_Angle(H4, 90);
-//    Set_Servo_Angle(H5, 90);
-//    Set_Servo_Angle(H6, 90);
-//    Set_Servo_Angle(H7, 90);
-//    Set_Servo_Angle(H8, 90);
+    SetInitServosPosition();          // 舵机初始位置
 //    vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1ms
-//    Set_Servo_Angle(H1, 90 - 20);  // 设置舵机角度
-//    Set_Servo_Angle(H2, 90 - 30);
-//    Set_Servo_Angle(H3, 90 + 20);
-//    Set_Servo_Angle(H4, 90 + 30);
-//    Set_Servo_Angle(H5, 90 - 20);
-//    Set_Servo_Angle(H6, 90 - 30);
-//    Set_Servo_Angle(H7, 90 + 20);
-//    Set_Servo_Angle(H8, 90 + 30);
-//
+//    SetStandbyPosition();            // 标准站立姿态
 //    vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1s
 
     /* Infinite loop */
     for(;;)
     {
-        GaitControl();
+       // GaitControl();
         vTaskDelay(pdMS_TO_TICKS(50));
 
     }
@@ -379,7 +358,6 @@ void StartSerialCommTask(void *argument)
     /* Infinite loop */
     for(;;)
     {
-
 
         // 从队列读取数据
         if (xQueueReceive(rxQueue, &receivedByte, portMAX_DELAY) == pdTRUE) {
@@ -425,6 +403,16 @@ void StartSerialCommTask(void *argument)
                                 } else {
                                     UART_SendData_IT((uint8_t *) "No Data\n", 8);
                                 }
+                                break;
+                            }
+                            case 0x07:{
+                                xEventGroupSetBits(xEventGroup, EVENT_QUAT_STATUS_ON);     // 切换四元数串口测试状态
+                                UART_SendData_IT((uint8_t *) "Quat Test On\n", 13);
+                                break;
+                            }
+                            case 0x08:{
+                                xEventGroupClearBits(xEventGroup, EVENT_QUAT_STATUS_ON); // 切换四元数串口测试状态
+                                UART_SendData_IT((uint8_t *) "Quat Test Off\n", 13);
                                 break;
                             }
                             default:
@@ -519,7 +507,7 @@ void HAL_UARTEx_RxEventCallback(UART_HandleTypeDef *huart, uint16_t Size){
 }
 #endif
 
-/* 自定义空闲任务钩子函�?????? */
+//自定义空闲任务钩子函数
 void vApplicationIdleHook(void) {
     vTaskDelay(1);
 }
