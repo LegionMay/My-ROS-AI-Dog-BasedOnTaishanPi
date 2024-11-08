@@ -303,8 +303,8 @@ void StartServoControlTask(void *argument)
         //判断并更新舵机状态
         for(uint8_t i=0; i<8; i++){
             if(servos[i].current_angle != servos[i].target_angle){
-               //Set_Servo_Angle(i, servos[i].target_angle);
-                servos[i].current_angle = servos[i].target_angle;
+               Set_Servo_Angle(i, servos[i].target_angle);
+               servos[i].current_angle = servos[i].target_angle;
             }
             //vTaskDelay(pdMS_TO_TICKS(10));
         }
@@ -327,14 +327,14 @@ void StartGaitControlTask(void *argument)
 
     Init_Servos();
     SetInitServosPosition();          // 舵机初始位置
-//    vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1ms
-//    SetStandbyPosition();            // 标准站立姿态
-//    vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1s
+    vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1ms
+    SetStandbyPosition();            // 标准站立姿态
+    vTaskDelay(pdMS_TO_TICKS(1000)); // 延迟1s
 
     /* Infinite loop */
     for(;;)
     {
-       // GaitControl();
+        GaitControl();
         vTaskDelay(pdMS_TO_TICKS(50));
 
     }
