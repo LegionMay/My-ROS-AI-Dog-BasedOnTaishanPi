@@ -46,7 +46,7 @@ typedef struct {
   
 <img width="629" alt="1731159252587" src="https://github.com/user-attachments/assets/f32a34a7-5b21-4f6d-99d5-d9d30d5e3414">  
   
-这里根据开源程序使用HAL库封装的IIC读写函数来实现  
+这里根据开源程序使用HAL库封装的IIC读写函数来实现，寄存器映射表参考[RM_MPU_9250A](https://invensense.tdk.com/wp-content/uploads/2015/02/RM-MPU-9250A-00-v1.6.pdf)  
 
 ### 2.3 使用互补滤波进行AHRS九轴姿态融合    
 ### 2.4 步态控制    
