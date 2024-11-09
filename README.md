@@ -192,7 +192,9 @@ void UART_SendData_IT(uint8_t *data, uint16_t size) {
 ```
 <img width="970" alt="dd3eb012ef10ecc18c1abe1ce6fcf68" src="https://github.com/user-attachments/assets/a3747ac6-c8db-4137-84a9-c27457fb415f">
 
+    
 此外，我还利用事件标志组实现线程安全的四元数串口调试模式的切换，从而便于在上位机进行姿态调试  
+  
 ```
 // 等待事件位
         uxBits = xEventGroupWaitBits(
