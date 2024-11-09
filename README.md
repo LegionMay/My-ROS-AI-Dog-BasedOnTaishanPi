@@ -13,6 +13,20 @@ OpenCV库SDK下路径  ```/home/osboxes/RK3566APP/tspi_linux_sdk_20230916/Releas
 参考 (https://github.com/fishros/install) 快速搭建ROS环境  
 ## 2. 基于FreeRTOS开发下位机    
 ### 2.1 舵机控制  
+我所使用的MG90S 180°舵机，PWM脉宽0.5-2.5MS对应0-180°，我为每个舵机提供了一个独立的定时器进行PWM控制，只需配置定时器输出50Hz PWM再通过控制占空比即可实现舵机角度控制  
+```
+void Set_Servo_Angle(ServoID servo, float angle) {
+    if (servo < 0 || servo >= sizeof(servo_timers) / sizeof(servo_timers[0])) {
+        return; // 无效的舵机索引
+    }
+    if (angle < 0.0f) angle = 0.0f;
+    if (angle > 180.0f) angle = 180.0f;
+
+    // 将角度转换为对应的脉宽值 (0.5ms到2.5ms)
+    uint32_t pulse_width = SERVO_MIN_PULSE_WIDTH + (uint32_t)((angle / 180.0f) * (SERVO_MAX_PULSE_WIDTH - SERVO_MIN_PULSE_WIDTH));
+    __HAL_TIM_SET_COMPARE(servo_timers[servo], servo_channels[servo], pulse_width);
+}
+```
 在任务中，我利用基于事件的状态机来控制八个舵机，使用一个独立的舵机控制任务更新舵机状态：  
 ```
 typedef struct {
