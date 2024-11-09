@@ -155,7 +155,7 @@ float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
 ```
 
 ### 2.4 步态控制    
-
+我设计了几种不同的步态，并根据步态周期的切换实现处于对角位置的腿的同步控制，还根据IMU数据进行动态角度调整以保持稳定  
 ### 2.5 在任务中实现串口通信    
 首先确保编译器支持浮点数格式化  
 另外，根据[STM32H743内存地址的分配](https://www.armbbs.cn/forum.php?mod=viewthread&tid=123953)：  
@@ -214,7 +214,7 @@ void UART_SendData_IT(uint8_t *data, uint16_t size) {
 ```
 <img width="1280" alt="4cd6a6dacb3abfd7ebdebb69ee57b70" src="https://github.com/user-attachments/assets/d757ca71-dfb4-4930-a287-936f49d857af">
 
-### 2.6 实现多种基本步态  
+ 
 ## 3. 泰山派ROS开发  
 ### 3.1 配置激光雷达ROS环境  
 我采用的YDLIDAR X2激光雷达官方提供了ROS1 与 ROS2 支持。
