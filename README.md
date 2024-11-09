@@ -123,19 +123,20 @@ float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
 // 互补滤波
     const float alpha = 0.98f;
 
-    // 使用磁力计计算航向角
+    // 使用加速度计计算 pitch 和 roll 的加权角度
+    const float alpha = 0.9f;  // 滤波系数
     float pitch = asinf(2 * (q0 * q2 - q3 * q1));
     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
-    float mag_x = mx * cosf(pitch) + my * sinf(roll) * sinf(pitch) + mz * cosf(roll) * sinf(pitch);
-    float mag_y = my * cosf(roll) - mz * sinf(roll);
-    float yaw = atan2f(-mag_y, mag_x);
-
-    // 使用加速度计计算pitch和roll校正
     float pitchAccel = atan2f(ay, az);
     float rollAccel = atan2f(ax, sqrtf(ay * ay + az * az));
     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
     roll = alpha * roll + (1.0f - alpha) * rollAccel;
-    yaw = alpha * yaw + (1.0f - alpha) * yaw;
+
+// 使用磁力计计算航向角 yaw
+    float mag_x = mx * cosf(pitch) + my * sinf(roll) * sinf(pitch) + mz * cosf(roll) * sinf(pitch);
+    float mag_y = my * cosf(roll) - mz * sinf(roll);
+    float yawMag = atan2f(-mag_y, mag_x);
+    float yaw = alpha * (yaw) + (1.0f - alpha) * yawMag;
 ```
 4.重新计算四元数  
 ```
