@@ -31,7 +31,17 @@ typedef struct {
             vTaskDelay(pdMS_TO_TICKS(10));
         }
 ```
-### 2.2 MPU9250 IIC读写   
+### 2.2 MPU9250/9255 IIC读写   
+根据数据手册，IIC设备7位地址为0x68/0x69，由于HAL库要求8位，我们左移一位使用0xD0；WHO AM I寄存器返回值为0x71/0x73  
+<img width="540" alt="1e9e32e8ebaad1ed10427981a22bcb6" src="https://github.com/user-attachments/assets/2ebbbf2a-de5e-442f-9b9a-0c2911325d67">
+<img width="719" alt="ddda3f3979ad7b0f535a34b65e3b486" src="https://github.com/user-attachments/assets/bd3d5958-65c2-4e74-ae14-a4abcb7d8382">  
+由于AK8963连接在MPU9250/9255内部的一个I2C总线上，主机MCU需要通过其寄存器来间接访问 AK8963  
+<img width="716" alt="1731159579889" src="https://github.com/user-attachments/assets/df8b211d-f0e0-43e1-8809-68c0599b959e">
+
+数据手册中IIC参考时序如图  
+<img width="629" alt="1731159252587" src="https://github.com/user-attachments/assets/f32a34a7-5b21-4f6d-99d5-d9d30d5e3414">
+这里根据开源程序使用HAL库封装的IIC读写函数来实现  
+
 ### 2.3 使用互补滤波进行AHRS九轴姿态融合    
 ### 2.4 步态控制    
 ### 2.5 在任务中实现串口通信    
