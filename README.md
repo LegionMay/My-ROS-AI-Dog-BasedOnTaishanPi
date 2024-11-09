@@ -63,7 +63,98 @@ typedef struct {
 这里根据开源程序使用HAL库封装的IIC读写函数来实现，寄存器映射表参考[RM_MPU_9250A](https://invensense.tdk.com/wp-content/uploads/2015/02/RM-MPU-9250A-00-v1.6.pdf)  
 
 ### 2.3 使用互补滤波进行AHRS九轴姿态融合    
+1.数据预处理  
+根据量程将MPU9250读取值转换为实际值并进行中值滤波和数据归一化      
+```
+float ax = imuData.accel[0] * 4.0f * 9.81f / 32768.0f; // 4G 量程
+    float ay = imuData.accel[1] * 4.0f * 9.81f / 32768.0f;
+    float az = imuData.accel[2] * 4.0f * 9.81f / 32768.0f;
+    float gx = imuData.gyro[0] * 500.0f / 32768.0f * M_PI / 180.0f; // 500DPS 量程
+    float gy = imuData.gyro[1] * 500.0f / 32768.0f * M_PI / 180.0f;
+    float gz = imuData.gyro[2] * 500.0f / 32768.0f * M_PI / 180.0f;
+    float mx = imuData.mag[0] * 0.146f; // 将原始数据转换为 µT
+    float my = imuData.mag[1] * 0.146f;
+    float mz = imuData.mag[2] * 0.146f;
+
+// 数据预处理：加速度和磁力计的中值滤波
+    ax = MedianFilter(ax);
+    ay = MedianFilter(ay);
+    az = MedianFilter(az);
+    mx = MedianFilter(mx);
+    my = MedianFilter(my);
+    mz = MedianFilter(mz);
+
+    // 归一化加速度计数据
+    float norm = invSqrt(ax * ax + ay * ay + az * az);
+    ax *= norm;
+    ay *= norm;
+    az *= norm;
+
+    // 归一化磁力计数据
+    norm = invSqrt(mx * mx + my * my + mz * mz);
+    mx *= norm;
+    my *= norm;
+    mz *= norm;
+
+    // 陀螺仪数据减去偏差
+    gx -= w1;
+    gy -= w2;
+    gz -= w3;
+```  
+2.四元数预测  
+这一部分利用了陀螺仪的数据来估计四元数的增量，从而得到下一个时间点的四元数预测值。通过一阶龙格库塔法近似计算新的四元数值，用来描述姿态的变化。通过积累四元数的变化量，追踪物体的旋转。  
+```
+// 四元数预测：一阶龙格库塔法
+    float halfT = deltaTime / 2.0f;
+    q0 += (-q1 * gx - q2 * gy - q3 * gz) * halfT;
+    q1 += (q0 * gx + q2 * gz - q3 * gy) * halfT;
+    q2 += (q0 * gy - q1 * gz + q3 * gx) * halfT;
+    q3 += (q0 * gz + q1 * gy - q2 * gx) * halfT;
+
+    // 归一化四元数
+    norm = invSqrt(q0 * q0 + q1 * q1 + q2 * q2 + q3 * q3);
+    q0 *= norm;
+    q1 *= norm;
+    q2 *= norm;
+    q3 *= norm;
+```
+3.互补滤波   
+```
+// 互补滤波
+    const float alpha = 0.98f;
+
+    // 使用磁力计计算航向角
+    float pitch = asinf(2 * (q0 * q2 - q3 * q1));
+    float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
+    float mag_x = mx * cosf(pitch) + my * sinf(roll) * sinf(pitch) + mz * cosf(roll) * sinf(pitch);
+    float mag_y = my * cosf(roll) - mz * sinf(roll);
+    float yaw = atan2f(-mag_y, mag_x);
+
+    // 使用加速度计计算pitch和roll校正
+    float pitchAccel = atan2f(ay, az);
+    float rollAccel = atan2f(ax, sqrtf(ay * ay + az * az));
+    pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
+    roll = alpha * roll + (1.0f - alpha) * rollAccel;
+    yaw = alpha * yaw + (1.0f - alpha) * yaw;
+```
+4.重新计算四元数  
+```
+// 重新计算四元数
+    float sinHalfRoll = sinf(roll / 2.0f);
+    float cosHalfRoll = cosf(roll / 2.0f);
+    float sinHalfPitch = sinf(pitch / 2.0f);
+    float cosHalfPitch = cosf(pitch / 2.0f);
+    float sinHalfYaw = sinf(yaw / 2.0f);
+    float cosHalfYaw = cosf(yaw / 2.0f);
+
+    q0 = cosHalfRoll * cosHalfPitch * cosHalfYaw + sinHalfRoll * sinHalfPitch * sinHalfYaw;
+    q1 = sinHalfRoll * cosHalfPitch * cosHalfYaw - cosHalfRoll * sinHalfPitch * sinHalfYaw;
+    q2 = cosHalfRoll * sinHalfPitch * cosHalfYaw + sinHalfRoll * cosHalfPitch * sinHalfYaw;
+    q3 = cosHalfRoll * cosHalfPitch * sinHalfYaw - sinHalfRoll * sinHalfPitch * cosHalfYaw;
+```
+
 ### 2.4 步态控制    
+
 ### 2.5 在任务中实现串口通信    
 首先确保编译器支持浮点数格式化  
 另外，根据[STM32H743内存地址的分配](https://www.armbbs.cn/forum.php?mod=viewthread&tid=123953)：  
