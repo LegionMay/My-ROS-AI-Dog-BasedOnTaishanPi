@@ -192,6 +192,25 @@ void UART_SendData_IT(uint8_t *data, uint16_t size) {
 ```
 <img width="970" alt="dd3eb012ef10ecc18c1abe1ce6fcf68" src="https://github.com/user-attachments/assets/a3747ac6-c8db-4137-84a9-c27457fb415f">
 
+此外，我还利用事件标志组实现线程安全的四元数串口调试模式的切换，从而便于在上位机进行姿态调试  
+```
+// 等待事件位
+        uxBits = xEventGroupWaitBits(
+                xEventGroup,                                  // 事件组句柄
+                EVENT_QUAT_STATUS_ON,           // 等待的位
+                pdFALSE,                           // 读取位后不清除
+                pdFALSE,                         // 等待任意位满足
+                pdMS_TO_TICKS(10));               // 等待10ms
+
+        if ((uxBits & EVENT_QUAT_STATUS_ON) != 0) {
+            int len = snprintf(printBuffer, sizeof(printBuffer),
+                               "%.2f,%.2f,%.2f,%.2f\n",
+                               quat[0], quat[1], quat[2], quat[3]);
+            UART_SendData_IT((uint8_t *) printBuffer, len);
+        }
+```
+<img width="1280" alt="4cd6a6dacb3abfd7ebdebb69ee57b70" src="https://github.com/user-attachments/assets/d757ca71-dfb4-4930-a287-936f49d857af">
+
 ### 2.6 实现多种基本步态  
 ## 3. 泰山派ROS开发  
 ### 3.1 配置激光雷达ROS环境  
