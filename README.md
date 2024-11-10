@@ -291,7 +291,12 @@ $roslaunch ydlidar_ros_driver lidar_view.launch
 
 
 ### 3.3 实现串口通信   
-
-
+安装libserial库  
+```sudo apt install libserial-dev```  
+在IntegratedObstacleNode的构造函数中配置串口为/dev/ttyS4，波特率115200，字符大小8位  
+在send_command函数根据避障逻辑生成符合下位机解析要求的指令格式，使用serial_port.Write发送至串口  
 
 ### 3.4 实现避障算法  
+订阅激光雷达的scan话题(sensor_msgs::msg::LaserScan消息类型)，并注册回调函数laser_callback来处理接收的数据  
+在laser_callback根据接收到的激光雷达数据进行避障分析,检查范围为前方180度的扫描数据，过滤距离小于0.25米的点,obstacle_detected_标志位用于判断当前是否有障碍物  
+避障指令通过话题cmd_vel发布  
