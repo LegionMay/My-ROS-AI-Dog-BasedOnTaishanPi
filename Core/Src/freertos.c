@@ -34,7 +34,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "AHRS.h"
-#include "stdarg.h"
+
 
 /* USER CODE END Includes */
 
@@ -272,7 +272,7 @@ void StartAttitudeTask(void *argument)
 
         if ((uxBits & EVENT_QUAT_STATUS_ON) != 0) {
             int len = snprintf(printBuffer, sizeof(printBuffer),
-                               "%.2f,%.2f,%.2f,%.2f\n",
+                               "%.6f,%.6f,%.6f,%.6f\n",
                                quat[0], quat[1], quat[2], quat[3]);
             UART_SendData_IT((uint8_t *) printBuffer, len);
         }
@@ -306,7 +306,7 @@ void StartServoControlTask(void *argument)
                Set_Servo_Angle(i, servos[i].target_angle);
                servos[i].current_angle = servos[i].target_angle;
             }
-            //vTaskDelay(pdMS_TO_TICKS(10));
+            vTaskDelay(pdMS_TO_TICKS(10));
         }
         vTaskDelay(pdMS_TO_TICKS(10));
     }
@@ -324,6 +324,8 @@ void StartGaitControlTask(void *argument)
 {
   /* USER CODE BEGIN StartGaitControlTask */
     current_action = ACTION_FORWARD;
+    //current_action = ACTION_MARCH_IN_PLACE;
+    current_action = ACTION_STOP;
 
     Init_Servos();
     SetInitServosPosition();          // 舵机初始位置
@@ -335,8 +337,8 @@ void StartGaitControlTask(void *argument)
     for(;;)
     {
         GaitControl();
+        DynamicStabilizationAdjustment();
         vTaskDelay(pdMS_TO_TICKS(50));
-
     }
   /* USER CODE END StartGaitControlTask */
 }

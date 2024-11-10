@@ -31,12 +31,12 @@ void Stop();
 
 ServoID GetServoIDForLeg(int leg, bool isUpperLeg);
 
-void InverseKinematics(float x, float y, float* theta1, float* theta2);
-void CalculateGait(float time, float* theta1, float* theta2);
+void CalculateGait(float time, float* theta1, float* theta2 ,float* LeftTheta, float* RigthTheta, float* FrontTheta, float* RearTheta);
 
-void CalculateBalanceAdjustment(float quat[4], float* adjust_pitch, float* adjust_roll);
 void GaitControl();
 void SetInitServosPosition();
 void SetStandbyPosition();
+
+void DynamicStabilizationAdjustment();
 
 #endif // ROBOCONTROL_H

@@ -13,10 +13,10 @@ float invSqrt(float x) { return 1.0f / sqrtf(x); }
 
 void AHRS_Init() {
     MPU9250_Init();
-    MPU9250_SetAccelRange(ACCEL_RANGE_4G);    // 设置加速度计量程为 4G
-    MPU9250_SetGyroRange(GYRO_RANGE_500DPS);  // 设置陀螺仪量程为 500DPS
-    MPU9250_SetDLPFBandwidth(DLPF_BANDWIDTH_92HZ); // 设置低通滤波带宽为 92Hz
-    MPU9250_SetSampleRateDivider(LP_ACCEL_ODR_125HZ); // 设置采样率为 125Hz
+    MPU9250_SetAccelRange(ACCEL_RANGE_4G);              // 设置加速度计量程为 4G
+    MPU9250_SetGyroRange(GYRO_RANGE_500DPS);            // 设置陀螺仪量程为 500DPS
+    MPU9250_SetDLPFBandwidth(DLPF_BANDWIDTH_92HZ);  // 设置低通滤波带宽为 92Hz
+
 }
 
 void AHRS_GetQuaternion(float* quat) {
@@ -85,27 +85,35 @@ void AHRS_Update() {
     q2 *= norm;
     q3 *= norm;
 
-    // 互补滤波：使用加速度计修正陀螺仪
-    const float alpha = 0.98f;  // 滤波系数
+    // 互补滤波
+    // 使用加速度计计算 pitch 和 roll 的加权角度
+    const float alpha = 0.9f;  // 滤波系数
     float pitch = asinf(2 * (q0 * q2 - q3 * q1));
     float roll = atan2f(2 * (q0 * q1 + q2 * q3), 1 - 2 * (q1 * q1 + q2 * q2));
-
     float pitchAccel = atan2f(ay, az);
-    float rollAccel = atan2f(ax, sqrt(ay * ay + az * az));
-
+    float rollAccel = atan2f(ax, sqrtf(ay * ay + az * az));
     pitch = alpha * pitch + (1.0f - alpha) * pitchAccel;
     roll = alpha * roll + (1.0f - alpha) * rollAccel;
 
-    // 重新计算四元数（根据修正的 pitch 和 roll）
+// 使用磁力计计算航向角 yaw
+    float mag_x = mx * cosf(pitch) + my * sinf(roll) * sinf(pitch) + mz * cosf(roll) * sinf(pitch);
+    float mag_y = my * cosf(roll) - mz * sinf(roll);
+    float yawMag = atan2f(-mag_y, mag_x);
+    float yaw = alpha * (yaw) + (1.0f - alpha) * yawMag;
+
+// 重新计算四元数（基于融合的 pitch, roll 和 yaw）
     float sinHalfRoll = sinf(roll / 2.0f);
     float cosHalfRoll = cosf(roll / 2.0f);
     float sinHalfPitch = sinf(pitch / 2.0f);
     float cosHalfPitch = cosf(pitch / 2.0f);
+    float sinHalfYaw = sinf(yaw / 2.0f);
+    float cosHalfYaw = cosf(yaw / 2.0f);
 
-    q0 = cosHalfRoll * cosHalfPitch;
-    q1 = sinHalfRoll * cosHalfPitch;
-    q2 = cosHalfRoll * sinHalfPitch;
-    q3 = sinHalfRoll * sinHalfPitch;
+    q0 = cosHalfRoll * cosHalfPitch * cosHalfYaw + sinHalfRoll * sinHalfPitch * sinHalfYaw;
+    q1 = sinHalfRoll * cosHalfPitch * cosHalfYaw - cosHalfRoll * sinHalfPitch * sinHalfYaw;
+    q2 = cosHalfRoll * sinHalfPitch * cosHalfYaw + sinHalfRoll * cosHalfPitch * sinHalfYaw;
+    q3 = cosHalfRoll * cosHalfPitch * sinHalfYaw - sinHalfRoll * sinHalfPitch * cosHalfYaw;
+
 }
 
 int compare_float(const void* a, const void* b) {

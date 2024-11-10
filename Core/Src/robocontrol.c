@@ -6,33 +6,20 @@
 #include <math.h>
 
 #define PI 3.14159
-#define Tf 0.5  // 步态周期
-
-// PID参数
-float Kp_pitch = 1.5f, Ki_pitch = 0.05f, Kd_pitch = 0.3f;
-float Kp_roll = 1.5f, Ki_roll = 0.05f, Kd_roll = 0.3f;
-
-// PID状态变量
-float prev_error_pitch = 0.0f, integral_pitch = 0.0f;
-float prev_error_roll = 0.0f, integral_roll = 0.0f;
+#define STEP_INCREMENT 1.0f  // 每次调整的角度步进
+#define MAX_ADJUSTMENT 15.0f // 最大调整范围，防止过度调整
 
 extern QueueHandle_t quatQueue;  // 四元数数据队列
-
-
-typedef struct {
-    float x, y;  // 足尖位置
-} FootPosition;
 
 // 全局状态变量
 volatile RobotAction current_action = ACTION_STOP;
 
-// 控制机器人动作的函数
+// 控制动作函数
 void Move_Forward() { current_action = ACTION_FORWARD; }
 void Move_Backward() { current_action = ACTION_BACKWARD; }
 void Turn_Left() { current_action = ACTION_TURN_LEFT; }
 void Turn_Right() { current_action = ACTION_TURN_RIGHT; }
 void Stop() { current_action = ACTION_STOP; }
-
 
 ServoID GetServoIDForLeg(int leg, bool isUpperLeg) {
     if (isUpperLeg) {
@@ -42,177 +29,124 @@ ServoID GetServoIDForLeg(int leg, bool isUpperLeg) {
     }
 }
 
-
-//PID控制
-void CalculateBalanceAdjustment(float quat[4], float* adjust_pitch, float* adjust_roll) {
-    // 四元数转欧拉角，计算俯仰（pitch）和横滚（roll）
-    float pitch = atan2f(2.0f * (quat[0] * quat[1] + quat[2] * quat[3]),
-                         1.0f - 2.0f * (quat[1] * quat[1] + quat[2] * quat[2])) * 180.0f / M_PI;
-    float roll = asinf(2.0f * (quat[0] * quat[2] - quat[3] * quat[1])) * 180.0f / M_PI;
-
-    // 设定目标角度
-    float target_pitch = 0.0f;
-    float target_roll = 0.0f;
-
-    // 计算误差
-    float error_pitch = target_pitch - pitch;
-    float error_roll = target_roll - roll;
-
-    // 计算积分项
-    integral_pitch += error_pitch;
-    integral_roll += error_roll;
-
-    // 计算微分项
-    float derivative_pitch = error_pitch - prev_error_pitch;
-    float derivative_roll = error_roll - prev_error_roll;
-
-    // PID 输出
-    *adjust_pitch = Kp_pitch * error_pitch + Ki_pitch * integral_pitch + Kd_pitch * derivative_pitch;
-    *adjust_roll = Kp_roll * error_roll + Ki_roll * integral_roll + Kd_roll * derivative_roll;
-
-    // 更新前一误差
-    prev_error_pitch = error_pitch;
-    prev_error_roll = error_roll;
-}
-
-/*//步态计算
-void CalculateFootTrajectory(float t, float x_target, float z_target, FootPosition *pos, RobotAction gait) {
-    switch (gait) {
-        case ACTION_FORWARD:
-            pos->x = t < Tf ? x_target * (t / Tf) : x_target * (2.0f - t / Tf);
-            pos->y = t < Tf ? z_target * sinf(PI * t / Tf) : 0;
-            break;
-        case ACTION_BACKWARD:
-            pos->x = t < Tf ? -x_target * (t / Tf) : -x_target * (2.0f - t / Tf);
-            pos->y = t < Tf ? z_target * sinf(PI * t / Tf) : 0;
-            break;
-        case ACTION_TURN_LEFT:
-            pos->x = (t < Tf ? x_target * (t / Tf) : x_target * (2.0f - t / Tf)) * (gait == ACTION_TURN_LEFT ? -1 : 1);
-            pos->y = t < Tf ? z_target * sinf(PI * t / Tf) : 0;
-            break;
-        case ACTION_TURN_RIGHT:
-            pos->x = (t < Tf ? x_target * (t / Tf) : x_target * (2.0f - t / Tf)) * (gait == ACTION_TURN_RIGHT ? 1 : -1);
-            pos->y = t < Tf ? z_target * sinf(PI * t / Tf) : 0;
-            break;
-        case ACTION_MARCH_IN_PLACE:
-            pos->x = 0;
-            pos->y = z_target * sinf(PI * t / Tf);
-            break;
-    }
-}*/
-
-/*// 逆运动学
-void InverseKinematics(float x, float y, float *theta1, float *theta2) {
-    float L1 = LEG_UPPER_LENGTH;
-    float L2 = LEG_LOWER_LENGTH;
-
-    float dist = sqrtf(x * x + y * y);
-    dist = fminf(fmaxf(dist, fabsf(L1 - L2)), (L1 + L2));
-
-    float cos_theta2 = (dist * dist - L1 * L1 - L2 * L2) / (2 * L1 * L2);
-    float phi2 = acosf(fmaxf(fminf(cos_theta2, 1.0f), -1.0f));
-    float phi1 = atan2f(y, x) - atan2f(L2 * sinf(phi2), L1 + L2 * cosf(phi2));
-
-    // 调整theta1和theta2的初始值
-    *theta1 = phi1 * 180.0f / PI; // 大腿角度，不需要调整
-    *theta2 = (phi2 - PI / 2) * 180.0f / PI; // 小腿角度，减去90度
-}*/
-
-/*//步态控制
-void GaitControl() {
-    float t = 0;
-    FootPosition pos1, pos2;
-    float x_target = 50.0f, z_target = 30.0f;
-    float theta1[4], theta2[4];
-    float quat[4];
-    float adjust_pitch = 0.0f, adjust_roll = 0.0f;
-
-    while (1) {
-        // 从IMU数据队列接收四元数数据
-        if (xQueueReceive(quatQueue, &quat, pdMS_TO_TICKS(10)) == pdPASS) {
-            CalculateBalanceAdjustment(quat, &adjust_pitch, &adjust_roll);
-
-            // 控制四条腿的步态和平衡
-            for (int i = 0; i < 4; i++) {
-                float t_shifted = t + (i % 2 == 0 ? 0 : Tf);
-
-                // 计算每条腿的足尖轨迹
-                CalculateFootTrajectory(fmodf(t_shifted, 2 * Tf), x_target, z_target,
-                                        (i == 0 || i == 2) ? &pos1 : &pos2, current_action);
-
-                // 计算逆运动学角度
-                InverseKinematics((i == 0 || i == 2) ? pos1.x : pos2.x,
-                                  (i == 0 || i == 2) ? pos1.y : pos2.y,
-                                  &theta1[i], &theta2[i]);
-
-                int leg = i;
-                float finalTheta1 = theta1[leg];
-                float finalTheta2 = theta2[leg];
-
-                // 将俯仰和横滚调整分别应用到不同方向的腿
-                if (leg == 0 || leg == 2) {  // 前后对角腿
-                    finalTheta1 += adjust_pitch;
-                    finalTheta2 += adjust_pitch;
-                } else {  // 左右对角腿
-                    finalTheta1 += adjust_roll;
-                    finalTheta2 += adjust_roll;
-                }
-
-                finalTheta1 = fmodf(finalTheta1 + 90, 180) - 90;
-                finalTheta2 = fmodf(finalTheta2 + 90, 180) - 90;
-
-                // 设置舵机角度，根据腿的位置调整方向
-                if (leg % 2 == 0) {  // 单数腿
-                    servos[GetServoIDForLeg(leg, true)].target_angle = 90 + ((leg == 0) ? finalTheta1 : -finalTheta1);
-                    servos[GetServoIDForLeg(leg, false)].target_angle = 90 + ((leg == 0) ? -finalTheta2 : finalTheta2);
-                } else {  // 双数腿
-                    servos[GetServoIDForLeg(leg, true)].target_angle = 90 + ((leg == 1) ? -finalTheta1 : finalTheta1);
-                     servos[GetServoIDForLeg(leg, false)].target_angle = 90 + ((leg == 1) ? finalTheta2 : -finalTheta2);
-                }
-            }
-
-            // 更新步态相位
-            t += 0.05;
-            if (t >= 2 * Tf) t -= 2 * Tf;
-        }
-
-        vTaskDelay(pdMS_TO_TICKS(50));
-    }
-}*/
-
-/*** 计算步态：根据时间计算每一步的足尖位置 ***/
-void CalculateGait(float time, float* theta1, float* theta2) {
+//计算步态
+void CalculateGait(float time, float* theta1, float* theta2 ,float* LeftTheta, float* RigthTheta, float* FrontTheta, float* RearTheta) {
     switch (current_action) {
         case ACTION_FORWARD:
-            if (time < 0.5) {
+           if (time < 0.5) {
                 // 大腿向前摆动时，小腿逐渐伸展
-                * theta1 = 50;  // 向前移动70/45
-                * theta2 = 0;  // 抬脚-30/5
+                *theta1 = 60;  // 向前移动70/45
+                *theta2 = -30;  // 伸脚-30/5
             } else {
                 // 大腿向后摆动时，小腿应收回
-                * theta1 = 25;  // 向后滑动15/25
-                * theta2 = -10;  // 小腿应抬起防止碰到地面20/-10
+                *theta1 = 40;  // 向后滑动15/25
+                *theta2 = -10;  // 小腿应抬起防止碰到地面20/-10
             }
             break;
         case ACTION_BACKWARD:
-
+            if (time < 0.5) {
+                // 大腿向后摆动时，小腿逐渐伸展
+                *theta1 = 60;
+                *theta2 = -30;
+            } else {
+                // 大腿向前摆动时，小腿应收回
+                *theta1 = 40;
+                *theta2 = -10;
+            }
             break;
         case ACTION_TURN_LEFT:
+            if (time < 0.5) {
+                // 左侧腿向后，右侧腿向前
 
+                *LeftTheta = 10;
+
+            } else {
+                // 左侧腿向前，右侧腿向后
+
+
+                *LeftTheta = 10;
+            }
             break;
         case ACTION_TURN_RIGHT:
+            if (time < 0.5) {
+                // 左侧腿向前，右侧腿向后
 
+                *RigthTheta = 10;
+
+            } else {
+                // 左侧腿向后，右侧腿向前
+
+
+                *RigthTheta = 10;
+            }
             break;
         case ACTION_MARCH_IN_PLACE:
-
+            if (time < 0.5) {
+                // 左腿抬起，右腿支撑
+                *theta1 = 40;
+                *theta2 = -10;
+            } else {
+                // 右腿抬起，左腿支撑
+                *theta1 = 40;
+                *theta2 = 10;
+            }
             break;
         case ACTION_STOP:
-
+            // 保持站立姿态
+            *theta1 = 40;  // 大腿角度中立
+            *theta2 = -10; // 小腿角度中立
             break;
     }
-
 }
 
+
+// 实时计算俯仰和横滚偏差并应用小步进调整
+void DynamicStabilizationAdjustment() {
+    float current_adjust_pitch_front = 0.0f,
+          current_adjust_pitch_rear = 0.0f,
+          current_adjust_roll_left = 0.0f,
+          current_adjust_roll_right = 0.0f;
+    float quat[4];
+
+    while (true) {
+        if (xQueueReceive(quatQueue, &quat, pdMS_TO_TICKS(10)) == pdPASS) {
+
+            // 四元数转为俯仰和横滚角
+            float pitch = atan2f(2.0f * (quat[0] * quat[1] + quat[2] * quat[3]),
+                                 1.0f - 2.0f * (quat[1] * quat[1] + quat[2] * quat[2])) * 180.0f / M_PI;
+            float roll = asinf(2.0f * (quat[0] * quat[2] - quat[3] * quat[1])) * 180.0f / M_PI;
+
+            // 根据偏差判断方向并调整前后俯仰调整量
+            if (pitch > 0) {
+                current_adjust_pitch_front = fminf(current_adjust_pitch_front + STEP_INCREMENT, MAX_ADJUSTMENT); // 前腿抬高
+                current_adjust_pitch_rear = fmaxf(current_adjust_pitch_rear - STEP_INCREMENT, -MAX_ADJUSTMENT); // 后腿降低
+            } else if (pitch < 0) {
+                current_adjust_pitch_front = fmaxf(current_adjust_pitch_front - STEP_INCREMENT,-MAX_ADJUSTMENT); // 前腿降低
+                current_adjust_pitch_rear = fminf(current_adjust_pitch_rear + STEP_INCREMENT, MAX_ADJUSTMENT);  // 后腿抬高
+            }
+
+            // 根据偏差判断方向并调整左右横滚调整量
+            if (roll > 0) {
+                current_adjust_roll_left = fminf(current_adjust_roll_left + STEP_INCREMENT, MAX_ADJUSTMENT); // 左腿抬高
+                current_adjust_roll_right = fmaxf(current_adjust_roll_right - STEP_INCREMENT, -MAX_ADJUSTMENT); // 右腿降低
+            } else if (roll < 0) {
+                current_adjust_roll_left = fmaxf(current_adjust_roll_left - STEP_INCREMENT, -MAX_ADJUSTMENT); // 左腿降低
+                current_adjust_roll_right = fminf(current_adjust_roll_right + STEP_INCREMENT, MAX_ADJUSTMENT);  // 右腿抬高
+            }
+
+            // 应用增量调整
+            for(int i = 0; i < 4; i++) {
+                if (i == 0 || i == 3) {  // 前后腿
+                    servos[GetServoIDForLeg(i, true)].target_angle  += (i == 0 ? current_adjust_pitch_front : current_adjust_pitch_rear);
+                    servos[GetServoIDForLeg(i, false)].target_angle += (i == 0 ? current_adjust_pitch_front : current_adjust_pitch_rear);
+                } else {  // 左右腿
+                    servos[GetServoIDForLeg(i, true)].target_angle += (i == 1 ? current_adjust_roll_left : current_adjust_roll_right);
+                    servos[GetServoIDForLeg(i, false)].target_angle += (i == 1 ? current_adjust_roll_left : current_adjust_roll_right);
+                }
+            }
+        }
+    }
+}
 
 
 
@@ -221,43 +155,46 @@ void GaitControl() {
     float phase_leg2_3 = 0.5;  // Leg 2 和 Leg 3 的相位，相对滞后 0.5
 
     while (true) {
-        // 控制 Leg 1 和 Leg 4 (对角步态)
-        for (int leg = 0; leg <= 3; leg += 3) {  // leg == 0 -> Leg 1, leg == 3 -> Leg 4
-            float theta1, theta2;
-            CalculateGait(phase_leg1_4, &theta1, &theta2);
 
-            if (leg == 0) {  // Leg 1 (左前腿)
-                servos[GetServoIDForLeg(leg, true)].target_angle = 90 - theta1;  // 大腿角度
-                servos[GetServoIDForLeg(leg, false)].target_angle = 90 + theta2;  // 小腿角度
-            } else {  // Leg 4 (右后腿)
-                servos[GetServoIDForLeg(leg, true)].target_angle = 90 + theta1;  // 大腿角度
-                servos[GetServoIDForLeg(leg, false)].target_angle = 90 - theta2;  // 小腿角度
+            // 控制 Leg 1 和 Leg 4 (对角步态)
+            for (int leg = 0; leg <= 3; leg += 3) {  // leg == 0 -> Leg 1, leg == 3 -> Leg 4
+                float theta1, theta2, LeftTheta, RigthTheta, FrontTheta, RearTheta;
+                CalculateGait(phase_leg1_4, &theta1, &theta2, &LeftTheta, &RigthTheta, &FrontTheta, &RearTheta);
+
+                if (leg == 0) {  // Leg 1 (左前腿)
+                    servos[GetServoIDForLeg(leg, true)].target_angle = 90 - theta1 - LeftTheta;
+                    servos[GetServoIDForLeg(leg, false)].target_angle = 90 + theta2;
+                } else {  // Leg 4 (右后腿)
+                    servos[GetServoIDForLeg(leg, true)].target_angle = 90 + theta1 + RigthTheta;
+                    servos[GetServoIDForLeg(leg, false)].target_angle = 90 - theta2;
+                }
             }
+
+            // 控制 Leg 2 和 Leg 3 (对角步态)
+            for (int leg = 1; leg <= 2; leg += 1) {  // leg == 1 -> Leg 2, leg == 2 -> Leg 3
+                float theta1, theta2, LeftTheta, RigthTheta, FrontTheta, RearTheta;
+                CalculateGait(phase_leg2_3, &theta1, &theta2, &LeftTheta, & RigthTheta, &FrontTheta, &RearTheta);
+
+                if (leg == 1) {  // Leg 2 (右前腿)
+                    servos[GetServoIDForLeg(leg, true)].target_angle = 90 + theta1 + LeftTheta;
+                    servos[GetServoIDForLeg(leg, false)].target_angle = 90 - theta2;
+                } else {  // Leg 3 (左后腿)
+                    servos[GetServoIDForLeg(leg, true)].target_angle = 90 - theta1 - RigthTheta;
+                    servos[GetServoIDForLeg(leg, false)].target_angle = 90 + theta2;
+                }
+            }
+
+            // 更新相位，确保同步步态
+            phase_leg1_4 += 0.1;
+            phase_leg2_3 += 0.1;
+            if (phase_leg1_4 >= 1.0) phase_leg1_4 -= 1.0;
+            if (phase_leg2_3 >= 1.0) phase_leg2_3 -= 1.0;
+
+            vTaskDelay(pdMS_TO_TICKS(50));  // 延时 50 毫秒，控制步态节奏
         }
 
-        // 控制 Leg 2 和 Leg 3 (对角步态)
-        for (int leg = 1; leg <= 2; leg += 1) {  // leg == 1 -> Leg 2, leg == 2 -> Leg 3
-            float theta1, theta2;
-            CalculateGait(phase_leg2_3, &theta1, &theta2);
-
-            if (leg == 1) {  // Leg 2 (右前腿)
-                servos[GetServoIDForLeg(leg, true)].target_angle = 90 + theta1;  // 大腿角度
-                servos[GetServoIDForLeg(leg, false)].target_angle = 90 - theta2;  // 小腿角度
-            } else {  // Leg 3 (左后腿)
-                servos[GetServoIDForLeg(leg, true)].target_angle = 90 - theta1;  // 大腿角度
-                servos[GetServoIDForLeg(leg, false)].target_angle = 90 + theta2;  // 小腿角度
-            }
-        }
-
-        // 更新相位，确保同步步态
-        phase_leg1_4 += 0.1;
-        phase_leg2_3 += 0.1;
-        if (phase_leg1_4 >= 1.0) phase_leg1_4 -= 1.0;
-        if (phase_leg2_3 >= 1.0) phase_leg2_3 -= 1.0;
-
-        vTaskDelay(pdMS_TO_TICKS(500));  // 延时 50 毫秒，控制步态节奏
-    }
 }
+
 
 
 //舵机初始位置
