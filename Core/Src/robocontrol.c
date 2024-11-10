@@ -6,8 +6,11 @@
 #include <math.h>
 
 #define PI 3.14159
-#define STEP_INCREMENT 1.0f  // 每次调整的角度步进
-#define MAX_ADJUSTMENT 15.0f // 最大调整范围，防止过度调整
+
+#define STEP_INCREMENT 0.2f          // 每步调整量，调整到较小值
+#define MAX_ADJUSTMENT 10.0f         // 调整的最大角度
+#define STABLE_THRESHOLD 3.0f        // 阈值，低于此值认为姿态稳定
+#define DAMPING_FACTOR 0.95f         // 阻尼系数
 
 extern QueueHandle_t quatQueue;  // 四元数数据队列
 
@@ -35,11 +38,11 @@ void CalculateGait(float time, float* theta1, float* theta2 ,float* LeftTheta, f
         case ACTION_FORWARD:
            if (time < 0.5) {
                 // 大腿向前摆动时，小腿逐渐伸展
-                *theta1 = 60;  // 向前移动70/45
-                *theta2 = -30;  // 伸脚-30/5
+                *theta1 = 70;  // 向前移动70/45
+                *theta2 = -20;  // 伸脚-30/5
             } else {
                 // 大腿向后摆动时，小腿应收回
-                *theta1 = 40;  // 向后滑动15/25
+                *theta1 = 35;  // 向后滑动15/25
                 *theta2 = -10;  // 小腿应抬起防止碰到地面20/-10
             }
             break;
@@ -57,26 +60,28 @@ void CalculateGait(float time, float* theta1, float* theta2 ,float* LeftTheta, f
         case ACTION_TURN_LEFT:
             if (time < 0.5) {
                 // 左侧腿向后，右侧腿向前
-
+                *theta1 = 70;
+                *theta2 = -20;
                 *LeftTheta = 10;
 
             } else {
                 // 左侧腿向前，右侧腿向后
-
-
+                *theta1 = 35;
+                *theta2 = -10;
                 *LeftTheta = 10;
             }
             break;
         case ACTION_TURN_RIGHT:
             if (time < 0.5) {
                 // 左侧腿向前，右侧腿向后
-
+                *theta1 = 70;
+                *theta2 = -20;
                 *RigthTheta = 10;
 
             } else {
                 // 左侧腿向后，右侧腿向前
-
-
+                *theta1 = 35;
+                *theta2 = -10;
                 *RigthTheta = 10;
             }
             break;
@@ -106,7 +111,7 @@ void DynamicStabilizationAdjustment() {
           current_adjust_pitch_rear = 0.0f,
           current_adjust_roll_left = 0.0f,
           current_adjust_roll_right = 0.0f;
-    float quat[4];
+    float quat[4] = {0.0f, 0.0f, 0.0f, 0.0f};
 
     while (true) {
         if (xQueueReceive(quatQueue, &quat, pdMS_TO_TICKS(10)) == pdPASS) {
@@ -145,8 +150,163 @@ void DynamicStabilizationAdjustment() {
                 }
             }
         }
+        vTaskDelay(pdMS_TO_TICKS(100));  // 延时 10 毫秒，控制调整频率
     }
 }
+
+// 实时计算俯仰和横滚偏差并应用小步进调整
+/*void DynamicStabilizationAdjustment() {
+    float current_adjust_pitch_front = 0.0f,
+            current_adjust_pitch_rear = 0.0f,
+            current_adjust_roll_left = 0.0f,
+            current_adjust_roll_right = 0.0f;
+    float quat[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+
+    while (true) {
+        if (xQueueReceive(quatQueue, &quat, pdMS_TO_TICKS(100)) == pdPASS) {
+
+            // 将四元数转为俯仰和横滚角
+            float pitch = atan2f(2.0f * (quat[0] * quat[1] + quat[2] * quat[3]),
+                                 1.0f - 2.0f * (quat[1] * quat[1] + quat[2] * quat[2])) * 180.0f / M_PI;
+            float roll = asinf(2.0f * (quat[0] * quat[2] - quat[3] * quat[1])) * 180.0f / M_PI;
+
+            // 前后俯仰调整
+            if (pitch > 5.0f) {  // 偏移超过5度视为前倾
+                current_adjust_pitch_front = fminf(current_adjust_pitch_front + STEP_INCREMENT, MAX_ADJUSTMENT);
+                current_adjust_pitch_rear = fmaxf(current_adjust_pitch_rear - STEP_INCREMENT, -MAX_ADJUSTMENT);
+            } else if (pitch < -5.0f) {  // 偏移超过-5度视为后倾
+                current_adjust_pitch_front = fmaxf(current_adjust_pitch_front - STEP_INCREMENT, -MAX_ADJUSTMENT);
+                current_adjust_pitch_rear = fminf(current_adjust_pitch_rear + STEP_INCREMENT, MAX_ADJUSTMENT);
+            } else {
+                // 在稳定阈值范围内，不做调整
+                current_adjust_pitch_front *= DAMPING_FACTOR;
+                current_adjust_pitch_rear *= DAMPING_FACTOR;
+            }
+
+            // 左右横滚调整
+            if (roll > 5.0f) {  // 偏移超过5度视为左倾
+                current_adjust_roll_left = fminf(current_adjust_roll_left + STEP_INCREMENT, MAX_ADJUSTMENT);
+                current_adjust_roll_right = fmaxf(current_adjust_roll_right - STEP_INCREMENT, -MAX_ADJUSTMENT);
+            } else if (roll < -5.0f) {  // 偏移超过-5度视为右倾
+                current_adjust_roll_left = fmaxf(current_adjust_roll_left - STEP_INCREMENT, -MAX_ADJUSTMENT);
+                current_adjust_roll_right = fminf(current_adjust_roll_right + STEP_INCREMENT, MAX_ADJUSTMENT);
+            } else {
+                // 在稳定阈值范围内，不做调整
+                current_adjust_roll_left *= DAMPING_FACTOR;
+                current_adjust_roll_right *= DAMPING_FACTOR;
+            }
+
+            // 将调整值应用到各个舵机
+            for (int i = 0; i < 4; i++) {
+                float pitch_adjustment = (i == 0) ? current_adjust_pitch_front :
+                                         (i == 3) ? current_adjust_pitch_rear : 0.0f;
+                float roll_adjustment = (i == 1) ? current_adjust_roll_left :
+                                        (i == 2) ? current_adjust_roll_right : 0.0f;
+
+                // 根据调整方向应用到对应腿
+                servos[GetServoIDForLeg(i, true)].target_angle += pitch_adjustment + roll_adjustment;
+                servos[GetServoIDForLeg(i, false)].target_angle += pitch_adjustment + roll_adjustment;
+            }
+
+            //判断并更新舵机状态
+            for(uint8_t i=0; i<8; i++){
+                if(servos[i].current_angle != servos[i].target_angle){
+                    Set_Servo_Angle(i, servos[i].target_angle);
+                    servos[i].current_angle = servos[i].target_angle;
+                }
+                vTaskDelay(pdMS_TO_TICKS(10));
+            }
+
+        }
+        vTaskDelay(pdMS_TO_TICKS(10));  // 调整频率控制
+    }
+}*/
+
+#define KP_PITCH 0.1f  // 俯仰方向的比例增益
+#define KD_PITCH 0.05f // 俯仰方向的微分增益
+#define KP_ROLL  0.1f  // 横滚方向的比例增益
+#define KD_ROLL  0.05f // 横滚方向的微分增益
+
+
+/*void DynamicStabilizationAdjustment() {
+    float current_adjust_pitch_front = 0.0f,
+            current_adjust_pitch_rear = 0.0f,
+            current_adjust_roll_left = 0.0f,
+            current_adjust_roll_right = 0.0f;
+    float pitch_origin = 0.0f, roll_origin = 0.0f;
+    bool calibrated = false;
+    float pitch, roll, gyro_x, gyro_y, acc_z;
+    float pitch_error, roll_error;
+
+    float quat[4] = {0.0f, 0.0f, 0.0f, 0.0f};
+    float filter_pitch = 0.0f, filter_roll = 0.0f;
+
+    while (true) {
+        // 从队列获取IMU数据（四元数、角速度和加速度）
+        if (xQueueReceive(quatQueue, &quat, pdMS_TO_TICKS(100)) == pdPASS) {
+
+
+            // 四元数转为俯仰和横滚角
+            pitch = atan2f(2.0f * (quat[0] * quat[1] + quat[2] * quat[3]),
+                           1.0f - 2.0f * (quat[1] * quat[1] + quat[2] * quat[2])) * 180.0f / M_PI;
+            roll = asinf(2.0f * (quat[0] * quat[2] - quat[3] * quat[1])) * 180.0f / M_PI;
+
+            // 初始校准原点
+            if (!calibrated) {
+                pitch_origin = pitch;
+                roll_origin = roll;
+                calibrated = true;
+            }
+
+            // 计算偏差（与初始稳定位置的偏差）
+            pitch_error = (pitch - pitch_origin) * KP_PITCH - gyro_x * KD_PITCH;
+            roll_error = (roll - roll_origin) * KP_ROLL - gyro_y * KD_ROLL;
+
+            // 前后俯仰调整
+            if (fabs(pitch_error) > 5.0f) {  // 5度为阈值
+                float pitch_adjust = (pitch_error > 0) ? STEP_INCREMENT : -STEP_INCREMENT;
+                current_adjust_pitch_front = fminf(current_adjust_pitch_front + pitch_adjust, MAX_ADJUSTMENT);
+                current_adjust_pitch_rear = fmaxf(current_adjust_pitch_rear - pitch_adjust, -MAX_ADJUSTMENT);
+            } else {
+                // 防抖动
+                current_adjust_pitch_front *= DAMPING_FACTOR;
+                current_adjust_pitch_rear *= DAMPING_FACTOR;
+            }
+
+            // 左右横滚调整
+            if (fabs(roll_error) > 5.0f) {  // 5度为阈值
+                float roll_adjust = (roll_error > 0) ? STEP_INCREMENT : -STEP_INCREMENT;
+                current_adjust_roll_left = fminf(current_adjust_roll_left + roll_adjust, MAX_ADJUSTMENT);
+                current_adjust_roll_right = fmaxf(current_adjust_roll_right - roll_adjust, -MAX_ADJUSTMENT);
+            } else {
+                current_adjust_roll_left *= DAMPING_FACTOR;
+                current_adjust_roll_right *= DAMPING_FACTOR;
+            }
+
+            // 将调整值应用到各个舵机
+            for (int i = 0; i < 4; i++) {
+                float pitch_adjustment = (i == 0) ? current_adjust_pitch_front :
+                                         (i == 3) ? current_adjust_pitch_rear : 0.0f;
+                float roll_adjustment = (i == 1) ? current_adjust_roll_left :
+                                        (i == 2) ? current_adjust_roll_right : 0.0f;
+
+                // 应用调整到对应腿的目标角度
+                servos[GetServoIDForLeg(i, true)].target_angle += pitch_adjustment + roll_adjustment;
+                servos[GetServoIDForLeg(i, false)].target_angle += pitch_adjustment + roll_adjustment;
+            }
+
+            // 检查并更新舵机状态
+            for (uint8_t i = 0; i < 8; i++) {
+                if (fabs(servos[i].current_angle - servos[i].target_angle) > STEP_INCREMENT) {
+                    Set_Servo_Angle(i, servos[i].target_angle);
+                    servos[i].current_angle = servos[i].target_angle;
+                }
+                vTaskDelay(pdMS_TO_TICKS(10));
+            }
+        }
+        vTaskDelay(pdMS_TO_TICKS(10));  // 控制调整频率
+    }
+}*/
 
 
 

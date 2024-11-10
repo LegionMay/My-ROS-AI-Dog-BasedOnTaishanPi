@@ -89,6 +89,15 @@ uint8_t ringBuffer[RING_BUFFER_SIZE]; // 定义环形缓冲区
 volatile uint16_t writeIndex = 0;
 volatile uint16_t readIndex = 0;
 
+
+/* Definitions for GaitControlTask */
+osThreadId_t StabTaskHandle;
+const osThreadAttr_t StabTask_attributes = {
+        .name = "StabTask",
+        .stack_size = 512 * 4,
+        .priority = (osPriority_t) osPriorityRealtime1,
+};
+
 /* USER CODE END Variables */
 /* Definitions for defaultTask */
 osThreadId_t defaultTaskHandle;
@@ -131,6 +140,8 @@ const osThreadAttr_t SerialCommTask_attributes = {
 void SendAttitudeToHost(float q[4]);
 void vApplicationIdleHook(void);
 void UART_SendData_IT(uint8_t *data, uint16_t size);
+
+void StartStabTask(void *argument);
 /* USER CODE END FunctionPrototypes */
 
 void StartDefaultTask(void *argument);
@@ -192,7 +203,7 @@ void MX_FREERTOS_Init(void) {
   /* USER CODE END RTOS_TIMERS */
 
   /* USER CODE BEGIN RTOS_QUEUES */
-    quatQueue = xQueueCreate(20, sizeof(int16_t[4]));        //四元数数据队列
+    quatQueue = xQueueCreate(20, sizeof(float) * 4);        //四元数数据队列
     rxQueue = xQueueCreate(RX_Queue_SIZE, sizeof(uint8_t)); //串口接收数据队列
     /* add queues, ... */
   /* USER CODE END RTOS_QUEUES */
@@ -214,7 +225,8 @@ void MX_FREERTOS_Init(void) {
   SerialCommTaskHandle = osThreadNew(StartSerialCommTask, NULL, &SerialCommTask_attributes);
 
   /* USER CODE BEGIN RTOS_THREADS */
-    vTaskStartScheduler();  // 确保启动调度�??????
+  StabTaskHandle = osThreadNew(StartStabTask, NULL, &StabTask_attributes);
+  vTaskStartScheduler();  // 确保启动调度
     /* add threads, ... */
   /* USER CODE END RTOS_THREADS */
 
@@ -277,7 +289,7 @@ void StartAttitudeTask(void *argument)
             UART_SendData_IT((uint8_t *) printBuffer, len);
         }
 
-         xQueueSend(quatQueue, &quat, pdMS_TO_TICKS(10));          // 将姿态四元数发送到队列
+         xQueueSend(quatQueue, &quat, pdMS_TO_TICKS(100));          // 将姿态四元数发送到队列
 
         vTaskDelay(pdMS_TO_TICKS(10));
     }
@@ -325,7 +337,7 @@ void StartGaitControlTask(void *argument)
   /* USER CODE BEGIN StartGaitControlTask */
     current_action = ACTION_FORWARD;
     //current_action = ACTION_MARCH_IN_PLACE;
-    current_action = ACTION_STOP;
+    //current_action = ACTION_STOP;
 
     Init_Servos();
     SetInitServosPosition();          // 舵机初始位置
@@ -337,7 +349,7 @@ void StartGaitControlTask(void *argument)
     for(;;)
     {
         GaitControl();
-        DynamicStabilizationAdjustment();
+
         vTaskDelay(pdMS_TO_TICKS(50));
     }
   /* USER CODE END StartGaitControlTask */
@@ -438,7 +450,13 @@ void StartSerialCommTask(void *argument)
 
 /* Private application code --------------------------------------------------*/
 /* USER CODE BEGIN Application */
+void StartStabTask(void *argument){
+    for(;;) {
 
+        DynamicStabilizationAdjustment();
+        vTaskDelay(pdMS_TO_TICKS(5));
+    }
+}
 
 
 
